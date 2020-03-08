@@ -1,8 +1,9 @@
 # 520-Project
 
 ## How to Run
-1. From root directory type ./mvnw spring-boot:run
-2. In  browser go to localhost:8080
+1. Install [Maven](https://maven.apache.org/download.cgi) build tool
+2. In terminal from root directory type ./mvnw spring-boot:run
+3. In  browser go to localhost:8080
 
 ## Using LiveReload
 1. Download chrome extension [Live Reload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei)
