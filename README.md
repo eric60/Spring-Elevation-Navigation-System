@@ -5,10 +5,9 @@
 2. In  browser go to localhost:8080
 
 ## Using LiveReload
-1. Go to localhost:8080
-2. Download chrome extension live reload
-and click it to enable it on localhost:8080
-3. Recompile any java file to trigger the live reload without having to restart the server to see changes
+1. Download chrome extension [Live Reload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei)
+2. Go to localhost:8080 and click the LiveReload icon to enable it on localhost:8080
+3. Recompile any java file to trigger the live reload so you don't have to restart the server to see changes
 
 ## How to test
 1
