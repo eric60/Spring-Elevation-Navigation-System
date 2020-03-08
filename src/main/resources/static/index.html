@@ -1,12 +1,32 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title>Getting Started: Serving Web Content</title>
+        <title>EleNa</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="Actions.js"></script>
     </head>
+
     <body>
-        <p>Hey ws up!</p>
-        <p>hey</p>
-        <p>Get your greeting <a href="/greeting">here</a></p>
+        <div class="container">
+            <label for="b1"></label><button id="b1" onClick="myFunc()">Click me</button>
+            <p>Get your greeting <a href="/greeting">here</a></p>
+            <form>
+                <div class="form-group">
+                    <label for="form-input-1">Example label</label>
+                    <input type="text" class="form-control" id="form-input-1" placeholder="Example input">
+                </div>
+                <div class="form-group">
+                    <label for="form-input-2">Another label</label>
+                    <input type="text" class="form-control" id="form-input-2" placeholder="Another input">
+                </div>
+            </form>
+        </div>
     </body>
 </html>
