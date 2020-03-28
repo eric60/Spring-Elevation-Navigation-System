@@ -1,4 +1,4 @@
-package com.EleNa;
+package com.EleNa.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
