@@ -3,8 +3,8 @@
 ## How to Run
 1. Install [Maven](https://maven.apache.org/download.cgi) build tool
 2. To Run
-    1. Run EleNaApplication with Intellij
-    2. In terminal from root directory type ./mvnw spring-boot:run
+    1. Either run EleNaApplication with Intellij
+    2. Or in terminal from root directory type ./mvnw spring-boot:run
 3. In  browser go to localhost:8080
 
 ## Database setup
