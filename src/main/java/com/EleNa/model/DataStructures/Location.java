@@ -1,4 +1,4 @@
-package com.EleNa.model;
+package com.EleNa.model.DataStructures;
 
 //Class used for storing the Location a Node represents
 public class Location{

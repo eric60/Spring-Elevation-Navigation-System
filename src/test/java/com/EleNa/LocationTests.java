@@ -6,7 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.EleNa.model.Location;
+import com.EleNa.model.DataStructures.Location;
+
 class LocationTests {
 
     private Location location1, location2;
@@ -63,7 +64,7 @@ class LocationTests {
         assertEquals(90.0, location1.getLatitude());
         assertEquals(45.0, location2.getLatitude());
     }
-    
+
     @Test
     public void testGetElevation(){
         assertEquals(0.0, location1.getElevation());
