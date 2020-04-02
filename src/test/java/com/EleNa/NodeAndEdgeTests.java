@@ -39,7 +39,7 @@ class NodeAndEdgeTests{
         assertNotEquals(null, edge);
     }
 
-    @Test 
+/*    @Test
     public void testNodeGetId(){
         assertEquals(0, nodeA.getId());
         assertEquals(1, nodeB.getId());
@@ -53,7 +53,7 @@ class NodeAndEdgeTests{
         assertEquals(100.0, loc.getElevation());
         assertEquals(45.0, loc.getLongitude());
         assertEquals(90.0, loc.getLatitude());
-    }
+    }*/
     @Test
     public void testEdgeGetNodes(){
         Edge edge = new Edge(nodeA, nodeB, name);
@@ -70,18 +70,18 @@ class NodeAndEdgeTests{
         assertEquals("Main Street", edge.getName());
     }
 
-    @Test
-    public void testNodeAddIllegalEdge(){
-        assertThrows(IllegalArgumentException.class, () -> nodeA.addEdge(null));
-    }
-
-    @Test
-    void testNodeAddAndGetEdge(){
-        Edge edge = new Edge(nodeA, nodeB, name);
-
-
-        nodeA.addEdge(edge);
-
-        assertEquals(edge, nodeA.getEdges().get(0));
-    }
+//    @Test
+//    public void testNodeAddIllegalEdge(){
+//        assertThrows(IllegalArgumentException.class, () -> nodeA.addEdge(null));
+//    }
+//
+//    @Test
+//    void testNodeAddAndGetEdge(){
+//        Edge edge = new Edge(nodeA, nodeB, name);
+//
+//
+//        nodeA.addEdge(edge);
+//
+//        assertEquals(edge, nodeA.getEdges().get(0));
+//    }
 }
