@@ -1,6 +1,5 @@
 package com.EleNa;
 
-import com.EleNa.repositories.CustomerRepository;
 import com.EleNa.repositories.EdgeRepository;
 import com.EleNa.repositories.NodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +25,10 @@ public class ParseOSMAndInsertIntoDb {
 
     String filePath = "C:/Users/T450-180519/Downloads/map.osm";
     private File osmFile = new File(filePath);
-    List<Node> nodes;
-    List<Edge> edges;
+    private static List<Node> nodes = new ArrayList<>();
+    private static List<Edge> edges = new ArrayList<>();
 
     public ParseOSMAndInsertIntoDb() {
-        nodes = new ArrayList<>();
-        edges = new ArrayList<>();
     }
 
     public static void parseOSMFile(File osmFile) {
@@ -43,34 +40,62 @@ public class ParseOSMAndInsertIntoDb {
             List<org.dom4j.Node> nodeNodes = document.selectNodes("/osm/node" );
             List<org.dom4j.Node> wayNodes = document.selectNodes("/osm/way" );
 
-            System.out.println(nodeNodes.size());
+            System.out.println("nodes size: " + nodeNodes.size());
+            System.out.println("ways size: " + wayNodes.size());
 
+            // Parsing Node Nodes
             int i = 0;
             for (org.dom4j.Node node : nodeNodes) {
                 String currNode = node.getName();
-                System.out.println(currNode);
+
                 String nodeId = node.valueOf("@id");
                 String lon = node.valueOf("@lon");
                 String lat = node.valueOf("@lat");
-                System.out.println(nodeId);
+
+                Point point = new Point(Double.parseDouble(lon), Double.parseDouble(lat));
+                Node osmNode = new Node(Long.parseLong(nodeId), point);
+                nodes.add(osmNode);
                 i++;
-                if(i == 1000) {
-                    System.out.println("1000 elements Inserting into Nodes table");
+                if(i % 100 == 0) {
+//                    System.out.println("Reached 100  elements. Inserting nodes into Nodes table");
+//                    nodes.clear();
                 }
             }
+            System.out.println("---finished nodes size: " + nodes.size());
+
+            // Parsing way Nodes
             int j = 0;
+            Edge prev = null;
             for(org.dom4j.Node wayNode : wayNodes) {
-                String currNode = wayNode.getName();
-                List<org.dom4j.Node> wayChildrenNodes = wayNode.selectNodes("/way/nd");
+                List<org.dom4j.Node> wayChildrenNodes = wayNode.selectNodes(".//nd");
+                System.out.println("wayChildrenNodes for " + wayNode.getName()+ ": " + wayChildrenNodes.size());
+                int ndIdx = 0;
 
-                int ndIdx = 1;
-                for(org.dom4j.Node ndRefNode : wayChildrenNodes) {
+                for(Iterator<org.dom4j.Node> iter = wayChildrenNodes.iterator(); iter.hasNext();) {
+                    org.dom4j.Node ndRefNode = iter.next();
+                    Long ndRef = Long.parseLong(ndRefNode.valueOf("@ref"));
+                    if(ndIdx != 0) {
+                        prev.setDest(ndRef);
+                    }
 
+                    if(iter.hasNext()) {
+                        Edge edge = new Edge(ndRef);
+                        edges.add(edge);
+                        prev = edge;
+                    } else {
+                        System.out.println("last elem");
+                    }
+                    ndIdx++;
                 }
             }
+            System.out.println("--Finished edges size: " + edges.size());
         } catch(Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    public static void commitElementsToDb(String elemType) {
 
     }
 

@@ -11,7 +11,7 @@ import com.EleNa.model.DataStructures.Node;
 import com.EleNa.model.DataStructures.Location;
 
 class NodeAndEdgeTests{
-    private Node nodeA, nodeB;
+   /* private Node nodeA, nodeB;
     private String name = "Main Street";
 
     @BeforeEach
@@ -39,7 +39,7 @@ class NodeAndEdgeTests{
         assertNotEquals(null, edge);
     }
 
-/*    @Test
+*//*    @Test
     public void testNodeGetId(){
         assertEquals(0, nodeA.getId());
         assertEquals(1, nodeB.getId());
@@ -53,7 +53,7 @@ class NodeAndEdgeTests{
         assertEquals(100.0, loc.getElevation());
         assertEquals(45.0, loc.getLongitude());
         assertEquals(90.0, loc.getLatitude());
-    }*/
+    }*//*
     @Test
     public void testEdgeGetNodes(){
         Edge edge = new Edge(nodeA, nodeB, name);
@@ -83,5 +83,5 @@ class NodeAndEdgeTests{
 //        nodeA.addEdge(edge);
 //
 //        assertEquals(edge, nodeA.getEdges().get(0));
-//    }
+//    }*/
 }

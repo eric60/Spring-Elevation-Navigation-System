@@ -16,10 +16,22 @@ public class Edge {
     @Column(name = "geog")
     private double distance;
 
-    public Edge(long src, long dest, double distance) {
+    public Edge(long src) {
+        this.src = src;
+    }
+
+    public Edge(long src, long dest) {
         this.src = src;
         this.dest = dest;
-        this.distance = distance;
+
+    }
+
+    public void setSrc(long src) {
+        this.src = src;
+    }
+
+    public void setDest(long dest) {
+        this.dest = dest;
     }
 
 }
