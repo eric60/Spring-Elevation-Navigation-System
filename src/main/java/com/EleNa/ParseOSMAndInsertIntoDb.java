@@ -58,8 +58,6 @@ public class ParseOSMAndInsertIntoDb {
             // Parsing Node Nodes
             int i = 0;
             for (org.dom4j.Node node : nodeNodes) {
-                String currNode = node.getName();
-
                 String nodeId = node.valueOf("@id");
                 String lon = node.valueOf("@lon");
                 String lat = node.valueOf("@lat");
@@ -69,9 +67,8 @@ public class ParseOSMAndInsertIntoDb {
                 nodes.add(osmNode);
                 i++;
                 if(i % 10 == 0) {
-                    System.out.println("Reached 100 node elements. Inserting nodes into Nodes table");
                     nodeRepo.saveAll(nodes);
-//                    nodeRepoCustom.insertWithQuery(nodes);
+                    System.out.println("Reached 100 node elements. Inserted 100 nodes into Nodes table");
                     nodes.clear();
                 }
             }
@@ -97,15 +94,15 @@ public class ParseOSMAndInsertIntoDb {
                         edges.add(edge);
                         prev = edge;
                     } else {
-                        System.out.println("last elem");
+                        System.out.println("last Way elem");
                     }
                     ndIdx++;
                 }
                 j++;
                 if(j % 100 == 0) {
                     System.out.println("Reached 100 way nd elements. Inserting edges into edges table");
-//                    edgeRepo.saveAll(edges);
-//                    edges.clear();
+                    edgeRepo.saveAll(edges);
+                    edges.clear();
                 }
             }
             System.out.println("--Finished edges size: " + edges.size());

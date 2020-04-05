@@ -7,7 +7,9 @@ import com.vividsolutions.jts.geom.Point;
 
 import com.vividsolutions.jts.geom.Coordinate;
 //import org.postgis.Point;
-import org.hibernate.spatial.GeolatteGeometryType;
+import org.hibernate.spatial.JTSGeometryType;
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Point;
 
 import javax.persistence.*;
 
@@ -17,8 +19,7 @@ public class Node {
     @Id
     private long id;
 
-    @Column(name = "point", columnDefinition = "Geometry", nullable = true)
-    @Type(type="org.hibernate.spatial.JTSGeometryType")
+    @Column(name = "point")
     private Point point;
 
     @Column(name = "elevation")
@@ -28,9 +29,8 @@ public class Node {
     public Node(long id, Coordinate coordinate){
         this.id = id;
         GeometryFactory gf = new GeometryFactory(new PrecisionModel(PrecisionModel.FLOATING), 4326);
-        System.out.println(gf.getSRID());
-        System.out.println("id: " + id + "Cooridnate x " + coordinate.x);
-        System.out.println("Corrdinate y " + coordinate.y);
+//        System.out.println("id: " + id + "Cooridnate x " + coordinate.x);
+//        System.out.println("Corrdinate y " + coordinate.y);
         this.point = gf.createPoint(coordinate);
         this.elevation = 1.0;
     }

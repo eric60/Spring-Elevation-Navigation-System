@@ -1,10 +1,11 @@
--- DROP TABLE IF EXISTS nodes CASCADE;
--- DROP TABLE IF EXISTS edges;
+DROP TABLE IF EXISTS nodes CASCADE;
+DROP TABLE IF EXISTS edges;
 -- DROP EXTENSION IF EXISTS postgis;
 
 CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE TABLE IF NOT EXISTS nodes(
     id bigint PRIMARY KEY,
+--     point geometry(Point, 4326),
     point GEOGRAPHY(Point),
     elevation double precision
 );
