@@ -1,7 +1,5 @@
 package com.EleNa.model.DataStructures;
 
-import org.postgis.Point;
-
 import javax.persistence.*;
 
 @Entity
@@ -25,10 +23,6 @@ public class Edge {
     }
 
     public Edge(){}
-
-    public void setSrc(long src) {
-        this.src = src;
-    }
 
     public void setDest(long dest) {
         this.dest = dest;

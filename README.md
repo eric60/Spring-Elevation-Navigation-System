@@ -7,7 +7,7 @@
     2. Or in terminal from root directory type ./mvnw spring-boot:run
 3. In  browser go to localhost:8080
 4. Go to http://localhost:8080/importData?path=yourFilePath inputting your OSM file path to parse the file and input 
-the node and edge values into the elenaDb.
+the node and edge values into the elenaDb. Make sure you have forward slashes path1/path2
 
 ## Database setup
 1. Download [postgres with stackbuilder](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads#windows) all default settings port 5432

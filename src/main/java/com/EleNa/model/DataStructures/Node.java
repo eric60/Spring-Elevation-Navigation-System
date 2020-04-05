@@ -3,11 +3,9 @@ package com.EleNa.model.DataStructures;
 import com.EleNa.ElevationFinder;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
-import org.hibernate.annotations.Type;
 import com.vividsolutions.jts.geom.Point;
 
 import com.vividsolutions.jts.geom.Coordinate;
-//import org.postgis.Point;
 import org.hibernate.spatial.JTSGeometryType;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Point;
