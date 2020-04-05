@@ -29,8 +29,6 @@ public class Node {
     public Node(long id, Coordinate coordinate){
         this.id = id;
         GeometryFactory gf = new GeometryFactory(new PrecisionModel(PrecisionModel.FLOATING), 4326);
-//        System.out.println("id: " + id + "Cooridnate x " + coordinate.x);
-//        System.out.println("Corrdinate y " + coordinate.y);
         this.point = gf.createPoint(coordinate);
         this.elevation = 1.0;
     }

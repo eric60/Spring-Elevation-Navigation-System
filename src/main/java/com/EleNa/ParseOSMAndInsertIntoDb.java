@@ -72,6 +72,7 @@ public class ParseOSMAndInsertIntoDb {
                     nodes.clear();
                 }
             }
+            nodeRepo.saveAll(nodes);
             System.out.println("---finished nodes size: " + nodes.size());
 
             // Parsing way Nodes
@@ -94,22 +95,24 @@ public class ParseOSMAndInsertIntoDb {
                         edges.add(edge);
                         prev = edge;
                     } else {
-                        System.out.println("last Way elem");
+                        System.out.println("NdIdx: " + ndIdx + ", last Way nd trigger don't create new Edge");
                     }
                     ndIdx++;
                 }
                 j++;
                 if(j % 100 == 0) {
-                    System.out.println("Reached 100 way nd elements. Inserting edges into edges table");
                     edgeRepo.saveAll(edges);
+                    System.out.println("Reached 100 way nd elements. Inserting edges into edges table");
                     edges.clear();
                 }
             }
+            edgeRepo.saveAll(edges);
             System.out.println("--Finished edges size: " + edges.size());
         } catch(Exception e) {
             e.printStackTrace();
         }
-        return "<h1>Imported node and way data";
+        System.out.println("Finished");
+        return "<h1>Imported node and way data</h1>";
     }
 
     @GetMapping("/importData")
