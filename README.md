@@ -29,10 +29,10 @@ the node and edge values into the elenaDb.
 ## PostGIS Geographic Information System Links
 PostGIS enables geometry and geography data types such as Point which has coordinates and spatial indexing to 
 enable useful queries such as 
-* ST_Distance(geography, geography) returns double
+* [ST_Distance(geography, geography) returns double](https://postgis.net/docs/ST_Distance.html)
     * Distance between 2 points 
-* ST_Buffer(geography, float8) returns geography
+* [ST_Buffer(geography, float8) returns geography](https://postgis.net/docs/ST_Buffer.html)
     * Buffer that returns all points less than or equal to the distance of the radius of the buffer 
-1. [PostGis DB Intro](https://postgis.net/workshops/postgis-intro/geography.html) and useful queries
+1. [PostGis DB Intro](https://postgis.net/workshops/postgis-intro/geography.html) and query list
 2. [Hibernate object relational mapping(ORM) to PostGis DB](https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#spatial-overview)
 3. [Point Java class](https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/Point.html) with coordinate error checking and the same useful methods in PostGIS

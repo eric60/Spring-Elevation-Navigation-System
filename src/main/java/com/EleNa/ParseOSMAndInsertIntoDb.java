@@ -36,6 +36,10 @@ public class ParseOSMAndInsertIntoDb {
     private static List<Node> nodes = new ArrayList<>();
     private static List<Edge> edges = new ArrayList<>();
 
+    private static final int SQL_BATCH_INSERT = 500;
+    private static final int REACH_NOTIFICATION = 50;
+
+
     @Autowired
     public ParseOSMAndInsertIntoDb(NodeRepository nodeRepo, EdgeRepository edgeRepo, NodeRepositoryCustom nodeRepoCustom) {
         this.nodeRepo = nodeRepo;
@@ -52,8 +56,8 @@ public class ParseOSMAndInsertIntoDb {
             List<org.dom4j.Node> nodeNodes = document.selectNodes("/osm/node" );
             List<org.dom4j.Node> wayNodes = document.selectNodes("/osm/way" );
 
-            System.out.println("nodes size: " + nodeNodes.size());
-            System.out.println("ways size: " + wayNodes.size());
+            System.out.println("Number of Node elements: " + nodeNodes.size());
+            System.out.println("Number of Way elements: " + wayNodes.size());
 
             // Parsing Node Nodes
             int i = 0;
@@ -66,21 +70,25 @@ public class ParseOSMAndInsertIntoDb {
                 Node osmNode = new Node(Long.parseLong(nodeId), coordinate);
                 nodes.add(osmNode);
                 i++;
-                if(i % 10 == 0) {
+                if(i % REACH_NOTIFICATION == 0) {
+                    System.out.println("Reached " + i + " node elements");
+                }
+                if(i % SQL_BATCH_INSERT == 0) {
                     nodeRepo.saveAll(nodes);
-                    System.out.println("Reached 100 node elements. Inserted 100 nodes into Nodes table");
+                    System.out.println("--- Reached " + i + " node elements and inserted into Nodes table");
                     nodes.clear();
                 }
             }
             nodeRepo.saveAll(nodes);
-            System.out.println("---finished nodes size: " + nodes.size());
+            System.out.println("--- Finished inserting " + i + " nodes");
 
             // Parsing way Nodes
-            int j = 0;
+            int wayCnt = 0;
+            int ndCnt = 0;
             Edge prev = null;
             for(org.dom4j.Node wayNode : wayNodes) {
                 List<org.dom4j.Node> wayChildrenNodes = wayNode.selectNodes(".//nd");
-                System.out.println("wayChildrenNodes for " + wayNode.getName()+ ": " + wayChildrenNodes.size());
+//                System.out.println("wayChildrenNodes for " + wayNode.getName()+ ": " + wayChildrenNodes.size());
                 int ndIdx = 0;
 
                 for(Iterator<org.dom4j.Node> iter = wayChildrenNodes.iterator(); iter.hasNext();) {
@@ -95,19 +103,23 @@ public class ParseOSMAndInsertIntoDb {
                         edges.add(edge);
                         prev = edge;
                     } else {
-                        System.out.println("NdIdx: " + ndIdx + ", last Way nd trigger don't create new Edge");
+//                        System.out.println("NdIdx: " + ndIdx + ", last Way nd trigger don't create new Edge");
                     }
                     ndIdx++;
+                    ndCnt++;
                 }
-                j++;
-                if(j % 100 == 0) {
+                wayCnt++;
+                if(ndCnt % REACH_NOTIFICATION == 0) {
+                    System.out.println("Reached " + ndCnt + " nd elements");
+                }
+                if(ndCnt % SQL_BATCH_INSERT == 0) {
                     edgeRepo.saveAll(edges);
-                    System.out.println("Reached 100 way nd elements. Inserting edges into edges table");
+                    System.out.println("--- Reached " + ndCnt + " way nd elements and inserted into Edges table");
                     edges.clear();
                 }
             }
             edgeRepo.saveAll(edges);
-            System.out.println("--Finished edges size: " + edges.size());
+            System.out.println("--- Finished inserting " + ndCnt + " nd elements for " + wayCnt + " ways");
         } catch(Exception e) {
             e.printStackTrace();
         }

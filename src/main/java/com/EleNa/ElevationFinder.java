@@ -6,12 +6,11 @@ import java.net.URL;
 import org.json.JSONObject;
 
 public class ElevationFinder {
-    final String BASE_URL = "https://nationalmap.gov/epqs/pqs.php";
-    final String units = "Meters";
-    final String outputType = "json";
+    final static String BASE_URL = "https://nationalmap.gov/epqs/pqs.php";
+    final static String units = "Meters";
+    final static String outputType = "json";
 
-    public double getElevation(double longitude, double latitude) throws Exception{
-
+    public static double getElevation(double longitude, double latitude) throws Exception {
         try {
             String query = String.format("%s?x=%f&y=%f&units=%s&output=%s", BASE_URL, longitude, latitude, units, outputType);
             URL url = new URL(query);
@@ -33,7 +32,8 @@ public class ElevationFinder {
                     if (queryJSON.has("Elevation_Query")) {
                         JSONObject dataJSON = queryJSON.getJSONObject("Elevation_Query");
                         if (dataJSON.has("Elevation")) {
-                            double elevation = (double) dataJSON.get("Elevation");
+                            // Elevation could be 75 integer or 75.5 double type
+                            double elevation = dataJSON.getDouble("Elevation");
                             return elevation;
                         }
                     }

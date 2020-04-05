@@ -1,5 +1,6 @@
 package com.EleNa.model.DataStructures;
 
+import com.EleNa.ElevationFinder;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 import org.hibernate.annotations.Type;
@@ -30,7 +31,11 @@ public class Node {
         this.id = id;
         GeometryFactory gf = new GeometryFactory(new PrecisionModel(PrecisionModel.FLOATING), 4326);
         this.point = gf.createPoint(coordinate);
-        this.elevation = 1.0;
+        try {
+            this.elevation = ElevationFinder.getElevation(coordinate.x, coordinate.y);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Node(){}
