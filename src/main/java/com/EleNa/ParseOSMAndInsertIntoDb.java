@@ -2,6 +2,8 @@ package com.EleNa;
 
 import com.EleNa.repositories.EdgeRepository;
 import com.EleNa.repositories.NodeRepository;
+import com.EleNa.repositories.NodeRepositoryCustom;
+import com.vividsolutions.jts.geom.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.dom4j.*;
@@ -16,22 +18,32 @@ import com.EleNa.model.DataStructures.Edge;
 
 import org.postgis.Point;
 
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.transaction.Transactional;
+
+@RestController
 public class ParseOSMAndInsertIntoDb {
-    @Autowired
-    NodeRepository nodeRepo;
 
-    @Autowired
-    EdgeRepository edgeRepo;
+    private static NodeRepository nodeRepo;
+    private static EdgeRepository edgeRepo;
+    private static NodeRepositoryCustom  nodeRepoCustom;
 
-    String filePath = "C:/Users/T450-180519/Downloads/map.osm";
-    private File osmFile = new File(filePath);
     private static List<Node> nodes = new ArrayList<>();
     private static List<Edge> edges = new ArrayList<>();
 
-    public ParseOSMAndInsertIntoDb() {
+    @Autowired
+    public ParseOSMAndInsertIntoDb(NodeRepository nodeRepo, EdgeRepository edgeRepo, NodeRepositoryCustom nodeRepoCustom) {
+        this.nodeRepo = nodeRepo;
+        this.edgeRepo = edgeRepo;
+        this.nodeRepoCustom = nodeRepoCustom;
     }
 
-    public static void parseOSMFile(File osmFile) {
+    public static String parseOSMFile(File osmFile){
         SAXReader reader = new SAXReader();
         try {
             Document document = reader.read( osmFile );
@@ -52,13 +64,15 @@ public class ParseOSMAndInsertIntoDb {
                 String lon = node.valueOf("@lon");
                 String lat = node.valueOf("@lat");
 
-                Point point = new Point(Double.parseDouble(lon), Double.parseDouble(lat));
-                Node osmNode = new Node(Long.parseLong(nodeId), point);
+                Coordinate coordinate = new Coordinate(Double.parseDouble(lon), Double.parseDouble(lat));
+                Node osmNode = new Node(Long.parseLong(nodeId), coordinate);
                 nodes.add(osmNode);
                 i++;
-                if(i % 100 == 0) {
-//                    System.out.println("Reached 100  elements. Inserting nodes into Nodes table");
-//                    nodes.clear();
+                if(i % 10 == 0) {
+                    System.out.println("Reached 100 node elements. Inserting nodes into Nodes table");
+                    nodeRepo.saveAll(nodes);
+//                    nodeRepoCustom.insertWithQuery(nodes);
+                    nodes.clear();
                 }
             }
             System.out.println("---finished nodes size: " + nodes.size());
@@ -87,16 +101,24 @@ public class ParseOSMAndInsertIntoDb {
                     }
                     ndIdx++;
                 }
+                j++;
+                if(j % 100 == 0) {
+                    System.out.println("Reached 100 way nd elements. Inserting edges into edges table");
+//                    edgeRepo.saveAll(edges);
+//                    edges.clear();
+                }
             }
             System.out.println("--Finished edges size: " + edges.size());
         } catch(Exception e) {
             e.printStackTrace();
         }
-
+        return "<h1>Imported node and way data";
     }
 
-    public static void commitElementsToDb(String elemType) {
-
+    @GetMapping("/importData")
+    public void importData(@RequestParam String path) {
+        File osmFile = new File(path);
+        parseOSMFile(osmFile);
     }
 
     public static void main(String[] args) {

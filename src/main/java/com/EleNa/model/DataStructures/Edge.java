@@ -1,19 +1,21 @@
 package com.EleNa.model.DataStructures;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "edges")
 public class Edge {
+    @Id
+    @GeneratedValue
+    private int id;
+
     @Column(name = "src")
     private long src;
 
     @Column(name = "dest")
     private long dest;
 
-    @Column(name = "geog")
+    @Column(name = "distance")
     private double distance;
 
     public Edge(long src) {
@@ -23,8 +25,9 @@ public class Edge {
     public Edge(long src, long dest) {
         this.src = src;
         this.dest = dest;
-
     }
+
+    public Edge(){}
 
     public void setSrc(long src) {
         this.src = src;

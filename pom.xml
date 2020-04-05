@@ -89,15 +89,31 @@
 			<version>1.2.0</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>net.postgis</groupId>
 			<artifactId>postgis-jdbc</artifactId>
 			<version>2.5.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-spatial</artifactId>
+			<version>5.4.10.Final</version>
+		</dependency>
 
+		<dependency>
+			<groupId>com.vividsolutions</groupId>
+			<artifactId>jts</artifactId>
+			<version>1.13</version>
+		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>Hibernate Spatial repo</id>
+			<url>http://www.hibernatespatial.org/repository</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
