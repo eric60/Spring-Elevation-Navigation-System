@@ -54,7 +54,7 @@ public class ParseOSMAndInsertIntoDb {
             System.out.println("Number of Node elements: " + nodeNodes.size());
             System.out.println("Number of Way elements: " + wayNodes.size());
 
-            // Parsing Node Nodes
+            // Parsing Node nodes
             int i = 0;
             for (org.dom4j.Node node : nodeNodes) {
                 String nodeId = node.valueOf("@id");
@@ -77,7 +77,7 @@ public class ParseOSMAndInsertIntoDb {
             nodeRepo.saveAll(nodes);
             System.out.println("--- Finished inserting " + i + " nodes");
 
-            // Parsing way Nodes
+            // Parsing way nodes
             int wayCnt = 0;
             int ndCnt = 0;
             Edge prev = null;

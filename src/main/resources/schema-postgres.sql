@@ -1,5 +1,5 @@
--- DROP TABLE IF EXISTS nodes CASCADE;
--- DROP TABLE IF EXISTS edges;
+DROP TABLE IF EXISTS nodes CASCADE;
+DROP TABLE IF EXISTS edges;
 -- DROP EXTENSION IF EXISTS postgis;
 
 CREATE EXTENSION IF NOT EXISTS postgis;
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS nodes(
 );
 
 CREATE TABLE IF NOT EXISTS edges(
-    id int PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     src bigint references nodes(id),
     dest bigint references nodes(id),
     distance double precision
