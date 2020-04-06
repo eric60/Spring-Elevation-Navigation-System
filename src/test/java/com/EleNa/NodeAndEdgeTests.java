@@ -1,15 +1,5 @@
 package com.EleNa;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.EleNa.model.DataStructures.Edge;
-import com.EleNa.model.DataStructures.Node;
-import com.EleNa.model.DataStructures.Location;
-
 class NodeAndEdgeTests{
    /* private Node nodeA, nodeB;
     private String name = "Main Street";
