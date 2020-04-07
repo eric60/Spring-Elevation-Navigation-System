@@ -83,9 +83,12 @@ public class ParseOSMAndInsertIntoDb {
             Edge prev = null;
             for(org.dom4j.Node wayNode : wayNodes) {
                 List<org.dom4j.Node> wayChildrenNodes = wayNode.selectNodes(".//nd");
-//                System.out.println("wayChildrenNodes for " + wayNode.getName()+ ": " + wayChildrenNodes.size());
-                int ndIdx = 0;
+                List<org.dom4j.Node> wayChildrenTagNodes = wayNode.selectNodes(".//tag");
 
+                boolean excludeCurrWay = excludeWay(wayChildrenTagNodes);
+                if (excludeCurrWay) { break;}
+
+                int ndIdx = 0;
                 for(Iterator<org.dom4j.Node> iter = wayChildrenNodes.iterator(); iter.hasNext();) {
                     org.dom4j.Node ndRefNode = iter.next();
                     Long ndRef = Long.parseLong(ndRefNode.valueOf("@ref"));
@@ -120,6 +123,19 @@ public class ParseOSMAndInsertIntoDb {
         }
         System.out.println("Finished");
         return "<h1>Imported node and way data</h1>";
+    }
+
+    public static boolean excludeWay(List<org.dom4j.Node> wayChildrenTagNodes) {
+        for (org.dom4j.Node node: wayChildrenTagNodes) {
+            if (node.valueOf("k").equals("highway")) {
+                String v = node.valueOf("v");
+                if (v.equals("motorway") || v.equals("trunk")) {
+                    System.out.println("---Not inserting highway:motorway/trunk way");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @GetMapping("/importData")
