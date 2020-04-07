@@ -1,7 +1,6 @@
 package com.EleNa;
 
 import com.EleNa.graph.*;
-import org.hibernate.graph.Graph;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
@@ -10,18 +9,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class NodeAndEdgeTests{
     private GraphNode nodeA, nodeB;
     private GraphEdge edge;
-    private String name = "Main Street";
 
     @BeforeEach
     void startUp(){
         nodeA = new GraphNode(0, 0.0, 0.0, 0.0);
         nodeB = new GraphNode(1, 1.0, 2.0, 100.0);
+        edge = new GraphEdge(nodeA, nodeB);
     }
 
     @AfterEach
     void tearDown(){
         nodeA = null;
         nodeB = null;
+        edge = null;
     }
 
     @Test
@@ -56,28 +56,21 @@ class NodeAndEdgeTests{
 
     @Test
     public void testEdgeConstructor(){
-        edge = new GraphEdge(nodeA, nodeB);
-
         assertNotEquals(null, edge);
     }
 
     @Test
     public void testEdgeGetSource(){
-        edge = new GraphEdge(nodeA, nodeB);
-
         assertEquals(nodeA, edge.getSource());
     }
 
     @Test
     public void testEdgeGetSink(){
-        edge = new GraphEdge(nodeA, nodeB);
-
         assertEquals(nodeB, edge.getSink());
     }
 
     @Test
     public void testEdgeGetWeight(){
-        edge = new GraphEdge(nodeA, nodeB);
         assertEquals(true,edge.getWeight() > 248600 && edge.getWeight() < 248700);
     }
 
@@ -88,8 +81,6 @@ class NodeAndEdgeTests{
 
     @Test
     void testNodeAddAndGetEdge(){
-        edge = new GraphEdge(nodeA, nodeB);
-
         nodeA.addEdge(edge);
 
         assertEquals(edge, nodeA.getEdges().get(0));
