@@ -15,6 +15,8 @@ public class GraphNode {
 
     protected ArrayList<GraphEdge> edges;
 
+    protected GraphNode prevNode;
+
     //Constructor
     public GraphNode(long id, double latitude, double longitude, double elevation){
         this.id = id;
@@ -22,6 +24,7 @@ public class GraphNode {
         this.longitude = longitude;
         this.elevation = elevation;
         this.edges = new ArrayList<GraphEdge>();
+        this.prevNode = null;
     }
 
     //public methods
@@ -77,5 +80,25 @@ public class GraphNode {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         return radius * c;
+    }
+
+    /*
+     * The following two methods are used in RouteFinders to retrace the optimal route once the goal Node is found
+     */
+
+    //Returns the Node this Node was reached from
+    public GraphNode getPrevNode(){
+        return this.prevNode;
+    }
+
+    //Sets this Node's previous Node to the specified node
+    public void setPrevNode(GraphNode prevNode) throws IllegalArgumentException{
+
+        //Check that input != null
+        if(prevNode == null){
+            throw new IllegalArgumentException("ERROR: node must be non-null");
+        }
+
+        this.prevNode = prevNode;
     }
 }

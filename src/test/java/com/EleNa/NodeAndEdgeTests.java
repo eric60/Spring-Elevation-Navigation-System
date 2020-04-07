@@ -55,6 +55,18 @@ class NodeAndEdgeTests{
     }
 
     @Test
+    public void testNodeSetIllegalPrevNode(){
+        assertThrows(IllegalArgumentException.class, () -> nodeA.setPrevNode(null));
+    }
+
+    @Test
+    public void testNodeSetAndGetPrevNode(){
+        nodeA.setPrevNode(nodeB);
+
+        assertEquals(nodeB, nodeA.getPrevNode());
+    }
+
+    @Test
     public void testEdgeConstructor(){
         assertNotEquals(null, edge);
     }
