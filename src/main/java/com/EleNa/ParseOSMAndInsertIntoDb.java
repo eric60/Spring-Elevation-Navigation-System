@@ -23,10 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ParseOSMAndInsertIntoDb {
-
     private static NodeRepository nodeRepo;
     private static EdgeRepository edgeRepo;
-    private static NodeRepositoryCustom  nodeRepoCustom;
 
     private static List<Node> nodes = new ArrayList<>();
     private static List<Edge> edges = new ArrayList<>();
@@ -34,12 +32,12 @@ public class ParseOSMAndInsertIntoDb {
     private static final int SQL_BATCH_INSERT = 500;
     private static final int REACH_NOTIFICATION = 50;
 
+    private static int excludedWays = 0;
 
     @Autowired
     public ParseOSMAndInsertIntoDb(NodeRepository nodeRepo, EdgeRepository edgeRepo, NodeRepositoryCustom nodeRepoCustom) {
         this.nodeRepo = nodeRepo;
         this.edgeRepo = edgeRepo;
-        this.nodeRepoCustom = nodeRepoCustom;
     }
 
     public static String parseOSMFile(File osmFile){
@@ -54,78 +52,103 @@ public class ParseOSMAndInsertIntoDb {
             System.out.println("Number of Node elements: " + nodeNodes.size());
             System.out.println("Number of Way elements: " + wayNodes.size());
 
-            // Parsing Node nodes
-            int i = 0;
-            for (org.dom4j.Node node : nodeNodes) {
-                String nodeId = node.valueOf("@id");
-                String lon = node.valueOf("@lon");
-                String lat = node.valueOf("@lat");
-
-                Coordinate coordinate = new Coordinate(Double.parseDouble(lon), Double.parseDouble(lat));
-                Node osmNode = new Node(Long.parseLong(nodeId), coordinate);
-                nodes.add(osmNode);
-                i++;
-                if(i % REACH_NOTIFICATION == 0) {
-                    System.out.println("Reached " + i + " node elements");
-                }
-                if(i % SQL_BATCH_INSERT == 0) {
-                    nodeRepo.saveAll(nodes);
-                    System.out.println("--- Reached " + i + " node elements and inserted into Nodes table");
-                    nodes.clear();
-                }
-            }
-            nodeRepo.saveAll(nodes);
-            System.out.println("--- Finished inserting " + i + " nodes");
-
-            // Parsing way nodes
-            int wayCnt = 0;
-            int ndCnt = 0;
-            Edge prev = null;
-            for(org.dom4j.Node wayNode : wayNodes) {
-                List<org.dom4j.Node> wayChildrenNodes = wayNode.selectNodes(".//nd");
-//                System.out.println("wayChildrenNodes for " + wayNode.getName()+ ": " + wayChildrenNodes.size());
-                int ndIdx = 0;
-
-                for(Iterator<org.dom4j.Node> iter = wayChildrenNodes.iterator(); iter.hasNext();) {
-                    org.dom4j.Node ndRefNode = iter.next();
-                    Long ndRef = Long.parseLong(ndRefNode.valueOf("@ref"));
-                    if(ndIdx != 0) {
-                        prev.setDest(ndRef);
-                    }
-
-                    if(iter.hasNext()) {
-                        Edge edge = new Edge(ndRef);
-                        edges.add(edge);
-                        prev = edge;
-                    } else {
-//                        System.out.println("NdIdx: " + ndIdx + ", last Way nd trigger don't create new Edge");
-                    }
-                    ndIdx++;
-                    ndCnt++;
-                }
-                wayCnt++;
-                if(ndCnt % REACH_NOTIFICATION == 0) {
-                    System.out.println("Reached " + ndCnt + " nd elements");
-                }
-                if(ndCnt % SQL_BATCH_INSERT == 0) {
-                    edgeRepo.saveAll(edges);
-                    System.out.println("--- Reached " + ndCnt + " way nd elements and inserted into Edges table");
-                    edges.clear();
-                }
-            }
-            edgeRepo.saveAll(edges);
-            System.out.println("--- Finished inserting " + ndCnt + " nd elements for " + wayCnt + " ways");
-        } catch(Exception e) {
+            parseNodeNodes(nodeNodes);
+            parseWayNodes(wayNodes);
+            System.out.println("Excluded " + excludedWays + " ways");
+        }
+        catch(Exception e) {
             e.printStackTrace();
         }
         System.out.println("Finished");
         return "<h1>Imported node and way data</h1>";
     }
 
+    public static void parseNodeNodes(List<org.dom4j.Node> nodeNodes) {
+        int i = 0;
+        for (org.dom4j.Node node : nodeNodes) {
+            String nodeId = node.valueOf("@id");
+            String lon = node.valueOf("@lon");
+            String lat = node.valueOf("@lat");
+
+            Coordinate coordinate = new Coordinate(Double.parseDouble(lon), Double.parseDouble(lat));
+            Node osmNode = new Node(Long.parseLong(nodeId), coordinate);
+            nodes.add(osmNode);
+            i++;
+            if(i % REACH_NOTIFICATION == 0) {
+                System.out.println("Reached " + i + " node elements");
+            }
+            if(i % SQL_BATCH_INSERT == 0) {
+                nodeRepo.saveAll(nodes);
+                System.out.println("--- Reached " + i + " node elements and inserted into Nodes table");
+                nodes.clear();
+            }
+        }
+        nodeRepo.saveAll(nodes);
+        System.out.println("--- Finished inserting " + i + " nodes");
+    }
+
+    public static void parseWayNodes(List<org.dom4j.Node> wayNodes) {
+        int wayCnt = 0;
+        int ndCnt = 0;
+        Edge prev = null;
+        for(org.dom4j.Node wayNode : wayNodes) {
+            List<org.dom4j.Node> wayChildrenNodes = wayNode.selectNodes(".//nd");
+            List<org.dom4j.Node> wayChildrenTagNodes = wayNode.selectNodes(".//tag");
+
+            boolean excludeCurrWay = excludeWay(wayChildrenTagNodes);
+            if (excludeCurrWay) { continue;}
+
+            int ndIdx = 0;
+            for(Iterator<org.dom4j.Node> iter = wayChildrenNodes.iterator(); iter.hasNext();) {
+                org.dom4j.Node ndRefNode = iter.next();
+                Long ndRef = Long.parseLong(ndRefNode.valueOf("@ref"));
+                if(ndIdx != 0) {
+                    prev.setDest(ndRef);
+                }
+
+                if(iter.hasNext()) {
+                    Edge edge = new Edge(ndRef);
+                    edges.add(edge);
+                    prev = edge;
+                } else {
+//                        System.out.println("NdIdx: " + ndIdx + ", last Way nd trigger don't create new Edge");
+                }
+                ndIdx++;
+                ndCnt++;
+            }
+            wayCnt++;
+            if(ndCnt % REACH_NOTIFICATION == 0) {
+                System.out.println("Reached " + ndCnt + " nd elements");
+            }
+            if(ndCnt % SQL_BATCH_INSERT == 0) {
+                edgeRepo.saveAll(edges);
+                System.out.println("--- Reached " + ndCnt + " way nd elements and inserted into Edges table");
+                edges.clear();
+            }
+        }
+        edgeRepo.saveAll(edges);
+        int total_edges = ndCnt - wayCnt;
+        System.out.println("--- Finished inserting " + total_edges + " edges for " + wayCnt + " ways");
+    }
+
+    public static boolean excludeWay(List<org.dom4j.Node> wayChildrenTagNodes) {
+        for (org.dom4j.Node node: wayChildrenTagNodes) {
+            if (node.valueOf("@k").equals("highway")) {
+                String v = node.valueOf("@v");
+                if (v.equals("motorway") || v.equals("trunk")) {
+                    System.out.println("--- Not inserting highway:motorway/trunk way");
+                    excludedWays++;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @GetMapping("/importData")
-    public void importData(@RequestParam String path) {
+    public String importData(@RequestParam String path) {
         File osmFile = new File(path);
-        parseOSMFile(osmFile);
+        return parseOSMFile(osmFile);
     }
 
     public static void main(String[] args) {

@@ -18,21 +18,24 @@
             <h1 class="display-1">EleNa</h1>
             <h3>Elevation Navigation for Amherst Cyclists</h3>
 
-            <label for="elevation-selection">Select your elevation preference</label>
-            <select id="elevation-selection">
-                <option value="none">No elevation</option>
-                <option value="max">Max Elevation</option>
-                <option value="min">Min Elevation</option>
-            </select>
-            <div>
+
+            <form class="form-inline">
                 <label for="starting">Starting Point</label>
                 <input type="text" class="form-control" id="starting" placeholder="Address,City,State,Zip">
 
                 <label for="destination">Destination</label>
                 <input type="text" class="form-control" id="destination" placeholder="Address,City,State,Zip">
-                <button type="button" id="submitRoute"class="btn btn-primary">Submit</button>
-            </div>
-            <p>hello world</p>
+
+                <label for="elevation-selection">Elevation preference</label>
+                <select id="elevation-selection">
+                    <option value="none">No elevation</option>
+                    <option value="max">Max Elevation</option>
+                    <option value="min">Min Elevation</option>
+                </select>
+            </form>
+            <button type="submit" id="submitRoute"class="btn btn-primary">Submit</button>
+
+            <p>hellos</p>
 
         </div>
     </body>
