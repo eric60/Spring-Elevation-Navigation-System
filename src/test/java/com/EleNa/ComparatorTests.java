@@ -27,8 +27,11 @@ public class ComparatorTests {
         maxComp = new MaxPriorityComparator();
         nodeA = new GraphNode(0,0.0,0.0,0.0);
         nodeB = new GraphNode(1,1.0,1.0,10.0);
-        itemA = new PriorityQueueItem(0.0,0.0,nodeA);
-        itemB = new PriorityQueueItem(1.0,1.0,nodeB);
+        itemA = new PriorityQueueItem(nodeA);
+        itemB = new PriorityQueueItem(nodeB);
+
+        itemA.setPriority(0.0);
+        itemB.setPriority(2.0);
     }
 
     @AfterEach
@@ -44,7 +47,7 @@ public class ComparatorTests {
 
     @Test
     void testMinPriorityComparator(){
-        pQueue = new PriorityQueue<>(2,minComp);
+        pQueue = new PriorityQueue<>(minComp);
 
         pQueue.add(itemA);
         pQueue.add(itemB);
@@ -55,7 +58,7 @@ public class ComparatorTests {
 
     @Test
     void testMaxPriorityComparator(){
-        pQueue = new PriorityQueue<>(2,maxComp);
+        pQueue = new PriorityQueue<>(maxComp);
 
         pQueue.add(itemA);
         pQueue.add(itemB);

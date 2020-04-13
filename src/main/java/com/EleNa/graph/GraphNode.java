@@ -1,6 +1,7 @@
 package com.EleNa.graph;
 
 import java.util.ArrayList;
+import com.EleNa.routing.PriorityQueueItem;
 
 public class GraphNode {
 
@@ -13,7 +14,7 @@ public class GraphNode {
 
     protected double elevation;
 
-    protected ArrayList<GraphEdge> edges;
+    protected ArrayList<GraphNode> neighbors;
 
     protected GraphNode prevNode;
 
@@ -23,7 +24,7 @@ public class GraphNode {
         this.latitude  = latitude;
         this.longitude = longitude;
         this.elevation = elevation;
-        this.edges = new ArrayList<GraphEdge>();
+        this.neighbors = new ArrayList<GraphNode>();
         this.prevNode = null;
     }
 
@@ -49,17 +50,17 @@ public class GraphNode {
         return this.elevation;
     }
 
-    //Adds an Edge to this Node
-    public void addEdge(GraphEdge edge) throws IllegalArgumentException{
-        if(edge == null){
-            throw new IllegalArgumentException("ERROR: edge must be non-null");
+    //Adds a neighbor Node to this Node
+    public void addNeighbor(GraphNode node) throws IllegalArgumentException{
+        if(node == null){
+            throw new IllegalArgumentException("ERROR: node must be non-null");
         }
-        this.edges.add(edge);
+        this.neighbors.add(node);
     }
 
     //Returns this Node's Edges
-    public ArrayList<GraphEdge> getEdges(){
-        return this.edges;
+    public ArrayList<GraphNode> getNeighbors(){
+        return this.neighbors;
     }
 
     //Uses the Haversine formula to compute the distance between two Nodes (in meters)
@@ -100,5 +101,9 @@ public class GraphNode {
         }
 
         this.prevNode = prevNode;
+    }
+
+    public boolean equals(PriorityQueueItem item){
+        return item.getNode().equals(this);
     }
 }

@@ -8,15 +8,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GraphTests {
     private GraphNode nodeA, nodeB;
-    private GraphEdge edgeA, edgeB;
     private Graph graph;
 
     @BeforeEach
     void startUp(){
         nodeA = new GraphNode(0, 0.0, 0.0, 0.0);
         nodeB = new GraphNode(1, 1.0, 2.0, 100.0);
-        edgeA = new GraphEdge(nodeA, nodeB);
-        edgeB = new GraphEdge(nodeB, nodeA);
         graph = new Graph();
     }
 
@@ -24,8 +21,6 @@ public class GraphTests {
     void tearDown(){
         nodeA = null;
         nodeB = null;
-        edgeA = null;
-        edgeB = null;
         graph = null;
     }
 
@@ -40,11 +35,6 @@ public class GraphTests {
     }
 
     @Test
-    void testGraphGetNumEdges(){
-        assertEquals(0,graph.getNumEdges());
-    }
-
-    @Test
     void testGraphAddIllegalNode(){
         assertThrows(IllegalArgumentException.class,() -> graph.addNode(null));
     }
@@ -54,24 +44,6 @@ public class GraphTests {
         graph.addNode(nodeA);
 
         assertEquals(1, graph.getNumNodes());
-    }
-
-    @Test
-    void testGraphAddIllegalEdge(){
-        assertThrows(IllegalArgumentException.class, () -> graph.addEdge(null));
-    }
-
-    @Test
-    void testGraphAddEdge(){
-        graph.addEdge(edgeA);
-
-        assertEquals(1, graph.getNumEdges());
-        assertEquals(2,graph.getNumNodes());
-
-        graph.addEdge(edgeB);
-
-        assertEquals(2, graph.getNumEdges());
-        assertEquals(2,graph.getNumNodes());
     }
 
     @Test

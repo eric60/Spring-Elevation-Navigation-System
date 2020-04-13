@@ -3,6 +3,7 @@ package com.EleNa.routing;
 import com.EleNa.graph.GraphNode;
 
 import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class PriorityQueueItem {
 
@@ -14,15 +15,15 @@ public class PriorityQueueItem {
     protected GraphNode node;
 
     //Constructor
-    public PriorityQueueItem(double priority, double distanceFromSource, GraphNode node) throws IllegalArgumentException{
+    public PriorityQueueItem(GraphNode node) throws IllegalArgumentException{
 
         //Check that node != null
         if(node == null){
             throw new IllegalArgumentException("ERROR: node must be non-null");
         }
 
-        this.priority = priority;
-        this.distanceFromSource = distanceFromSource;
+        this.priority = Double.POSITIVE_INFINITY;
+        this.distanceFromSource = Double.POSITIVE_INFINITY;
         this.node = node;
     }
 
@@ -33,14 +34,28 @@ public class PriorityQueueItem {
         return this.priority;
     }
 
+    //Sets the priority of this Item
+    public void setPriority(double priority){
+        this.priority = priority;
+    }
+
     //Returns the distance from the source Node this Item's Node is
     public double getDistanceFromSource(){
         return this.distanceFromSource;
     }
 
+    //Sets the distance from the source Node this Item's Node is
+    public void setDistanceFromSource(double distanceFromSource){
+        this.distanceFromSource = distanceFromSource;
+    }
+
     //Returns the Node this Item represents
     public GraphNode getNode(){
         return this.node;
+    }
+
+    public boolean equals(GraphNode node){
+        return this.node == node;
     }
 }
 

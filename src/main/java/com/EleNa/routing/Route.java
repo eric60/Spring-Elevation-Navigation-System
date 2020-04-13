@@ -1,7 +1,7 @@
 package com.EleNa.routing;
 
 import java.util.ArrayList;
-import com.EleNa.graph.GraphEdge;
+import com.EleNa.graph.GraphNode;
 
 public class Route {
 
@@ -12,17 +12,17 @@ public class Route {
      *The start of the route is the source of the first element in the ArrayList
      *The end of the route is the sink of the last element in the ArrayList
      */
-    protected ArrayList<GraphEdge> route;
+    protected ArrayList<GraphNode> route;
 
     //Constructor
     public Route(){
-        this.route = new ArrayList<GraphEdge>();
+        this.route = new ArrayList<GraphNode>();
     }
 
     //public methods
 
     //Returns the route this object represents
-    public ArrayList<GraphEdge> getRoute(){
+    public ArrayList<GraphNode> getRoute(){
         return this.route;
     }
 
@@ -30,8 +30,8 @@ public class Route {
     public double getLength(){
         double distance = 0.0;
 
-        for(GraphEdge edge : route){
-            distance += edge.getWeight();
+        for(int i = 0; i < route.size() - 1; i++){
+            distance += GraphNode.computeDistance(route.get(i), route.get(i+1));
         }
 
         return distance;
@@ -41,23 +41,52 @@ public class Route {
     public double getElevationGain(){
         double elevationGain = 0.0;
 
-        for(GraphEdge edge : route){
-            if(edge.getSource().getElevation() < edge.getSink().getElevation()){
-                elevationGain += edge.getSink().getElevation() - edge.getSource().getElevation();
+        for(int i = 0; i < route.size() - 1; i++){
+            GraphNode a = route.get(i);
+            GraphNode b = route.get(i+1);
+            if(a.getElevation() < b.getElevation()) {
+                elevationGain += b.getElevation() - a.getElevation();
             }
         }
 
         return elevationGain;
     }
 
-    //Adds an Edge to this route
-    public void addEdge(GraphEdge edge) throws IllegalArgumentException{
+    //Adds a Node to the end of this Route
+    public void appendNode(GraphNode node) throws IllegalArgumentException{
 
-        //Check that edge != null
-        if(edge == null){
-            throw new IllegalArgumentException("ERROR: edge mus tbe non-null");
+        //Check that node != null
+        if(node == null){
+            throw new IllegalArgumentException("ERROR: node must be non-null");
         }
 
-        route.add(edge);
+        route.add(node);
+    }
+
+    //Adds a Node to the beginning of this Route
+    public void prependNode(GraphNode node) throws IllegalArgumentException{
+
+        //Check that node != null
+        if(node == null){
+            throw new IllegalArgumentException("Error: node must be non-null");
+        }
+
+        route.add(0,node);
+    }
+
+    //Reconstructs the route from sink to source by following GraphNode.prev backwards
+    //NOTE: Only use if a path is guaranteed, otherwise will result in an infinite loop
+    public static Route reconstructRoute(GraphNode source, GraphNode sink){
+        Route route = new Route();
+
+        GraphNode temp = sink;
+
+        while(temp != source){
+            route.prependNode(temp);
+
+            temp = temp.getPrevNode();
+        }
+
+        return route;
     }
 }

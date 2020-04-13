@@ -16,8 +16,8 @@ public class PriorityQueueItemTests {
         nodeA = new GraphNode(0, 0.0, 0.0, 0.0);
         nodeB = new GraphNode(1, 1.0, 2.0, 100.0);
 
-        itemA = new PriorityQueueItem(0.0, 0.0,nodeA);
-        itemB = new PriorityQueueItem(1.0,1.0, nodeB);
+        itemA = new PriorityQueueItem(nodeA);
+        itemB = new PriorityQueueItem(nodeB);
     }
 
     @AfterEach
@@ -31,7 +31,7 @@ public class PriorityQueueItemTests {
 
     @Test
     void testItemInvalidConstructor(){
-        assertThrows(IllegalArgumentException.class, () -> new PriorityQueueItem(0.0,0.0,null));
+        assertThrows(IllegalArgumentException.class, () -> new PriorityQueueItem(null));
     }
 
     @Test
@@ -42,19 +42,38 @@ public class PriorityQueueItemTests {
 
     @Test
     void testItemGetPriority(){
-        assertEquals(0.0, itemA.getPriority());
-        assertEquals(1.0, itemB.getPriority());
+        assertEquals(Double.POSITIVE_INFINITY, itemA.getPriority());
+        assertEquals(Double.POSITIVE_INFINITY, itemB.getPriority());
+    }
+
+    @Test
+    void testItemSetPriority(){
+        itemA.setPriority(1.0);
+
+        assertEquals(1.0, itemA.getPriority());
     }
 
     @Test
     void testItemGetDistanceFromSource(){
-        assertEquals(0.0,itemA.getDistanceFromSource());
-        assertEquals(1.0,itemB.getDistanceFromSource());
+        assertEquals(Double.POSITIVE_INFINITY,itemA.getDistanceFromSource());
+        assertEquals(Double.POSITIVE_INFINITY,itemB.getDistanceFromSource());
+    }
+
+    @Test
+    void testItemSetDistanceFromSource(){
+        itemA.setDistanceFromSource(3.14);
+
+        assertEquals(3.14, itemA.getDistanceFromSource());
     }
 
     @Test
     void testItemGetNode(){
         assertEquals(nodeA,itemA.getNode());
         assertEquals(nodeB,itemB.getNode());
+    }
+
+    @Test
+    void testItemEquals(){
+        assertEquals(true, itemA.equals(nodeA));
     }
 }

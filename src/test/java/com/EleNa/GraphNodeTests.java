@@ -1,27 +1,25 @@
 package com.EleNa;
 
 import com.EleNa.graph.*;
+import com.EleNa.routing.PriorityQueueItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
-class NodeAndEdgeTests{
+class GraphNodeTests {
     private GraphNode nodeA, nodeB;
-    private GraphEdge edge;
 
     @BeforeEach
     void startUp(){
         nodeA = new GraphNode(0, 0.0, 0.0, 0.0);
         nodeB = new GraphNode(1, 1.0, 2.0, 100.0);
-        edge = new GraphEdge(nodeA, nodeB);
     }
 
     @AfterEach
     void tearDown(){
         nodeA = null;
         nodeB = null;
-        edge = null;
     }
 
     @Test
@@ -67,34 +65,20 @@ class NodeAndEdgeTests{
     }
 
     @Test
-    public void testEdgeConstructor(){
-        assertNotEquals(null, edge);
+    public void testNodeAddIllegalNeighbor(){
+        assertThrows(IllegalArgumentException.class, () -> nodeA.addNeighbor(null));
     }
 
     @Test
-    public void testEdgeGetSource(){
-        assertEquals(nodeA, edge.getSource());
+    void testNodeAddAndGetNeighbor(){
+        nodeA.addNeighbor(nodeB);
+
+        assertEquals(nodeB, nodeA.getNeighbors().get(0));
     }
 
     @Test
-    public void testEdgeGetSink(){
-        assertEquals(nodeB, edge.getSink());
-    }
-
-    @Test
-    public void testEdgeGetWeight(){
-        assertEquals(true,edge.getWeight() > 248600 && edge.getWeight() < 248700);
-    }
-
-    @Test
-    public void testNodeAddIllegalEdge(){
-        assertThrows(IllegalArgumentException.class, () -> nodeA.addEdge(null));
-    }
-
-    @Test
-    void testNodeAddAndGetEdge(){
-        nodeA.addEdge(edge);
-
-        assertEquals(edge, nodeA.getEdges().get(0));
+    void testNodeEqualsItem(){
+        PriorityQueueItem itemA = new PriorityQueueItem(nodeA);
+        assertEquals(true, nodeA.equals(itemA));
     }
 }
