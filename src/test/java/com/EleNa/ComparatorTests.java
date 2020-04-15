@@ -4,7 +4,7 @@ import com.EleNa.graph.GraphNode;
 import com.EleNa.routing.PriorityQueueItem;
 import com.EleNa.routing.MaxPriorityComparator;
 import com.EleNa.routing.MinPriorityComparator;
-import java.util.PriorityQueue;
+import com.EleNa.routing.PriorityQueue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
@@ -19,7 +19,7 @@ public class ComparatorTests {
     private PriorityQueueItem itemB;
     private GraphNode nodeA;
     private GraphNode nodeB;
-    private PriorityQueue<PriorityQueueItem> pQueue;
+    private PriorityQueue pQueue;
 
     @BeforeEach
     void startUp() {
@@ -47,7 +47,7 @@ public class ComparatorTests {
 
     @Test
     void testMinPriorityComparator(){
-        pQueue = new PriorityQueue<>(minComp);
+        pQueue = new PriorityQueue(minComp);
 
         pQueue.add(itemA);
         pQueue.add(itemB);
@@ -58,7 +58,7 @@ public class ComparatorTests {
 
     @Test
     void testMaxPriorityComparator(){
-        pQueue = new PriorityQueue<>(maxComp);
+        pQueue = new PriorityQueue(maxComp);
 
         pQueue.add(itemA);
         pQueue.add(itemB);
