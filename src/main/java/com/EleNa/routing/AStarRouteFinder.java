@@ -2,17 +2,33 @@ package com.EleNa.routing;
 
 import com.EleNa.graph.*;
 
+import java.util.Comparator;
+
 public class AStarRouteFinder implements RouteFinder{
 
     //Member fields
     protected PriorityQueue pQueue;
 
+    protected Comparator<? super PriorityQueueItem> comparator;
+
+    protected Graph graph;
+
     //Constructor
-    public AStarRouteFinder(Graph graph){
-        this.pQueue = new PriorityQueue(new MinPriorityComparator());
+    public AStarRouteFinder(Graph graph, Comparator<? super PriorityQueueItem> comparator){
+        this.comparator = comparator;
+        this.pQueue = new PriorityQueue(this.comparator);
+        this.graph = graph;
     }
 
     //public methods
+    public void setComparator(Comparator<? super PriorityQueueItem> comparator){
+        this.comparator = comparator;
+        this.pQueue = new PriorityQueue(this.comparator);
+    }
+
+    public Comparator<? super PriorityQueueItem> getComparator(){
+        return this.comparator;
+    }
 
     //Computes the shortest path from source to sink using A* search
     public Route shortestPath(GraphNode source, GraphNode sink){
@@ -29,6 +45,7 @@ public class AStarRouteFinder implements RouteFinder{
 
             //If we've reached the goal, we're done
             if(current.getNode() == sink){
+                pQueue.clear();
                 return Route.reconstructRoute(source, sink);
             }
 
@@ -60,7 +77,7 @@ public class AStarRouteFinder implements RouteFinder{
             }
         }
 
-        //TODO
+        //If no route is found, return an empty Route
         return new Route();
     }
 

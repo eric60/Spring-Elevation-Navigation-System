@@ -87,6 +87,8 @@ public class Route {
             temp = temp.getPrevNode();
         }
 
+        route.prependNode(source);
+
         return route;
     }
 }
