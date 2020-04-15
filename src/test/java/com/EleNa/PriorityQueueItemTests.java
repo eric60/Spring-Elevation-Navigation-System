@@ -54,13 +54,9 @@ public class PriorityQueueItemTests {
     }
 
     @Test
-    void testItemGetDistanceFromSource(){
+    void testItemSetAndGetDistanceFromSource(){
         assertEquals(Double.POSITIVE_INFINITY,itemA.getDistanceFromSource());
-        assertEquals(Double.POSITIVE_INFINITY,itemB.getDistanceFromSource());
-    }
 
-    @Test
-    void testItemSetDistanceFromSource(){
         itemA.setDistanceFromSource(3.14);
 
         assertEquals(3.14, itemA.getDistanceFromSource());
@@ -75,5 +71,14 @@ public class PriorityQueueItemTests {
     @Test
     void testItemEquals(){
         assertEquals(true, itemA.equals(nodeA));
+    }
+
+    @Test
+    void testSetAndGetElevationGainFromSource(){
+        assertEquals(Double.POSITIVE_INFINITY,itemA.getElevationGainFromSource());
+
+        itemA.setElevationGainFromSource(3.14);
+
+        assertEquals(3.14, itemA.getElevationGainFromSource());
     }
 }

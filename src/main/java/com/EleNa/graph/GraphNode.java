@@ -83,6 +83,15 @@ public class GraphNode {
         return radius * c;
     }
 
+    public static double computeElevationGain(GraphNode source, GraphNode sink){
+        if(sink.getElevation() > source.getElevation()){
+            return sink.getElevation() - source.getElevation();
+        }
+        else{
+            return 0.0;
+        }
+    }
+
     /*
      * The following two methods are used in RouteFinders to retrace the optimal route once the goal Node is found
      */

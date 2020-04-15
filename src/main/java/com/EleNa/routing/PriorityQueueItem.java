@@ -12,6 +12,8 @@ public class PriorityQueueItem {
 
     protected double distanceFromSource;
 
+    protected double elevationGainFromSource;
+
     protected GraphNode node;
 
     //Constructor
@@ -24,6 +26,7 @@ public class PriorityQueueItem {
 
         this.priority = Double.POSITIVE_INFINITY;
         this.distanceFromSource = Double.POSITIVE_INFINITY;
+        this.elevationGainFromSource = Double.POSITIVE_INFINITY;
         this.node = node;
     }
 
@@ -39,15 +42,21 @@ public class PriorityQueueItem {
         this.priority = priority;
     }
 
-    //Returns the distance from the source Node this Item's Node is
+    //Returns the distance from the source Node this Item's Node
     public double getDistanceFromSource(){
         return this.distanceFromSource;
     }
 
-    //Sets the distance from the source Node this Item's Node is
+    //Sets the distance from the source Node this Item's Node
     public void setDistanceFromSource(double distanceFromSource){
         this.distanceFromSource = distanceFromSource;
     }
+
+    //Returns the elevation gain from the source Node to this Item's Node
+    public double getElevationGainFromSource(){ return this.elevationGainFromSource; }
+
+    //Sets the elevation gain from the source Node to this Item's Node
+    public void setElevationGainFromSource(double elevationGainFromSource){ this.elevationGainFromSource = elevationGainFromSource; }
 
     //Returns the Node this Item represents
     public GraphNode getNode(){

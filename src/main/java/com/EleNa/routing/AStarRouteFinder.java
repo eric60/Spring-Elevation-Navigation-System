@@ -30,7 +30,10 @@ public class AStarRouteFinder implements RouteFinder{
         return this.comparator;
     }
 
-    //Computes the shortest path from source to sink using A* search
+    /*
+     *Computes the shortest path from source to sink using A* search
+     * Expects this.comparator to be a MinPriorityComparator
+    */
     public Route shortestPath(GraphNode source, GraphNode sink){
         //Initialization
         PriorityQueueItem start = new PriorityQueueItem(source);
@@ -84,12 +87,65 @@ public class AStarRouteFinder implements RouteFinder{
     /*
      *Computes the path with the min. elevation gain from source to sink
      * That is within the specified maxDistance
+     * Expects this.comparator to be a MinPriorityComparator
      */
     public Route minElevationGainPath(GraphNode source, GraphNode sink, double maxDistance){
-        Route route = new Route();
+        //Initialization
+        PriorityQueueItem start = new PriorityQueueItem(source);
+        start.setDistanceFromSource(0.0);
+        start.setElevationGainFromSource(0.0);
+        start.setPriority(GraphNode.computeElevationGain(source,sink));
+        pQueue.add(start);
 
-        //TODO
-        return route;
+        //Main loop
+        while(!pQueue.isEmpty()){
+            //Get the lowest priority node
+            PriorityQueueItem current = pQueue.poll();
+
+            //If we've reached the goal, we're done
+            if(current.getNode() == sink){
+                pQueue.clear();
+                return Route.reconstructRoute(source, sink);
+            }
+
+            //Look at each Node's neighbor
+            for(GraphNode neighbor : current.getNode().getNeighbors()){
+                double distanceFromSource = current.getDistanceFromSource() + GraphNode.computeDistance(current.getNode(), neighbor);
+                double elevationGainFromSource = current.getElevationGainFromSource() + GraphNode.computeElevationGain(current.getNode(),neighbor);
+
+                if(distanceFromSource >= maxDistance){
+                    continue;
+                }
+
+                //If neighbor is not in the pQueue, it has never been seen before, so we know we can update safely
+                if(!pQueue.contains(neighbor)){
+                    PriorityQueueItem neighborItem = new PriorityQueueItem(neighbor);
+
+                    neighbor.setPrevNode(current.getNode());
+                    neighborItem.setDistanceFromSource(distanceFromSource);
+                    neighborItem.setElevationGainFromSource(elevationGainFromSource);
+                    neighborItem.setPriority(elevationGainFromSource + GraphNode.computeElevationGain(neighbor, sink));
+
+                    pQueue.add(neighborItem);
+                }
+                else{
+                    PriorityQueueItem neighborItem = pQueue.remove(neighbor);
+
+                    if(elevationGainFromSource < neighborItem.getElevationGainFromSource()){
+                        neighborItem.getNode().setPrevNode(current.getNode());
+                        neighborItem.setDistanceFromSource(distanceFromSource);
+                        neighborItem.setElevationGainFromSource(elevationGainFromSource);
+                        neighborItem.setPriority(distanceFromSource + GraphNode.computeDistance(neighbor,sink));
+                        neighborItem.setPriority(elevationGainFromSource + GraphNode.computeElevationGain(neighbor, sink));
+
+                        pQueue.add(neighborItem);
+                    }
+                }
+            }
+        }
+
+        //If no route is found, return an empty Route
+        return new Route();
     }
 
     /*
