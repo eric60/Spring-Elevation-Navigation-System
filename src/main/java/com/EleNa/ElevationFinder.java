@@ -38,7 +38,7 @@ public class ElevationFinder {
                         }
                     }
                 }
-                return Double.MAX_VALUE;
+                throw new Exception("ERROR in ElevationFinder: could not find elevation.");
             }
         }
         catch (Exception e) {
