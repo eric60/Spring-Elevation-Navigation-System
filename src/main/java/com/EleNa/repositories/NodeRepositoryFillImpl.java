@@ -47,7 +47,7 @@ public class NodeRepositoryFillImpl implements NodeRepositoryFill{
         String queryString = "select n.id, ST_AsText(n.point) as point, n.elevation, e.src, e.dest " +
                 "from nodes n inner join edges e on n.id=e.src "+
                 "where ST_DWithin(n.point, ST_MakeLine(ST_MakePoint(:sourceLong, :sourceLat), " +
-                "ST_MakePoint(:sinkLong, :sinkLat)), :searchRadius);";
+                "ST_MakePoint(:sinkLong, :sinkLat)), :searchRadius)";
 
         Query query = entityManager.createNativeQuery(queryString, BufferNode.class);
 
@@ -102,7 +102,7 @@ public class NodeRepositoryFillImpl implements NodeRepositoryFill{
 
         String queryString = "select n.id from nodes n " +
                 "order by ST_Distance(ST_MakePoint(:lon, :lat), n.point)" +
-                "limit 1;";
+                "limit 1";
 
         Query query = entityManager.createNativeQuery(queryString);
 

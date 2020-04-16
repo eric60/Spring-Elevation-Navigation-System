@@ -3,7 +3,7 @@ package com.EleNa;
 import com.EleNa.repositories.EdgeRepository;
 import com.EleNa.repositories.NodeRepository;
 import com.EleNa.repositories.NodeRepositoryCustom;
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.dom4j.*;
@@ -70,7 +70,7 @@ public class ParseOSMAndInsertIntoDb {
             String lon = node.valueOf("@lon");
             String lat = node.valueOf("@lat");
 
-            Coordinate coordinate = new Coordinate(Double.parseDouble(lon), Double.parseDouble(lat));
+            org.locationtech.jts.geom.Coordinate coordinate = new Coordinate(Double.parseDouble(lon), Double.parseDouble(lat));
             Node osmNode = new Node(Long.parseLong(nodeId), coordinate);
             nodes.add(osmNode);
             i++;
