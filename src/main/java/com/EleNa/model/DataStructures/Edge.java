@@ -26,9 +26,21 @@ public class Edge {
 
     public Edge(){}
 
+    public Edge(long src, long dest) {
+        this.src = src;
+        this.dest = dest;
+    }
+
     public void setDest(long dest) {
         this.dest = dest;
         this.distance = 1.0;
     }
 
+    public long getSrc() {
+        return this.src;
+    }
+
+    public long getDest() {
+        return this.dest;
+    }
 }
