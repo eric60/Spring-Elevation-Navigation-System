@@ -42,11 +42,79 @@ public class PriorityQueueTests {
     }
 
     @Test
-    void testisEmpty(){
-        assertEquals(true, pQueue.isEmpty());
+    void testConstructor(){
+        assertNotEquals(null, pQueue);
+    }
+
+    @Test
+    void testAddAndOfferAndSize(){
+        assertEquals(0,pQueue.size());
 
         pQueue.add(itemA);
 
-        assertEquals(false, pQueue.isEmpty());
+        assertEquals(1,pQueue.size());
+    }
+
+    @Test
+    void testIndexOf(){
+        pQueue.add(itemA);
+
+        int idx = pQueue.indexOf(nodeA);
+
+        assertEquals(0, idx);
+    }
+
+    @Test
+    void testRemove(){
+        pQueue.add(itemA);
+
+        assertEquals(itemA, pQueue.remove(nodeA));
+        assertEquals(0,pQueue.size());
+    }
+
+    @Test
+    void testContains(){
+        assertEquals(false,pQueue.contains(nodeA));
+
+        pQueue.add(itemB);
+
+        assertEquals(true, pQueue.contains(nodeB));
+    }
+
+    @Test
+    void testIsEmpty(){
+        assertEquals(true,pQueue.isEmpty());
+
+        pQueue.add(itemA);
+
+        assertEquals(false,pQueue.isEmpty());
+    }
+
+    @Test
+    void testClear(){
+        pQueue.add(itemA);
+        pQueue.add(itemB);
+
+        assertEquals(2,pQueue.size());
+        assertEquals(false,pQueue.isEmpty());
+
+        pQueue.clear();
+
+        assertEquals(0,pQueue.size());
+        assertEquals(true,pQueue.isEmpty());
+    }
+
+    @Test
+    void testPoll(){
+        itemA.setPriority(0.0);
+        itemB.setPriority(100.0);
+
+        pQueue.add(itemB);
+        pQueue.add(itemA);
+
+        assertEquals(itemA,pQueue.poll());
+        assertEquals(1,pQueue.size());
+        assertEquals(itemB,pQueue.poll());
+        assertEquals(true,pQueue.isEmpty());
     }
 }

@@ -32,7 +32,6 @@ import com.EleNa.graph.GraphNode;
  * And making some previously private methods public
  */
 
-import java.util.function.Consumer;
 import java.util.*;
 public class PriorityQueue {
 
@@ -168,7 +167,7 @@ public class PriorityQueue {
         return true;
     }
 
-    private int indexOf(GraphNode node) {
+    public int indexOf(GraphNode node) {
         if (node != null) {
             for (int i = 0; i < size; i++)
                 if (queue[i].equals(node))
@@ -177,17 +176,7 @@ public class PriorityQueue {
         return -1;
     }
 
-    /**
-     * Removes a single instance of the specified element from this queue,
-     * if it is present.  More formally, removes an element {@code e} such
-     * that {@code o.equals(e)}, if this queue contains one or more such
-     * elements.  Returns {@code true} if and only if this queue contained
-     * the specified element (or equivalently, if this queue changed as a
-     * result of the call).
-     *
-     * @param o element to be removed from this queue, if present
-     * @return {@code true} if this queue changed as a result of the call
-     */
+    //Returns the PriorityQueueItem that contains o (if it exists) in the queue
     public PriorityQueueItem remove(GraphNode o) {
         int i = indexOf(o);
         if (i == -1)
@@ -256,22 +245,22 @@ public class PriorityQueue {
      */
     @SuppressWarnings("unchecked")
     private PriorityQueueItem removeAt(int i) {
+        PriorityQueueItem removed = queue[i];
         // assert i >= 0 && i < size;
         modCount++;
         int s = --size;
-        if (s == i) // removed last element
+        if (s == i)  // removed last element
             queue[i] = null;
+
         else {
             PriorityQueueItem moved = queue[s];
             queue[s] = null;
             siftDown(i, moved);
             if (queue[i] == moved) {
                 siftUp(i, moved);
-                if (queue[i] != moved)
-                    return moved;
             }
         }
-        return null;
+        return removed;
     }
 
     /**
