@@ -3,6 +3,7 @@ package com.EleNa;
 import com.EleNa.repositories.EdgeRepository;
 import com.EleNa.repositories.NodeRepository;
 import com.EleNa.repositories.NodeRepositoryCustom;
+//import org.locationtech.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 

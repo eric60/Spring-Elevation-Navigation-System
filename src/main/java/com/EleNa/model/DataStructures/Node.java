@@ -1,16 +1,22 @@
 package com.EleNa.model.DataStructures;
 
 import com.EleNa.ElevationFinder;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.PrecisionModel;
-import com.vividsolutions.jts.geom.Point;
+
+//import org.locationtech.jts.geom.Coordinate;
+//import org.locationtech.jts.geom.GeometryFactory;
+//import org.locationtech.jts.geom.Point;
+//import org.locationtech.jts.geom.PrecisionModel;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.PrecisionModel;
+
 import org.hibernate.spatial.JTSGeometryType;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Point;
+//import org.locationtech.jts.geom.PrecisionModel;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "nodes")
@@ -37,4 +43,16 @@ public class Node {
     }
 
     public Node(){}
+
+    public long getId() {
+        return this.id;
+    }
+
+    public Point getPoint() {
+        return this.point;
+    }
+
+    public double getElevation() {
+        return this.elevation;
+    }
 }
