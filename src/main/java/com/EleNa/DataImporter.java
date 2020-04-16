@@ -51,9 +51,9 @@ public class DataImporter {
 
     public static void main(String[] args) {
         // Tested with map_small_test.osm file
-        // lat="32.8516860" lon="-95.3200780"
-        // lat="32.8432690" lon="-95.3058210"
-        long id = getClosestNode(-95.3200780, 32.8516860);
+        // lat="32.8516860" lon="-95.3200780" = first node
+        // lat="32.8432690" lon="-95.3058210" = last node
+        long id = getClosestNode(-95.3058210, 32.8432690);
         System.out.println(id);
         Graph myGraph = fillGraph(-95.3200780, 32.8516860, -95.3058210, 32.8432690);
     }

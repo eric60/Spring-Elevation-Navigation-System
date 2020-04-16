@@ -8,15 +8,18 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.vividsolutions.jts.geom.Point;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 public interface NodeRepositoryFill {
-    @Query("select * from public.nodes n where " +
-            "ST_DWithin(n.point, ST_MakeLine(ST_MakePoint(:sourceLong, :sourceLat), " +
-            "ST_MakePoint(:sinkLong, :sinkLat)), :searchRadius);")
+    @Query(value = "select n.id, ST_AsText(n.point) as point, n.elevation, n.src, n.dest " +
+            "from nodesAndEdges n " +
+            "where ST_DWithin(n.point, ST_MakeLine(ST_MakePoint(:sourceLong, :sourceLat), " +
+            "ST_MakePoint(:sinkLong, :sinkLat)), :searchRadius)", nativeQuery = true)
     Graph getLocalPoints(double sourceLong, double sourceLat, double sinkLong, double sinkLat, int searchRadius);
 
+    @Query(value = "select n.id from nodes n " +
+            "order by ST_Distance(ST_MakePoint(:lon, :lat), n.point) " +
+            "limit 1", nativeQuery = true)
     long getClosestID(double lon, double lat);
 }

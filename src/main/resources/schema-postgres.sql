@@ -20,6 +20,11 @@ CREATE TABLE IF NOT EXISTS edges(
 CREATE INDEX IF NOT EXISTS nodes_point_gix
 ON nodes USING GIST (point);
 
+CREATE OR REPLACE VIEW nodesAndEdges AS
+select n.id, n.point as point, n.elevation, e.src, e.dest
+from nodes n left outer join edges e on n.id=e.src
+order by n.id;
+
 -- INSERT INTO nodes(geog) values('POINT(-118.4079 33.9434)');
 -- INSERT INTO nodes(geog) values('POINT(2.5559 49.0083)');
 

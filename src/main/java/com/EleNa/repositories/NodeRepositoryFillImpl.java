@@ -34,7 +34,7 @@ public class NodeRepositoryFillImpl implements NodeRepositoryFill{
     private EntityManager entityManager;
 
     @Override
-    @Transactional
+    //@Transactional
     public Graph getLocalPoints(double sourceLong, double sourceLat, double sinkLong, double sinkLat, int searchRadius) {
         entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         entityManager.getTransaction().begin();
@@ -44,8 +44,8 @@ public class NodeRepositoryFillImpl implements NodeRepositoryFill{
         Graph graphNodes = new Graph();
         ArrayList<Edge> edges = new ArrayList<Edge>();
 
-        String queryString = "select n.id, ST_AsText(n.point) as point, n.elevation, e.src, e.dest " +
-                "from nodes n inner join edges e on n.id=e.src "+
+        String queryString = "select n.id, ST_AsText(n.point) as point, n.elevation, n.src, n.dest " +
+                "from nodesAndEdges n " +
                 "where ST_DWithin(n.point, ST_MakeLine(ST_MakePoint(:sourceLong, :sourceLat), " +
                 "ST_MakePoint(:sinkLong, :sinkLat)), :searchRadius)";
 
@@ -93,7 +93,6 @@ public class NodeRepositoryFillImpl implements NodeRepositoryFill{
     }
 
     @Override
-    @Transactional
     public long getClosestID(double lon, double lat) {
         entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         entityManager.getTransaction().begin();
@@ -101,7 +100,7 @@ public class NodeRepositoryFillImpl implements NodeRepositoryFill{
         long closestID;
 
         String queryString = "select n.id from nodes n " +
-                "order by ST_Distance(ST_MakePoint(:lon, :lat), n.point)" +
+                "order by ST_Distance(ST_MakePoint(:lon, :lat), n.point) " +
                 "limit 1";
 
         Query query = entityManager.createNativeQuery(queryString);

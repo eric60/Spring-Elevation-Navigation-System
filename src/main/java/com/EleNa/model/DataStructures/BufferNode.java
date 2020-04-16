@@ -23,19 +23,19 @@ public class BufferNode {
     @Column(name = "elevation")
     private double elevation;
 
-    @Column(name = "src")
-    private long src;
+    @Column(name = "src", nullable = true)
+    private Long src;
 
-    @Column(name = "dest")
-    private long dest;
+    @Column(name = "dest", nullable = true)
+    private Long dest;
 
     //NOTE: elevation is expected in meters
     public BufferNode(long id, String point, double elevation, long src, long dest){
         this.id = id;
         this.point = point;
         this.elevation = elevation;
-        this.src = src;
-        this.dest = dest;
+        this.src = new Long(src);
+        this.dest = new Long(dest);
     }
 
     public BufferNode(){}
@@ -49,11 +49,21 @@ public class BufferNode {
     }
 
     public long getSrc() {
-        return this.src;
+        if (this.src != null) {
+            return this.src.longValue();
+        }
+        else {
+            return -1;
+        }
     }
 
     public long getDest() {
-        return this.dest;
+        if (this.dest != null) {
+            return this.dest.longValue();
+        }
+        else {
+            return -1;
+        }
     }
 
     public double getElevation() {
