@@ -18,15 +18,10 @@ the node and edge values into the elenaDb. Make sure you have forward slashes pa
 ## Adding dependencies
 1. Go to maven repository online and copy and paste the dependency into pom.xml and import them as libraries on intellij
 
-## Using LiveReload
-1. Download chrome extension [Live Reload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei)
-2. Go to localhost:8080 and click the LiveReload icon to enable it on localhost:8080
-3. Recompile any java file to trigger the live reload so you don't have to restart the server to see changes
-
 ## How to test
 1
 
-## PostGIS Geographic Information System Links
+## PostGIS Geographic Information System Docs
 PostGIS enables geometry and geography data types such as Point which has coordinates and spatial indexing to 
 enable useful queries such as 
 * [ST_Distance(geography, geography) returns double](https://postgis.net/docs/ST_Distance.html)
@@ -36,3 +31,12 @@ enable useful queries such as
 1. [PostGis DB Intro](https://postgis.net/workshops/postgis-intro/geography.html) and query list
 2. [Hibernate object relational mapping(ORM) to PostGis DB](https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#spatial-overview)
 3. [Point Java class](https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/Point.html) with coordinate error checking and the same useful methods in PostGIS
+
+## Map docs
+* [Leaftlet reference](https://leafletjs.com/reference-0.7.7.html#map-zoom_)
+* [Mapbox vs Leaftlet vs OSM](https://stackoverflow.com/questions/12262163/what-are-leaflet-and-mapbox-and-what-are-their-differences)
+
+## Using LiveReload
+1. Download chrome extension [Live Reload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei)
+2. Go to localhost:8080 and click the LiveReload icon to enable it on localhost:8080
+3. Recompile any java file to trigger the live reload so you don't have to restart the server to see changes
