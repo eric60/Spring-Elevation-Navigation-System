@@ -3,39 +3,55 @@
     <head>
         <title>EleNa</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link rel="stylesheet" type="text/css" href="./styles.css">
-        <!-- Latest compiled and minified CSS -->
+
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <!-- jQuery library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+              integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+              crossorigin=""/>
+
+        <!-- Make sure you put this AFTER Leaflet's CSS -->
+        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+                integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+                crossorigin=""></script>
+
+        <link rel="stylesheet" type="text/css" href="./styles.css">
         <script type="text/javascript" src="Actions.js"></script>
     </head>
 
     <body>
-        <div class="container">
+        <div class="container text-center">
             <h1 class="display-1">EleNa</h1>
             <h3>Elevation Navigation for Amherst Cyclists</h3>
 
-
-            <form class="form-inline">
-                <label for="starting">Starting Point</label>
-                <input type="text" class="form-control" id="starting" placeholder="Address,City,State,Zip">
-
-                <label for="destination">Destination</label>
-                <input type="text" class="form-control" id="destination" placeholder="Address,City,State,Zip">
-
-                <label for="elevation-selection">Elevation preference</label>
-                <select id="elevation-selection">
+            <form class="form-inline justify-content-center" onsubmit="return false;">
+                <label id="elevation-label" for="elevation">Elevation</label>
+                <select id="elevation" class="form-control">
                     <option value="none">No elevation</option>
                     <option value="max">Max Elevation</option>
                     <option value="min">Min Elevation</option>
                 </select>
-            </form>
-            <button type="submit" id="submitRoute"class="btn btn-primary">Submit</button>
 
-            <p>hellos</p>
+                <label id="within-label" for="within-x">Within x%</label>
+                <input id="within-x" class="form-control" placeholder="10%" required type="number" value="10" min="0" max="100"/>
+
+                <label for="starting">Starting</label>
+                <input type="text" class="form-control" id="starting" placeholder="Address,City,State,Zip">
+
+                <label for="destination">Destination</label>
+                <input type="text" class="form-control" id="destination" placeholder="Address,City,State,Zip">
+                <button id="submit" class="btn btn-primary my-2 my-sm-0">Submit</button>
+            </form>
+
+            <div id="mapid"></div>
+
 
         </div>
     </body>

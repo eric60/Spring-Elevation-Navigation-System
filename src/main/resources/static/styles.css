@@ -1,5 +1,5 @@
 body {
-
+    font-family: 'Roboto', sans-serif;
 }
 
 label {
@@ -10,7 +10,41 @@ label {
     margin-top: 10px;
 }
 
+
+#slider {
+    margin: 10px;
+}
+.ui-slider-horizontal {
+    height: 8px;
+    width: 200px;
+}
+.ui-slider .ui-slider-handle {
+    height: 15px;
+    width: 5px;
+    padding-left: 5px;
+}
+
+#mapid {
+    margin-top: 30px;
+    height: 800px;
+}
+
 /* --- form --- */
+.form {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+#elevation {
+    margin-right: 7px;
+}
+
+label {
+    margin-right: 3px;
+    font-size: 15px
+}
+
 .form-inline input {
     vertical-align: middle;
     margin: 5px 10px 5px 0;
@@ -31,7 +65,3 @@ label {
     background-color: royalblue;
 }
 
-.form-inline {
-    flex-direction: column;
-    align-items: stretch;
-}
