@@ -33,7 +33,12 @@ enable useful queries such as
 3. [Point Java class](https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/Point.html) with coordinate error checking and the same useful methods in PostGIS
 
 ## Map docs
-* [Leaftlet reference](https://leafletjs.com/reference-0.7.7.html#map-zoom_)
+Using MapBox GL JS API to draw customized routes
+* (Lat, Long) pairs
+1. [Fit to the bounds of a linestring](https://docs.mapbox.com/mapbox-gl-js/example/zoomto-linestring/_)
+2. [Adding a GeoJSON line](https://docs.mapbox.com/mapbox-gl-js/example/geojson-line/)
+
+Other
 * [Mapbox vs Leaftlet vs OSM](https://stackoverflow.com/questions/12262163/what-are-leaflet-and-mapbox-and-what-are-their-differences)
 
 ## Using LiveReload

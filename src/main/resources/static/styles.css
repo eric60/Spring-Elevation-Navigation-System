@@ -10,6 +10,10 @@ label {
     margin-top: 10px;
 }
 
+h1, h3, label {
+ color: #1E90FF;
+}
+
 
 #slider {
     margin: 10px;
