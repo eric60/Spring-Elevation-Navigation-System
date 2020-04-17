@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="CGImap 0.8.1 (2999 thorn-03.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <bounds minlat="32.8404800" minlon="-95.3130800" maxlat="32.8486700" maxlon="-95.2985000"/>
+ <node id="229985031" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:44:30Z" user="woodpeck_fixbot" uid="147510" lat="32.8516860" lon="-95.3200780"/>
+ <node id="229985078" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:44:30Z" user="woodpeck_fixbot" uid="147510" lat="32.8386600" lon="-95.3132090"/>
+ <node id="230018971" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:51:22Z" user="woodpeck_fixbot" uid="147510" lat="32.8405410" lon="-95.3016830"/>
+ <node id="230018975" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:51:22Z" user="woodpeck_fixbot" uid="147510" lat="32.8397300" lon="-95.3016420"/>
+ <node id="230018978" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:51:22Z" user="woodpeck_fixbot" uid="147510" lat="32.8391110" lon="-95.3016420"/>
+ <node id="230018982" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:51:22Z" user="woodpeck_fixbot" uid="147510" lat="32.8387830" lon="-95.3018590"/>
+ <node id="230018986" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:51:23Z" user="woodpeck_fixbot" uid="147510" lat="32.8385640" lon="-95.3027260"/>
+ <node id="230028164" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:53:05Z" user="woodpeck_fixbot" uid="147510" lat="32.8593800" lon="-95.3212460"/>
+ <node id="230031031" visible="true" version="3" changeset="16742132" timestamp="2013-06-28T16:48:36Z" user="25or6to4" uid="37392" lat="32.8412794" lon="-95.2974617"/>
+ <node id="230032736" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:03Z" user="woodpeck_fixbot" uid="147510" lat="32.8512280" lon="-95.3198060"/>
+ <node id="230035550" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8590130" lon="-95.3211640"/>
+ <node id="230035553" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8575940" lon="-95.3201600"/>
+ <node id="230035557" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8571590" lon="-95.3200510"/>
+ <node id="230035564" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8561510" lon="-95.3200240"/>
+ <node id="230035567" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8549600" lon="-95.3205120"/>
+ <node id="230035570" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8540210" lon="-95.3205120"/>
+ <node id="230035574" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8493730" lon="-95.3196430"/>
+ <node id="230035576" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8488000" lon="-95.3197790"/>
+ <node id="230035579" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8471620" lon="-95.3197650"/>
+ <node id="230035582" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8455720" lon="-95.3197510"/>
+ <node id="230035587" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8447710" lon="-95.3195340"/>
+ <node id="230035591" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8439240" lon="-95.3190190"/>
+ <node id="230035595" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8429850" lon="-95.3190180"/>
+ <node id="230035599" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8427790" lon="-95.3191270"/>
+ <node id="230035603" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8415190" lon="-95.3191270"/>
+ <node id="230035606" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8410840" lon="-95.3188550"/>
+ <node id="230035609" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8397620" lon="-95.3180010"/>
+ <node id="230035612" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8388170" lon="-95.3173900"/>
+ <node id="230035615" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:35Z" user="woodpeck_fixbot" uid="147510" lat="32.8383360" lon="-95.3169290"/>
+ <node id="230035618" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8381070" lon="-95.3162780"/>
+ <node id="230035620" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8380620" lon="-95.3156540"/>
+ <node id="230035622" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8382910" lon="-95.3150850"/>
+ <node id="230035625" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8386340" lon="-95.3146510"/>
+ <node id="230035628" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8386570" lon="-95.3141080"/>
+ <node id="230035630" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8385880" lon="-95.3134300"/>
+ <node id="230035635" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8391380" lon="-95.3117490"/>
+ <node id="230035639" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8392760" lon="-95.3106360"/>
+ <node id="230035646" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8392760" lon="-95.3080320"/>
+ <node id="230035648" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8394360" lon="-95.3070290"/>
+ <node id="230035652" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8398480" lon="-95.3060250"/>
+ <node id="230035654" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8401000" lon="-95.3037740"/>
+ <node id="230035658" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8402370" lon="-95.3036380"/>
+ <node id="230035662" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:36Z" user="woodpeck_fixbot" uid="147510" lat="32.8409840" lon="-95.2988370"/>
+ <node id="230035785" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:37Z" user="woodpeck_fixbot" uid="147510" lat="32.8434860" lon="-95.3036950"/>
+ <node id="230035789" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:37Z" user="woodpeck_fixbot" uid="147510" lat="32.8448170" lon="-95.3037190"/>
+ <node id="230035793" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:37Z" user="woodpeck_fixbot" uid="147510" lat="32.8453440" lon="-95.3038280"/>
+ <node id="230035798" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:38Z" user="woodpeck_fixbot" uid="147510" lat="32.8457330" lon="-95.3042890"/>
+ <node id="230035802" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:38Z" user="woodpeck_fixbot" uid="147510" lat="32.8456650" lon="-95.3091450"/>
+ <node id="230035804" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:38Z" user="woodpeck_fixbot" uid="147510" lat="32.8456160" lon="-95.3092310"/>
+ <node id="230036246" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:43Z" user="woodpeck_fixbot" uid="147510" lat="32.8432690" lon="-95.3058210"/>
+ <way id="21388725" visible="true" version="1" changeset="641448" timestamp="2008-01-15T21:26:49Z" user="DaveHansenTiger" uid="7168">
+  <nd ref="230018971"/>
+  <nd ref="230018975"/>
+  <nd ref="230018978"/>
+  <nd ref="230018982"/>
+  <nd ref="230018986"/>
+  <tag k="access" v="private"/>
+  <tag k="highway" v="service"/>
+  <tag k="tiger:cfcc" v="A74"/>
+  <tag k="tiger:county" v="Wood, TX"/>
+  <tag k="tiger:reviewed" v="no"/>
+  <tag k="tiger:source" v="tiger_import_dch_v0.6_20070830"/>
+  <tag k="tiger:tlid" v="42995293"/>
+  <tag k="tiger:upload_uuid" v="bulk_upload.pl-b6bd111b-ffa4-4530-a7d3-f416d00be402"/>
+  <way id="21388725" visible="true" version="1" changeset="641448" timestamp="2008-01-15T21:26:49Z" user="DaveHansenTiger" uid="7168">
+ </way>
+  <nd ref="230018971"/>
+  <nd ref="230018975"/>
+  <nd ref="230018978"/>
+  <nd ref="230018982"/>
+  <nd ref="230018986"/>
+  <tag k="highway" v="trunk"/>
+  <tag k="highway" v="service"/>
+  <tag k="tiger:cfcc" v="A74"/>
+  <tag k="tiger:county" v="Wood, TX"/>
+  <tag k="tiger:reviewed" v="no"/>
+  <tag k="tiger:source" v="tiger_import_dch_v0.6_20070830"/>
+  <tag k="tiger:tlid" v="42995293"/>
+  <tag k="tiger:upload_uuid" v="bulk_upload.pl-b6bd111b-ffa4-4530-a7d3-f416d00be402"/>
+ </way>
+ <way id="21390328" visible="true" version="1" changeset="641448" timestamp="2008-01-15T21:35:26Z" user="DaveHansenTiger" uid="7168">
+  <nd ref="230028164"/>
+  <nd ref="230035550"/>
+  <nd ref="230035553"/>
+  <nd ref="230035557"/>
+  <nd ref="230035564"/>
+  <nd ref="230035567"/>
+  <nd ref="230035570"/>
+  <nd ref="229985031"/>
+  <nd ref="230032736"/>
+  <nd ref="230035574"/>
+  <nd ref="230035576"/>
+  <nd ref="230035579"/>
+  <nd ref="230035582"/>
+  <nd ref="230035587"/>
+  <nd ref="230035591"/>
+  <nd ref="230035595"/>
+  <nd ref="230035599"/>
+  <nd ref="230035603"/>
+  <nd ref="230035606"/>
+  <nd ref="230035609"/>
+  <nd ref="230035612"/>
+  <nd ref="230035615"/>
+  <nd ref="230035618"/>
+  <nd ref="230035620"/>
+  <nd ref="230035622"/>
+  <nd ref="230035625"/>
+  <nd ref="230035628"/>
+  <nd ref="230035630"/>
+  <nd ref="229985078"/>
+  <nd ref="230035635"/>
+  <nd ref="230035639"/>
+  <nd ref="230035646"/>
+  <nd ref="230035648"/>
+  <nd ref="230035652"/>
+  <nd ref="230035654"/>
+  <nd ref="230035658"/>
+  <nd ref="230018971"/>
+  <nd ref="230035662"/>
+  <nd ref="230031031"/>
+  <tag k="highway" v="residential"/>
+  <tag k="name" v="County Road 4778"/>
+  <tag k="tiger:cfcc" v="A41"/>
+  <tag k="tiger:county" v="Wood, TX"/>
+  <tag k="tiger:name_base" v="County Road 4778"/>
+  <tag k="tiger:reviewed" v="no"/>
+  <tag k="tiger:separated" v="no"/>
+  <tag k="tiger:source" v="tiger_import_dch_v0.6_20070830"/>
+  <tag k="tiger:tlid" v="42985421:42995282:42995283:42995285:42995286:42988424:42978056:42995291:42995292"/>
+  <tag k="tiger:upload_uuid" v="bulk_upload.pl-b6bd111b-ffa4-4530-a7d3-f416d00be402"/>
+ </way>
+ <way id="21390347" visible="true" version="1" changeset="641448" timestamp="2008-01-15T21:35:31Z" user="DaveHansenTiger" uid="7168">
+  <nd ref="230035658"/>
+  <nd ref="230035785"/>
+  <nd ref="230035789"/>
+  <nd ref="230035793"/>
+  <nd ref="230035798"/>
+  <nd ref="230035802"/>
+  <nd ref="230035804"/>
+  <tag k="highway" v="residential"/>
+  <tag k="name" v="County Road 4779"/>
+  <tag k="tiger:cfcc" v="A41"/>
+  <tag k="tiger:county" v="Wood, TX"/>
+  <tag k="tiger:name_base" v="County Road 4779"/>
+  <tag k="tiger:reviewed" v="no"/>
+  <tag k="tiger:separated" v="no"/>
+  <tag k="tiger:source" v="tiger_import_dch_v0.6_20070830"/>
+  <tag k="tiger:tlid" v="42977864:42996642"/>
+  <tag k="tiger:upload_uuid" v="bulk_upload.pl-b6bd111b-ffa4-4530-a7d3-f416d00be402"/>
+ </way>
+ <way id="21390400" visible="true" version="1" changeset="641448" timestamp="2008-01-15T21:35:54Z" user="DaveHansenTiger" uid="7168">
+  <nd ref="230035785"/>
+  <nd ref="230036246"/>
+  <tag k="highway" v="residential"/>
+  <tag k="name" v="County Road 4780"/>
+  <tag k="tiger:cfcc" v="A41"/>
+  <tag k="tiger:county" v="Wood, TX"/>
+  <tag k="tiger:name_base" v="County Road 4780"/>
+  <tag k="tiger:reviewed" v="no"/>
+  <tag k="tiger:separated" v="no"/>
+  <tag k="tiger:source" v="tiger_import_dch_v0.6_20070830"/>
+  <tag k="tiger:tlid" v="42978363"/>
+  <tag k="tiger:upload_uuid" v="bulk_upload.pl-b6bd111b-ffa4-4530-a7d3-f416d00be402"/>
+ </way>
+</osm>

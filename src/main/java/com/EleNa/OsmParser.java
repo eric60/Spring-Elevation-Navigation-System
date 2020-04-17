@@ -2,7 +2,6 @@ package com.EleNa;
 
 import com.EleNa.repositories.EdgeRepository;
 import com.EleNa.repositories.NodeRepository;
-import com.EleNa.repositories.NodeRepositoryCustom;
 //import org.locationtech.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,11 @@ import com.EleNa.model.DataStructures.Node;
 import com.EleNa.model.DataStructures.Edge;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ParseOSMAndInsertIntoDb {
+public class OsmParser {
     private static NodeRepository nodeRepo;
     private static EdgeRepository edgeRepo;
 
@@ -34,9 +32,10 @@ public class ParseOSMAndInsertIntoDb {
     private static final int REACH_NOTIFICATION = 50;
 
     private static int excludedWays = 0;
+    public static int nodeCnt, wayCnt, edgeCnt;
 
     @Autowired
-    public ParseOSMAndInsertIntoDb(NodeRepository nodeRepo, EdgeRepository edgeRepo, NodeRepositoryCustom nodeRepoCustom) {
+    public OsmParser(NodeRepository nodeRepo, EdgeRepository edgeRepo) {
         this.nodeRepo = nodeRepo;
         this.edgeRepo = edgeRepo;
     }
@@ -85,6 +84,7 @@ public class ParseOSMAndInsertIntoDb {
             }
         }
         nodeRepo.saveAll(nodes);
+        OsmParser.nodeCnt = i;
         System.out.println("--- Finished inserting " + i + " nodes");
     }
 
@@ -130,6 +130,8 @@ public class ParseOSMAndInsertIntoDb {
         edgeRepo.saveAll(edges);
         int total_edges = ndCnt - wayCnt;
         System.out.println("--- Finished inserting " + total_edges + " edges for " + wayCnt + " ways");
+        OsmParser.wayCnt = wayCnt;
+        OsmParser.edgeCnt = total_edges;
     }
 
     public static boolean excludeWay(List<org.dom4j.Node> wayChildrenTagNodes) {
