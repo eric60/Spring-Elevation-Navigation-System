@@ -6,17 +6,17 @@
     1. Either run EleNaApplication with Intellij
     2. Or in terminal from root directory type ./mvnw spring-boot:run
 3. In  browser go to localhost:8080
-4. Go to http://localhost:8080/importData?path=yourFilePath inputting your OSM file path to parse the file and input 
-the node and edge values into the elenaDb. Make sure you have forward slashes path1/path2
 
 ## Database setup
 1. Download [postgres with stackbuilder](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads#windows) all default settings port 5432
 2. Launch stackbuilder and download PostGIS under Spatial Extensions 
 3. Launch pgadmin4
 4. Create database elenaDb with password 'password'
+5. Go to http://localhost:8080/importData?path=yourFilePath inputting your OSM file path to parse the file and input 
+the node and edge values into the elenaDb. Make sure you have forward slashes path1/path2
 
 ## Adding dependencies
-1. Go to maven repository online and copy and paste the dependency into pom.xml and import them as libraries on intellij
+1. Go to maven repository online and copy and paste the dependency into pom.xml and import them as libraries in intellij
 
 ## How to test
 1
@@ -32,10 +32,11 @@ enable useful queries such as
 2. [Hibernate object relational mapping(ORM) to PostGis DB](https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#spatial-overview)
 3. [Point Java class](https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/Point.html) with coordinate error checking and the same useful methods in PostGIS
 
-## Map docs
+## Map Docs
 Using MapBox GL JS API to draw customized routes
 * (Lat, Long) pairs
-* user input -> submit -> get path coordinates -> draw GeoJSON line on map
+* Flow
+    * user input submit-> get path coordinates from routing -> draw GeoJSON line on map
 1. [Fit to the bounds of a linestring](https://docs.mapbox.com/mapbox-gl-js/example/zoomto-linestring/_)
 2. [Adding a GeoJSON line](https://docs.mapbox.com/mapbox-gl-js/example/geojson-line/)
 3. [Mapbox directions](https://docs.mapbox.com/help/how-mapbox-works/directions/)
