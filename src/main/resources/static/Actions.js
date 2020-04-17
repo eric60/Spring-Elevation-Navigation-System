@@ -5,25 +5,44 @@ $(document).ready(function() {
         withinX = $('#within-x').val()
         starting = $('#starting').val()
         destination = $('#destination').val()
-        console.log(`elevation:${elevation}\nwithinX:${withinX} \nstarting: ${starting} \ndestination: ${destination}`);
+        console.log(`elevationPref:${elevation}\nwithinX:${withinX} \nstarting: ${starting} \ndestination: ${destination}`);
+        postToSpring();
     });
 
     function postToSpring() {
+        let elenaData = {
+            elevationPref: elevation, withinX: withinX,
+            starting: starting, destination: destination
+        }
         $.ajax({
             method: "POST",
-            url: "some.php",
-            data: { elevation: elevation, withinX: withinX, starting: starting, destination: destination }
+            url: "http://localhost:8080/submit",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(elenaData)
         })
         .done(function( msg ) {
-            alert( "Data Saved: " + msg );
+            console.log(msg);
         });
     }
 
 
-    var mymap = L.map('mapid').setView([42.3868, 72.5301], 13);
+    // -----------------------  Map methods -------------------------
+    var map = L.map('map')
+        // .setView([51.505, -0.09], 13);
 
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(mymap);
+    let mapBoxToken = "sk.eyJ1IjoiZXJpY3M5OCIsImEiOiJjazkzbHFvZ28wMWhpM25tbTRjMnFtdW54In0.Ew68k87MaxIBw7wA9xIrVQ"
+    let mapUrl  = `https://api.mapbox.com/styles/v1/mapbox/emerald-v8/tiles/{z}/{x}/{y}?access_token=${mapBoxToken}`
+
+    L.tileLayer(mapUrl, {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.Routing.control({
+        waypoints: [
+            L.latLng(57.74, 11.94),
+            L.latLng(57.6792, 11.949)
+        ]
+    }).addTo(map);
 
 })
