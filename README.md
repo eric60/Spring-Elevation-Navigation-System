@@ -35,8 +35,10 @@ enable useful queries such as
 ## Map docs
 Using MapBox GL JS API to draw customized routes
 * (Lat, Long) pairs
+* user input -> submit -> get path coordinates -> draw GeoJSON line on map
 1. [Fit to the bounds of a linestring](https://docs.mapbox.com/mapbox-gl-js/example/zoomto-linestring/_)
 2. [Adding a GeoJSON line](https://docs.mapbox.com/mapbox-gl-js/example/geojson-line/)
+3. [Mapbox directions](https://docs.mapbox.com/help/how-mapbox-works/directions/)
 
 Other
 * [Mapbox vs Leaftlet vs OSM](https://stackoverflow.com/questions/12262163/what-are-leaflet-and-mapbox-and-what-are-their-differences)
