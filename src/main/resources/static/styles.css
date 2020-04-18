@@ -30,7 +30,12 @@ h1, h3, label {
 
 #map {
     margin-top: 30px;
-    height: 1000px;
+    height: 700px;
+}
+
+#map-div {
+    margin: 0px 20px 0px 20px;
+    padding: 0px 20px 0px 20px;
 }
 
 /* --- form --- */
