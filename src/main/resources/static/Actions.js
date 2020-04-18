@@ -14,41 +14,44 @@ $(document).ready(function() {
 
     function getCoordinates(addresses) {
         let startCoord = [], endCoord = [];
-
+        let promises = []
 
         for (let i = 0; i < addresses.length; i++) {
             let address = addresses[i];
             console.log("--" + address)
+            promises[i] = getCoordinatesApi(address)
+        }
+        processPromises(promises)
+    }
 
-            getCoordinatesApi(address).then(json => {
+    function processPromises(promises) {
+        Promise.all(promises).then(function(values) {
+            console.log('------ Promises ------')
+            console.log(values);
+            let startCoord = [], endCoord = [];
+
+            for (let i = 0; i < values.length; i++) {
+                let json = values[i];
                 let lat = json.results[0].locations[0].latLng.lat
                 let long = json.results[0].locations[0].latLng.lng
                 if (!lat || ! long) {
                     alert("Failed to get address. Please check and try again")
                     return;
                 }
-                console.log(lat + ", " + long)
                 if (i == 0) {
                     startCoord.push(lat);
                     startCoord.push(long);
+                    console.log('----- start coord ----')
                     console.log(startCoord)
                 } else {
                     endCoord.push(lat);
                     endCoord.push(long);
-
+                    console.log('----- start coord ----')
+                    console.log(endCoord)
+                    postToSpring(startCoord, endCoord)
                 }
-            })
-        }
-        console.log(" ------------- Coordinates (start, stop)--------------")
-        console.log(startCoord);
-        console.log(endCoord);
-        if (startCoord.length == 2 && endCoord.length == 2) {
-            console.log("posting")
-            postToSpring(startCoord, endCoord)
-        } else {
-            console.log("not ready")
-        }
-
+            }
+        })
     }
 
     async function getCoordinatesApi(address) {
