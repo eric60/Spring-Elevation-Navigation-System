@@ -7,21 +7,84 @@ $(document).ready(function() {
         starting = $('#starting').val()
         destination = $('#destination').val()
         console.log(`elevationPref:${elevation}\nwithinX:${withinX} \nstarting: ${starting} \ndestination: ${destination}`);
-        postToSpring();
 
+        let addresses = [starting, destination]
+        getCoordinates(addresses)
     });
 
-    function postToSpring() {
-        let elenaData = {
-            elevationPref: elevation, withinX: withinX,
-            starting: starting, destination: destination
+    function getCoordinates(addresses) {
+        let startCoord = [], endCoord = [];
+
+
+        for (let i = 0; i < addresses.length; i++) {
+            let address = addresses[i];
+            console.log("--" + address)
+
+            getCoordinatesApi(address).then(json => {
+                let lat = json.results[0].locations[0].latLng.lat
+                let long = json.results[0].locations[0].latLng.lng
+                if (!lat || ! long) {
+                    alert("Failed to get address. Please check and try again")
+                    return;
+                }
+                console.log(lat + ", " + long)
+                if (i == 0) {
+                    startCoord.push(lat);
+                    startCoord.push(long);
+                    console.log(startCoord)
+                } else {
+                    endCoord.push(lat);
+                    endCoord.push(long);
+
+                }
+            })
         }
+        console.log(" ------------- Coordinates (start, stop)--------------")
+        console.log(startCoord);
+        console.log(endCoord);
+        if (startCoord.length == 2 && endCoord.length == 2) {
+            console.log("posting")
+            postToSpring(startCoord, endCoord)
+        } else {
+            console.log("not ready")
+        }
+
+    }
+
+    async function getCoordinatesApi(address) {
+        let KEY = "Gm02cmrNkRBukt" + "1wambjK5AmAnZGW0vr"
+        try {
+            const restAPI = `http://open.mapquestapi.com/geocoding/v1/address?key=${KEY}&location=${address}`
+            const response = await fetch(restAPI);
+            const json = await response.json();
+            console.log(json);
+            return json;
+        } catch {
+
+        }
+    }
+
+    function postToSpring(startCoord, endCoord) {
+        console.log('----- In post to string ------')
+        console.log(startCoord[0])
+
+        let elenaData =
+        {
+            elevationPref: elevation,
+            withinX: withinX,
+            start: startCoord,
+            end: endCoord
+        }
+
+        let data = JSON.stringify(elenaData);
+        console.log(data)
+
         $.ajax({
             method: "POST",
             url: "http://localhost:8080/submit",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            data: JSON.stringify(elenaData)
+            data: data
         })
         .done(function( msg ) {
              let edges = msg;
@@ -59,11 +122,6 @@ $(document).ready(function() {
         zoom: 12
     });
 
-    var geocoder = new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl
-    });
-
     function initMapRoute(edges) {
             geojson.features[0].geometry.coordinates = edges;
 
@@ -84,9 +142,6 @@ $(document).ready(function() {
                     'line-width': 5
                 }
             });
-
     }
-
-
 
 })

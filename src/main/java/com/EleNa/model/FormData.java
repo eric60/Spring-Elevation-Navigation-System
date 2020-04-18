@@ -1,12 +1,10 @@
 package com.EleNa.model;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
 public class FormData {
     private String elevationPref;
     private int withinX;
-    private String starting;
-    private String destination;
+    private double[] start;
+    private double[] end;
 
     public String getElevationPref() {
         return elevationPref;
@@ -24,19 +22,27 @@ public class FormData {
         this.withinX = withinX;
     }
 
-    public String getStarting() {
-        return starting;
+    public double[] getStart() {
+        System.out.println("\n--Start--");
+        for(double coord : start) {
+            System.out.println(coord);
+        }
+        return start;
     }
 
-    public void setStarting(String starting) {
-        this.starting = starting;
+    public void setStart(double[] start) {
+        this.start = start;
     }
 
-    public String getDestination() {
-        return destination;
+    public double[] getEnd() {
+        System.out.println("\n--End--");
+        for(double coord : end) {
+            System.out.println(coord);
+        }
+        return end;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setEnd(double[] end) {
+        this.end = end;
     }
 }

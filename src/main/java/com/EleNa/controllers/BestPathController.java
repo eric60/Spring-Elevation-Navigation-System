@@ -1,14 +1,21 @@
-package com.EleNa.model;
+package com.EleNa.controllers;
 
+import com.EleNa.model.FormData;
 import com.EleNa.routing.RouteFinder;
 import java.util.ArrayList;
 
-public class BestPathData {
+public class BestPathController {
     private ArrayList<ArrayList<Double>> list = new ArrayList<>();
     private RouteFinder routeFinder;
 
     public double[][] calculateRoute(FormData form) {
         // all edge pairs , [n1,n2] [n2,n4]
+
+        double[] start = form.getStart();
+        double[] end = form.getEnd();
+        String elevationPref = form.getElevationPref();
+        int withinX = form.getWithinX();
+
         int edgesCnt = 11;
         int edgePair = 2;
 
