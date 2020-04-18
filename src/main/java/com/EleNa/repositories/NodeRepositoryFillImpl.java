@@ -121,7 +121,7 @@ public class NodeRepositoryFillImpl implements NodeRepositoryFill{
         ArrayList<Edge> edges = new ArrayList<Edge>();
 
         String queryString = "select n.id, ST_AsText(n.point) as point, n.elevation, n.src, n.dest " +
-                "from nodesAndEdges n";
+                "from nodesAndEdges n order by n.id";
 
         Query query = entityManager.createNativeQuery(queryString, BufferNode.class);
 
