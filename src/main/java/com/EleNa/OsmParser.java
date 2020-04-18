@@ -78,14 +78,19 @@ public class OsmParser {
                 System.out.println("Reached " + i + " node elements");
             }
             if(i % SQL_BATCH_INSERT == 0) {
-                nodeRepo.saveAll(nodes);
+                saveNodes();
                 System.out.println("--- Reached " + i + " node elements and inserted into Nodes table");
-                nodes.clear();
+
             }
         }
-        nodeRepo.saveAll(nodes);
+        saveNodes();
         OsmParser.nodeCnt = i;
         System.out.println("--- Finished inserting " + i + " nodes");
+    }
+
+    public static void saveNodes() {
+        nodeRepo.saveAll(nodes);
+        nodes.clear();
     }
 
     public static void parseWayNodes(List<org.dom4j.Node> wayNodes) {
@@ -122,16 +127,20 @@ public class OsmParser {
                 System.out.println("Reached " + ndCnt + " nd elements");
             }
             if(ndCnt % SQL_BATCH_INSERT == 0) {
-                edgeRepo.saveAll(edges);
+                saveEdges();
                 System.out.println("--- Reached " + ndCnt + " way nd elements and inserted into Edges table");
-                edges.clear();
             }
         }
-        edgeRepo.saveAll(edges);
+        saveEdges();
         int total_edges = ndCnt - wayCnt;
         System.out.println("--- Finished inserting " + total_edges + " edges for " + wayCnt + " ways");
         OsmParser.wayCnt = wayCnt;
         OsmParser.edgeCnt = total_edges;
+    }
+
+    public static void saveEdges() {
+        edgeRepo.saveAll(edges);
+        edges.clear();
     }
 
     public static boolean excludeWay(List<org.dom4j.Node> wayChildrenTagNodes) {
@@ -155,7 +164,7 @@ public class OsmParser {
     }
 
     public static void main(String[] args) {
-        String filePath = "C:/Users/T450-180519/Downloads/map.osm";
+        String filePath = "C:\\Users\\T450-180519\\Documents\\Coding_Projects\\520-Project\\src\\main\\resources\\map_small_test.osm";
         File osmFile = new File(filePath);
         parseOSMFile(osmFile);
     }
