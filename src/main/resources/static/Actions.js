@@ -41,12 +41,12 @@ $(document).ready(function() {
                 if (i == 0) {
                     startCoord.push(lat);
                     startCoord.push(long);
-                    console.log('----- start coord ----')
+                    console.log('----- Start coord ----')
                     console.log(startCoord)
                 } else {
                     endCoord.push(lat);
                     endCoord.push(long);
-                    console.log('----- start coord ----')
+                    console.log('----- End  coord ----')
                     console.log(endCoord)
                     postToSpring(startCoord, endCoord)
                 }
@@ -145,6 +145,76 @@ $(document).ready(function() {
                     'line-width': 5
                 }
             });
+
+        let start = edges[0];
+        let end = edges[edges.length - 1];
+        console.log('---- in init map')
+        console.log(start);
+        console.log(end)
+        addStartandStopPoints(start, end)
+    }
+
+    function addStartandStopPoints(start, end) {
+        map.addSource('points', {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                'features': [
+                    {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'start',
+                            'coordinates': start
+                        },
+                        'properties': {
+                            'title': 'Mapbox DC',
+                            'icon': 'monument'
+                        }
+                    },
+                    {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'end',
+                            'coordinates': end
+                        },
+                        'properties': {
+                            'title': 'Mapbox SF',
+                            'icon': 'harbor'
+                        }
+                    }
+                ]
+            }
+        });
+        addPointColor("start", start)
+        addPointColor("end", end)
+    }
+
+    function addPointColor(type, coords) {
+        let color;
+        if (type == "end") { color = "#f30"}
+        else { color = "#3887be"}
+        map.addLayer({
+            id: type,
+            type: 'circle',
+            source: {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: [{
+                        type: type,
+                        properties: {},
+                        geometry: {
+                            type: 'Point',
+                            coordinates: coords
+                        }
+                    }]
+                }
+            },
+            paint: {
+                'circle-radius': 10,
+                'circle-color': color
+            }
+        });
     }
 
 })

@@ -41,7 +41,9 @@ Using MapBox GL JS API to draw customized routes
 2. [Adding a GeoJSON line](https://docs.mapbox.com/mapbox-gl-js/example/geojson-line/)
 3. [Mapbox directions](https://docs.mapbox.com/help/how-mapbox-works/directions/)
 
-Other
+## Notes
+* PostGIS point is longitude, latitude
+* Mapbox point is reversed with latitude, longitude
 * [Mapbox vs Leaftlet vs OSM](https://stackoverflow.com/questions/12262163/what-are-leaflet-and-mapbox-and-what-are-their-differences)
 
 ## Using LiveReload
