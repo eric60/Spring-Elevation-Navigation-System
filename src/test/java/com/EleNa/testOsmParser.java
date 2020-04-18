@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -18,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class testOsmParser {
-    @Autowired
+    @MockBean
     private static NodeRepository nodeRepo;
-    @Autowired
+    @MockBean
     private static EdgeRepository edgeRepo;
 
     private static OsmParser importer;
@@ -32,7 +33,7 @@ public class testOsmParser {
     }
 
     @Test
-    public void test_given_osm_when_importData_then_Correct_nodes_ways() {
+    public void test_given_osm_when_importData_then_Correct_number_of_nodes_and_ways() {
         String file = "C:\\Users\\T450-180519\\Documents\\Coding_Projects\\520-Project\\src\\main\\resources\\map_small_test.osm";
         importer.importData(file);
         assertEquals(50, importer.nodeCnt);

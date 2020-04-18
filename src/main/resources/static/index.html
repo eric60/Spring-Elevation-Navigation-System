@@ -36,9 +36,9 @@
             <form class="form-inline justify-content-center" onsubmit="return false;">
                 <label id="elevation-label" for="elevation">Elevation</label>
                 <select id="elevation" class="form-control">
-                    <option value="none">No elevation</option>
-                    <option value="max">Max Elevation</option>
-                    <option value="min">Min Elevation</option>
+                    <option value="No elevation">No elevation</option>
+                    <option value="Max Elevation">Max Elevation</option>
+                    <option value="Min Elevation">Min Elevation</option>
                 </select>
 
                 <label id="within-label" for="within-x">Within x%</label>
@@ -52,14 +52,17 @@
                 <input type="text" class="form-control" id="destination" placeholder="Street, City, State">
                 <button id="submit" class="btn btn-primary my-2 my-sm-0">Submit</button>
             </form>
+        </div>
 
+        <div>
             <!--     geocoder links       -->
             <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
             <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css" type="text/css"/>
 
             <div id="map"></div>
-            <div id="geocoder" class="geocoder"></div>
-
+            <div id="routes" class="geocoder"></div>
         </div>
+
+
     </body>
 </html>
