@@ -28,13 +28,10 @@ import java.sql.Connection;
 @Repository
 public class NodeRepositoryFillImpl implements NodeRepositoryFill{
 
-    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("javax.persistence-api");
-
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    //@Transactional
     public Graph getLocalPoints(double sourceLong, double sourceLat, double sinkLong, double sinkLat, int searchRadius) {
         entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         entityManager.getTransaction().begin();
@@ -111,5 +108,52 @@ public class NodeRepositoryFillImpl implements NodeRepositoryFill{
         closestID = (new BigInteger(query.getSingleResult().toString())).longValue();
 
         return closestID;
+    }
+
+    @Override
+    public Graph getAllPoints() {
+        entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
+        entityManager.getTransaction().begin();
+
+        ArrayList<BufferNode> buffNodes;
+        ArrayList<Long> keys = new ArrayList<Long>();
+        Graph graphNodes = new Graph();
+        ArrayList<Edge> edges = new ArrayList<Edge>();
+
+        String queryString = "select n.id, ST_AsText(n.point) as point, n.elevation, n.src, n.dest " +
+                "from nodesAndEdges";
+
+        Query query = entityManager.createNativeQuery(queryString, BufferNode.class);
+
+        buffNodes = new ArrayList<BufferNode>(query.getResultList());
+
+
+        entityManager.close();
+
+        BufferNode temp;
+
+        for(int i=0; i<buffNodes.size(); i++) {
+            temp = buffNodes.get(i);
+            graphNodes.addNode(new GraphNode(temp.getId(), temp.getLongitude(),
+                    temp.getLatitude(), temp.getElevation()));
+            if (!keys.contains(new Long(temp.getId()))) {
+                keys.add(new Long(temp.getId()));
+            }
+
+            edges.add(new Edge(temp.getSrc(), temp.getDest()));
+        }
+
+        GraphNode curr;
+        boolean neighbor = true;
+        for(int i=0; i<graphNodes.getNumNodes(); i++) {
+            curr = graphNodes.getNodeById(keys.get(i).longValue());
+            if(curr.getId() == edges.get(0).getSrc()) {     // If node is the source of an edge
+                if(!curr.getNeighbors().contains(edges.get(0).getSrc()) && keys.contains(edges.get(0).getDest())) {    // If neighbor doesn't already exist
+                    curr.addNeighbor(graphNodes.getNodeById(edges.remove(0).getDest()));
+                }
+            }
+        }
+
+        return graphNodes;
     }
 }

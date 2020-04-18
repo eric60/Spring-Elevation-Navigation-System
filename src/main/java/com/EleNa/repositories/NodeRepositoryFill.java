@@ -18,8 +18,14 @@ public interface NodeRepositoryFill {
             "ST_MakePoint(:sinkLong, :sinkLat)), :searchRadius)", nativeQuery = true)
     Graph getLocalPoints(double sourceLong, double sourceLat, double sinkLong, double sinkLat, int searchRadius);
 
+    @Query(value = "select n.id, ST_AsText(n.point) as point, n.elevation, n.src, n.dest " +
+            "from nodesAndEdges n", nativeQuery = true)
+    Graph getAllPoints();
+
     @Query(value = "select n.id from nodes n " +
             "order by ST_Distance(ST_MakePoint(:lon, :lat), n.point) " +
             "limit 1", nativeQuery = true)
     long getClosestID(double lon, double lat);
+
+
 }

@@ -53,8 +53,13 @@ public class DataImporter {
         // Tested with map_small_test.osm file
         // lat="32.8516860" lon="-95.3200780" = first node
         // lat="32.8432690" lon="-95.3058210" = last node
-        long id = getClosestNode(-95.3058210, 32.8432690);
-        System.out.println(id);
+
+        // Tested with map2Small.osm file
+        // -72.519473, 42.367418
+        // -72.512548, 42.366545
+
+        long id = getClosestNode(-95.3200780, 32.8516860);
         Graph myGraph = fillGraph(-95.3200780, 32.8516860, -95.3058210, 32.8432690);
+        System.out.println(id);
     }
 }
