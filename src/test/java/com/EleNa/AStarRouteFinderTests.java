@@ -16,6 +16,7 @@ public class AStarRouteFinderTests {
     private GraphNode nodeB;
     private GraphNode nodeC;
     private GraphNode nodeD;
+    private GraphNode nodeE;
 
     private Graph graph;
 
@@ -30,22 +31,19 @@ public class AStarRouteFinderTests {
         nodeB = new GraphNode(1,1.0,1.0,10.0);
         nodeC = new GraphNode(2,0.0,1.0,0.0);
         nodeD = new GraphNode(3,1.0,0.0,0.0);
+        nodeE = new GraphNode(4, 1.5,1.5,100.0);
 
         nodeA.addNeighbor(nodeB);
         nodeA.addNeighbor(nodeC);
+        nodeA.addNeighbor(nodeE);
         nodeB.addNeighbor(nodeD);
         nodeC.addNeighbor(nodeD);
-
-        graph = new Graph();
-        graph.addNode(nodeA);
-        graph.addNode(nodeB);
-        graph.addNode(nodeC);
-        graph.addNode(nodeD);
+        nodeE.addNeighbor(nodeD);
 
         minComp = new MinPriorityComparator();
         maxComp = new MaxPriorityComparator();
 
-        routeFinder = new AStarRouteFinder(graph, minComp);
+        routeFinder = new AStarRouteFinder(minComp);
     }
 
     @AfterEach
@@ -100,5 +98,20 @@ public class AStarRouteFinderTests {
         assertEquals(nodeA,minElevationRoute.getRoute().get(0));
         assertEquals(nodeC,minElevationRoute.getRoute().get(1));
         assertEquals(nodeD,minElevationRoute.getRoute().get(2));
+    }
+
+    @Test
+    void testMaxElevationGainPath(){
+        Route optimalRoute = routeFinder.shortestPath(nodeA,nodeD);
+
+        routeFinder.setComparator(maxComp);
+        Route maxElevationRoute = routeFinder.maxElevationGainPath(nodeA,nodeD,optimalRoute.getLength() * 10);
+
+        assertEquals(3,maxElevationRoute.getRoute().size());
+        assertEquals(100.0,maxElevationRoute.getElevationGain());
+
+        assertEquals(nodeA,maxElevationRoute.getRoute().get(0));
+        assertEquals(nodeE,maxElevationRoute.getRoute().get(1));
+        assertEquals(nodeD,maxElevationRoute.getRoute().get(2));
     }
 }

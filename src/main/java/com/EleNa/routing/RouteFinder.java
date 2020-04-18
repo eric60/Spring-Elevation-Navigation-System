@@ -2,6 +2,8 @@ package com.EleNa.routing;
 
 import com.EleNa.graph.GraphNode;
 
+import java.util.Comparator;
+
 public interface RouteFinder {
 
     //public methods
@@ -11,4 +13,6 @@ public interface RouteFinder {
     public Route minElevationGainPath(GraphNode source, GraphNode sink, double maxDistance);
 
     public Route maxElevationGainPath(GraphNode source, GraphNode sink, double maxDistance);
+
+    public void setComparator(Comparator<? super PriorityQueueItem> comparator);
 }

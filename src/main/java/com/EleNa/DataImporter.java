@@ -44,6 +44,11 @@ public class DataImporter {
         return graph;
     }
 
+    //Populate a graph will all Nodes in the database
+    public static Graph fillGraph(){
+        return nodeRepo.getAllPoints();
+    }
+
     public static long getClosestNode(double lon, double lat) {
         long closestID = nodeRepo.getClosestID(lon, lat);
         return closestID;

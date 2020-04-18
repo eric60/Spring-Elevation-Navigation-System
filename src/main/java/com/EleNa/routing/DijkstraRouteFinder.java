@@ -5,6 +5,7 @@ import com.EleNa.graph.GraphNode;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -21,6 +22,12 @@ public class DijkstraRouteFinder implements RouteFinder {
         }
         this.graph = graph;
         this.pQueue = new PriorityQueue(new MinPriorityComparator());
+    }
+
+    //Stub so everything compiles
+    public void setComparator(Comparator<? super PriorityQueueItem> comparator){
+        //does nothing for now
+        //Implement if needed
     }
 
     /**

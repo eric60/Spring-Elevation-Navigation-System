@@ -37,6 +37,16 @@ public class Route {
         return distance;
     }
 
+    //Returns the number of Nodes in this Route
+    public int size(){
+        return this.route.size();
+    }
+
+    //Returns the Node in this Route at the specified index
+    public GraphNode getNode(int i){
+        return this.route.get(i);
+    }
+
     //Returns the elevation gain along this route
     public double getElevationGain(){
         double elevationGain = 0.0;
