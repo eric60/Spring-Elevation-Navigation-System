@@ -29,6 +29,11 @@ public class BestPathController {
         GraphNode source = myGraph.getNodeById(DataImporter.getClosestNode(start[1],start[0]));
         GraphNode sink = myGraph.getNodeById(DataImporter.getClosestNode(end[1],end[0]));
 
+        System.out.println("Source Lat: " + source.getLatitude());
+        System.out.println("Source Long: " + source.getLongitude());
+
+        System.out.println("Sink Lat: " + sink.getLatitude());
+        System.out.println("Sink Long: " + sink.getLongitude());
         //Calculate the shortest route from source to sink
         Route optimalRoute = routeFinder.shortestPath(source,sink);
         Route output;
