@@ -1,10 +1,13 @@
 package com.EleNa.graph;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Graph {
+public class Graph implements Serializable {
 
     //member fields
+
+    private static final long serialVersionUID = 1L;
 
     //Maps the id of a Node to the Node itself
     protected HashMap<Long,GraphNode> nodes;

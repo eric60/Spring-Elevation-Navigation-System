@@ -7,6 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -113,5 +118,32 @@ public class AStarRouteFinderTests {
         assertEquals(nodeA,maxElevationRoute.getRoute().get(0));
         assertEquals(nodeE,maxElevationRoute.getRoute().get(1));
         assertEquals(nodeD,maxElevationRoute.getRoute().get(2));
+    }
+
+    @Test
+    void testUMassToAmherstCollege() throws IOException, ClassNotFoundException {
+        String filePath = "./src/main/resources/graph.bin";
+
+        assertTrue(new File(filePath).exists());
+
+        FileInputStream fileInputStream = new FileInputStream(filePath);
+        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+        Graph graph = (Graph) objectInputStream.readObject();
+        objectInputStream.close();
+
+        //UMass
+        GraphNode source = graph.getNodeById(DataImporter.getClosestNode(42.3857854,-72.5268343));
+
+        //Amherst College
+        GraphNode sink = graph.getNodeById(DataImporter.getClosestNode(42.375818,-72.510099));
+
+        Route optimalRoute = routeFinder.shortestPath(source, sink);
+        Route minElevationRoute = routeFinder.minElevationGainPath(source, sink, 2 * optimalRoute.getLength());
+        routeFinder.setComparator(maxComp);
+        Route maxElevationRoute = routeFinder.maxElevationGainPath(source, sink, 2 * optimalRoute.getLength());
+
+        //TODO
+        //Make assertions of what the three Routes should look like
     }
 }

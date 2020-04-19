@@ -1,11 +1,14 @@
 package com.EleNa.graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import com.EleNa.routing.PriorityQueueItem;
 
-public class GraphNode {
+public class GraphNode implements Serializable {
 
     //Member fields
+    private static final long serialVersionUID = 0L;
+
     protected long id;
 
     protected double longitude;

@@ -5,6 +5,9 @@ import com.EleNa.routing.PriorityQueueItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
+
+import java.io.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GraphNodeTests {
@@ -80,5 +83,33 @@ class GraphNodeTests {
     void testNodeEqualsItem(){
         PriorityQueueItem itemA = new PriorityQueueItem(nodeA);
         assertEquals(true, nodeA.equals(itemA));
+    }
+
+    @Test
+    void testWriteAndReadObject() throws IOException, ClassNotFoundException {
+
+        nodeA.addNeighbor(nodeB);
+
+        FileOutputStream fileOutputStream = new FileOutputStream("Node.bin");
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+        objectOutputStream.writeObject(nodeA);
+        objectOutputStream.flush();
+        objectOutputStream.close();
+
+        FileInputStream fileInputStream = new FileInputStream("Node.bin");
+        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+        GraphNode node = (GraphNode) objectInputStream.readObject();
+        objectInputStream.close();
+
+        assertEquals(1, node.getNeighbors().get(0).getId());
+        assertEquals(1, node.getNeighbors().get(0).getLatitude());
+        assertEquals(2, node.getNeighbors().get(0).getLongitude());
+        assertEquals(100, node.getNeighbors().get(0).getElevation());
+        assertEquals(0.0, node.getElevation());
+        assertEquals(0.0, node.getLongitude());
+        assertEquals(0.0, node.getLatitude());
+        assertEquals(0, node.getId());
     }
 }

@@ -4,6 +4,9 @@ import com.EleNa.graph.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
+
+import java.io.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GraphTests {
@@ -58,6 +61,35 @@ public class GraphTests {
 
         assertEquals(nodeA, graph.getNodeById(0));
         assertEquals(nodeB, graph.getNodeById(1));
+    }
+
+    @Test
+    void testWriteAndReadObject() throws IOException, ClassNotFoundException {
+        graph.addNode(nodeA);
+        graph.addNode(nodeB);
+
+        FileOutputStream fileOutputStream = new FileOutputStream("./Graph.bin");
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+        objectOutputStream.writeObject(graph);
+        objectOutputStream.flush();
+        objectOutputStream.close();
+
+        FileInputStream fileInputStream = new FileInputStream("./Graph.bin");
+        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+        Graph myGraph = (Graph) objectInputStream.readObject();
+        objectInputStream.close();
+
+        assertEquals(2, myGraph.getNumNodes());
+        assertEquals(0.0, myGraph.getNodeById(0).getId());
+        assertEquals(0.0, myGraph.getNodeById(0).getLatitude());
+        assertEquals(0.0, myGraph.getNodeById(0).getLongitude());
+        assertEquals(0.0, myGraph.getNodeById(0).getElevation());
+        assertEquals(1, myGraph.getNodeById(1).getId());
+        assertEquals(1, myGraph.getNodeById(1).getLatitude());
+        assertEquals(2, myGraph.getNodeById(1).getLongitude());
+        assertEquals(100, myGraph.getNodeById(1).getElevation());
     }
 
 }
