@@ -89,8 +89,8 @@ $(document).ready(function() {
             dataType: "json",
             data: data
         })
-        .done(function( msg ) {
-             let edges = msg;
+        .done(function( edges ) {
+             console.log('------- Received edges --------')
              console.log(edges)
              initMapRoute(edges)
         });
@@ -103,7 +103,6 @@ $(document).ready(function() {
     mapboxgl.accessToken = publicKey;
 
 
-    // A GeoJSON object with a LineString route from the White House to Capitol Hill
     var geojson = {
         'type': 'FeatureCollection',
         'features': [
@@ -118,10 +117,11 @@ $(document).ready(function() {
         ]
     };
 
+    let umassCoord = [-72.526798, 42.39205];
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v10',
-        center: [-77.0214, 38.897],
+        center: umassCoord,
         zoom: 12
     });
 
@@ -167,8 +167,7 @@ $(document).ready(function() {
                             'coordinates': start
                         },
                         'properties': {
-                            'title': 'Mapbox DC',
-                            'icon': 'monument'
+                            'title': starting
                         }
                     },
                     {
@@ -192,7 +191,7 @@ $(document).ready(function() {
     function addPointColor(type, coords) {
         let color;
         if (type == "end") { color = "#f30"}
-        else { color = "#3887be"}
+        else { color = "#32CD32"}
         map.addLayer({
             id: type,
             type: 'circle',
@@ -211,10 +210,40 @@ $(document).ready(function() {
                 }
             },
             paint: {
-                'circle-radius': 10,
+                'circle-radius': 15,
                 'circle-color': color
             }
         });
     }
+
+
+    // When a click event occurs on a feature in the places layer, open a popup at the
+    // location of the feature, with description HTML from its properties.
+    map.on('click', 'points', function(e) {
+        var coordinates = e.features[0].geometry.coordinates.slice();
+        var title = e.features[0].properties.title;
+
+        // Ensure that if the map is zoomed out such that multiple
+        // copies of the feature are visible, the popup appears
+        // over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(title)
+            .addTo(map);
+    });
+
+    // Change the cursor to a pointer when the mouse is over the places layer.
+    map.on('mouseenter', 'places', function() {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'places', function() {
+        map.getCanvas().style.cursor = '';
+    });
 
 })
