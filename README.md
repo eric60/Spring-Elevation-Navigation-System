@@ -5,7 +5,7 @@
 2. To Run
     1. Either run EleNaApplication with Intellij
     2. Or from root directory type `./mvnw spring-boot:run`
-3. [Set up database](https://github.com/eric60/520-Project/edit/master/README.md#database)
+3. [Set up database](https://github.com/eric60/520-Project/edit/master/#database)
 3. In  browser go to localhost:8080
 
 ## [Database setup](#database)
