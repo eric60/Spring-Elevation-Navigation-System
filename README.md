@@ -4,7 +4,7 @@
 1. Install [Maven](https://maven.apache.org/download.cgi) build tool
 2. To Run
     1. Either run EleNaApplication with Intellij
-    2. Or in terminal from root directory type ./mvnw spring-boot:run
+    2. Or from root directory type `./mvnw spring-boot:run`
 3. In  browser go to localhost:8080
 
 ## Database setup
@@ -18,8 +18,9 @@ the node and edge values into the elenaDb. Make sure you have forward slashes pa
 ## Adding dependencies
 1. Go to maven repository online and copy and paste the dependency into pom.xml and import them as libraries in intellij
 
-## How to test
-1
+## How to Test 
+Running all unit tests
+1. In root directory type `mvn test`
 
 ## PostGIS Geographic Information System Docs
 PostGIS enables geometry and geography data types such as Point which has coordinates and spatial indexing to 
