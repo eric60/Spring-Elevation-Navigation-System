@@ -10,7 +10,7 @@ import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GraphNodeTests {
+public class GraphNodeTests {
     private GraphNode nodeA, nodeB;
 
     @BeforeEach

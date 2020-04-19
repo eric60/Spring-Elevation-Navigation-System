@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 
 @ActiveProfiles("test")
-public class testOsmParser {
+public class OsmParserTests {
     @Mock
     private NodeRepository nodeRepo;
 
