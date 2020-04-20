@@ -2,10 +2,7 @@ package com.EleNa;
 
 import com.EleNa.graph.Graph;
 import com.EleNa.graph.GraphNode;
-import com.EleNa.routing.DijkstraRouteFinder;
-import com.EleNa.routing.MaxPriorityComparator;
-import com.EleNa.routing.MinPriorityComparator;
-import com.EleNa.routing.Route;
+import com.EleNa.routing.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,7 +60,7 @@ public class DijkstraRouteFinderTests {
         minComp = new MinPriorityComparator();
         maxComp = new MaxPriorityComparator();
 
-        routeFinder = new DijkstraRouteFinder(graph);
+        routeFinder = new DijkstraRouteFinder(graph, minComp);
     }
 
     @AfterEach
@@ -86,14 +83,14 @@ public class DijkstraRouteFinderTests {
         assertNotEquals(null, routeFinder);
     }
 
-    /*@Test
+    @Test
     void testSetAndGetComparator(){
-        assertEquals(minComp,routeFinder.getComparator());
+        assertEquals(minComp, routeFinder.getComparator());
 
         routeFinder.setComparator(maxComp);
 
-        assertEquals(maxComp,routeFinder.getComparator());
-    }*/
+        assertEquals(maxComp, routeFinder.getComparator());
+    }
 
     @Test
     void testShortestPath(){
@@ -124,19 +121,35 @@ public class DijkstraRouteFinderTests {
         assertEquals(nodeG, optimalRoute.getRoute().get(4));
     }
 
-    /*
     @Test
     void testMinElevationGainPath(){
         Route optimalRoute = routeFinder.shortestPath(nodeA,nodeD);
 
-        Route minElevationRoute = routeFinder.minElevationGainPath(nodeA,nodeD,optimalRoute.getLength() * 1.5);
+        assertEquals(3, optimalRoute.getRoute().size());
+
+        Route minElevationRoute = routeFinder.minElevationGainPath(nodeA, nodeD,
+                                                        optimalRoute.getLength() * 10);
 
         assertEquals(3,minElevationRoute.getRoute().size());
         assertEquals(0.0,minElevationRoute.getElevationGain());
-        assertEquals(268444.0,Math.floor(minElevationRoute.getLength()));
 
         assertEquals(nodeA,minElevationRoute.getRoute().get(0));
         assertEquals(nodeC,minElevationRoute.getRoute().get(1));
         assertEquals(nodeD,minElevationRoute.getRoute().get(2));
-    }*/
+    }
+
+    @Test
+    void testMaxElevationGainPath(){
+        Route optimalRoute = routeFinder.shortestPath(nodeA,nodeD);
+
+        routeFinder.setComparator(maxComp);
+        Route maxElevationRoute = routeFinder.maxElevationGainPath(nodeA,nodeD,optimalRoute.getLength() * 10);
+
+        assertEquals(3,maxElevationRoute.getRoute().size());
+        assertEquals(10.0,maxElevationRoute.getElevationGain());
+
+        assertEquals(nodeA,maxElevationRoute.getRoute().get(0));
+        assertEquals(nodeB,maxElevationRoute.getRoute().get(1));
+        assertEquals(nodeD,maxElevationRoute.getRoute().get(2));
+    }
 }
