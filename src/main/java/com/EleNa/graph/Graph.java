@@ -1,6 +1,7 @@
 package com.EleNa.graph;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Graph implements Serializable {
@@ -42,6 +43,20 @@ public class Graph implements Serializable {
 
     public GraphNode getNodeById(long id){
         return this.nodes.get(new Long(id));
+    }
+
+    public void printGraph() {
+        for(Long key : nodes.keySet()) {
+            System.out.print("Node id: "+key+" has neighbors: ");
+            ArrayList<GraphNode> neighbors = nodes.get(key).getNeighbors();
+            for(int i=0; i<neighbors.size(); i++) {
+                System.out.print(neighbors.get(i).getId());
+                if(i+1 < neighbors.size()) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println("");
+        }
     }
 
 }

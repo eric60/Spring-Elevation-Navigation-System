@@ -30,12 +30,12 @@ public class DataImporter {
     //Populate a graph will all Nodes in the database
     public static Graph fillGraph(){
         bufferNodes = nodeRepo.getBufferNodes();
+        edges = edgeRepo.getEdges();
 
         // Initialize graph with nodes
         for(int i=0; i<bufferNodes.size(); i++) {
             graph.addNode(new GraphNode(bufferNodes.get(i).getId(), bufferNodes.get(i).getLongitude(),
                     bufferNodes.get(i).getLatitude(), bufferNodes.get(i).getElevation()));
-            edges.add(new Edge(bufferNodes.get(i).getSrc(), bufferNodes.get(i).getDest()));
         }
 
         // Add all neighbors
@@ -93,6 +93,9 @@ public class DataImporter {
 
         long id = getClosestNode(-72.519473, 42.367418);
         Graph myGraph = fillGraph();
+        //myGraph.printGraph();
+        //System.out.println(myGraph.getNodeById(1).getNeighbors().get(0).getNeighbors().get(0).getId());
+        //System.out.println(myGraph.getNodeById(1).getNeighbors().get(0).getNeighbors().get(1).getId());
         System.out.println(id);
     }
 }

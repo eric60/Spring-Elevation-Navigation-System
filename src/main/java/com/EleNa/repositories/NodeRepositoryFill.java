@@ -19,7 +19,7 @@ public interface NodeRepositoryFill {
             "limit 1", nativeQuery = true)
     long getClosestID(double lon, double lat);
 
-    @Query(value = "select n.id, ST_AsText(n.point) as point, n.elevation, n.src, n.dest " +
-            "from nodesAndEdges n order by n.id", nativeQuery = true)
+    @Query(value = "select n.id, ST_AsText(n.point) as point, n.elevation " +
+            "from nodes n order by n.id", nativeQuery = true)
     ArrayList<BufferNode> getBufferNodes();
 }
