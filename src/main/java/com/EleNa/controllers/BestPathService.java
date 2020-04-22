@@ -5,8 +5,6 @@ import com.EleNa.graph.Graph;
 import com.EleNa.graph.GraphNode;
 import com.EleNa.model.FormData;
 import com.EleNa.routing.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -17,28 +15,11 @@ public class BestPathService {
     private ArrayList<ArrayList<Double>> list;
     private RouteFinder routeFinder ;
     private Graph myGraph;
-    final private String filePath = "./src/main/resources/graph.bin";
-    public BestPathService() throws IOException, ClassNotFoundException{
+
+    public BestPathService() throws ClassNotFoundException, IOException{
         //Import the graph from the database
-        File graphBin = new File(filePath);
 
-        if(graphBin.exists()){
-            FileInputStream fileInputStream = new FileInputStream(filePath);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-
-            this.myGraph = (Graph) objectInputStream.readObject();
-            objectInputStream.close();
-        }
-        else{
-            this.myGraph = DataImporter.fillGraph();
-            FileOutputStream fileOutputStream = new FileOutputStream(filePath);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-
-            objectOutputStream.writeObject(this.myGraph);
-            objectOutputStream.flush();
-            objectOutputStream.close();
-        }
-
+        this.myGraph = DataImporter.fillGraph();
         this.routeFinder = new AStarRouteFinder(new MinPriorityComparator());
         this.list = new ArrayList<>();
     }

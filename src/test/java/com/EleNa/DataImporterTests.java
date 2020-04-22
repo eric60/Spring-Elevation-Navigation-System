@@ -19,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 
 import org.springframework.test.context.ActiveProfiles;
 
+import java.io.IOException;
 import java.nio.Buffer;
 import java.util.ArrayList;
 
@@ -69,7 +70,7 @@ public class DataImporterTests {
     }
 
     @Test
-    public void test_given_query_response_when_getNodesEdges_then_correct_number_of_nodes_and_edges() {
+    public void test_given_query_response_when_getNodesEdges_then_correct_number_of_nodes_and_edges() throws ClassNotFoundException, IOException {
 
         Mockito.when(nodeRepo.getBufferNodes()).thenReturn(bufferNodes);
         Mockito.when(edgeRepo.getEdges()).thenReturn(edges);

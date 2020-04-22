@@ -4,11 +4,11 @@ import com.EleNa.graph.Graph;
 import com.EleNa.graph.GraphNode;
 import com.EleNa.model.DataStructures.BufferNode;
 import com.EleNa.model.DataStructures.Edge;
-import com.EleNa.model.DataStructures.Node;
 import com.EleNa.repositories.EdgeRepositoryFillImpl;
 import com.EleNa.repositories.NodeRepositoryFillImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +19,8 @@ public class DataImporter {
     private static NodeRepositoryFillImpl nodeRepo = new NodeRepositoryFillImpl();
     private static EdgeRepositoryFillImpl edgeRepo = new EdgeRepositoryFillImpl();
     private final static double NOT_SET = 200;
+    static final private String nodePath = "./src/main/resources/nodes.bin";
+    static final private String edgePath = "./src/main/resources/edges.bin";
 
 
     @Autowired
@@ -28,54 +30,75 @@ public class DataImporter {
     }
 
     //Populate a graph will all Nodes in the database
-    public static Graph fillGraph(){
-        bufferNodes = nodeRepo.getBufferNodes();
-        edges = edgeRepo.getEdges();
+    public static Graph fillGraph() throws IOException, ClassNotFoundException {
+        File nodeBin = new File(nodePath);
+        File edgeBin = new File(edgePath);
+
+        ArrayList<BufferNode> nodes;
+        ArrayList<Edge> edges;
+
+        if(!nodeBin.exists()){
+            FileOutputStream fileOutputStream = new FileOutputStream(nodePath);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            nodes = DataImporter.getAllNodes();
+
+            objectOutputStream.writeObject(nodes);
+            objectOutputStream.flush();
+            objectOutputStream.close();
+        }
+        else{
+            FileInputStream fileInputStream = new FileInputStream(nodePath);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+            nodes = (ArrayList<BufferNode>) objectInputStream.readObject();
+
+            objectInputStream.close();
+        }
+
+        if(!edgeBin.exists()){
+            FileOutputStream fileOutputStream = new FileOutputStream(edgePath);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            edges = DataImporter.getAllEdges();
+
+            objectOutputStream.writeObject(edges);
+            objectOutputStream.flush();
+            objectOutputStream.close();
+        }
+        else{
+            FileInputStream fileInputStream = new FileInputStream(edgePath);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+            edges = (ArrayList<Edge>) objectInputStream.readObject();
+
+            objectInputStream.close();
+        }
+
+        Graph graph = new Graph();
 
         // Initialize graph with nodes
-        for(int i=0; i<bufferNodes.size(); i++) {
-            graph.addNode(new GraphNode(bufferNodes.get(i).getId(), bufferNodes.get(i).getLongitude(),
-                    bufferNodes.get(i).getLatitude(), bufferNodes.get(i).getElevation()));
+        for(BufferNode node : nodes) {
+            graph.addNode(new GraphNode(node.getId(), node.getLongitude(),node.getLatitude(), node.getElevation()));
         }
 
         // Add all neighbors
-        for(int i=0; i<edges.size(); i++) {
-            if(((graph.getNodeById(edges.get(i).getSrc())) != null) &&
-                    (graph.getNodeById(edges.get(i).getDest()) != null)) {
-                graph.getNodeById(edges.get(i).getSrc()).addNeighbor(graph.getNodeById(edges.get(i).getDest()));
-                graph.getNodeById(edges.get(i).getDest()).addNeighbor(graph.getNodeById(edges.get(i).getSrc()));
+        for(Edge edge : edges) {
+            if (((graph.getNodeById(edge.getSrc())) != null) && (graph.getNodeById(edge.getDest()) != null)) {
+                graph.getNodeById(edge.getSrc()).addNeighbor(graph.getNodeById(edge.getDest()));
+                graph.getNodeById(edge.getDest()).addNeighbor(graph.getNodeById(edge.getSrc()));
             }
         }
-
-
-        /*
-        // BufferNode {long id, String point, double elevation, long src, long dest}
-        for(int i=0; i<bufferNodes.size(); i++) {
-            // Create new GraphNode and add it to graph -- addNode() checks if node already exists
-            if(graph.getNodeById(bufferNodes.get(i).getId()) == null) {
-                graph.addNode(new GraphNode(bufferNodes.get(i).getId(), bufferNodes.get(i).getLongitude(),
-                        bufferNodes.get(i).getLatitude(), bufferNodes.get(i).getElevation()));
-            }
-            // If node was created / inserted, but longitude, latitude, and elevation weren't set
-            else if(graph.getNodeById(bufferNodes.get(i).getId()).getLongitude() == NOT_SET) {
-                graph.getNodeById(bufferNodes.get(i).getId()).setLongitude(bufferNodes.get(i).getLongitude());
-                graph.getNodeById(bufferNodes.get(i).getId()).setLatitude(bufferNodes.get(i).getLatitude());
-                graph.getNodeById(bufferNodes.get(i).getId()).setElevation(bufferNodes.get(i).getElevation());
-            }
-
-            // Source GraphNode will always exist since nodesAndEdges table has: nodes.id=edges.src
-            // If dest GraphNode hasn't been created / inserted into graph yet
-            // Create GraphNode for dest and insert it into graph
-            if(graph.getNodeById(bufferNodes.get(i).getDest()) == null) {
-                graph.addNode(new GraphNode(bufferNodes.get(i).getDest()));
-            }
-            // Add neighbor
-            graph.getNodeById(bufferNodes.get(i).getSrc())
-                    .addNeighbor(graph.getNodeById(bufferNodes.get(i).getDest()));
-        }
-        */
 
         return graph;
+    }
+
+    public static ArrayList<BufferNode> getAllNodes(){
+        return nodeRepo.getBufferNodes();
+    }
+
+    public static ArrayList<Edge> getAllEdges(){
+        return edgeRepo.getEdges();
     }
 
     public static long getClosestNode(double lon, double lat) {
@@ -83,7 +106,7 @@ public class DataImporter {
         return closestID;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, IOException{
         // Tested with map_small_test.osm file
         // lat="32.8516860" lon="-95.3200780" = first node
         // lat="32.8432690" lon="-95.3058210" = last node

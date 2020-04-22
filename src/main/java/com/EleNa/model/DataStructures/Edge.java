@@ -1,12 +1,11 @@
 package com.EleNa.model.DataStructures;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "edges")
-public class Edge {
+public class Edge implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

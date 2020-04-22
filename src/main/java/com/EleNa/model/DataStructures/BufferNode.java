@@ -1,19 +1,14 @@
 package com.EleNa.model.DataStructures;
 
-import com.EleNa.ElevationFinder;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.PrecisionModel;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "nodes")
-public class BufferNode {
+public class BufferNode implements Serializable {
     @Id
     private long id;
 
