@@ -31,6 +31,16 @@ public class GraphNode implements Serializable {
         this.prevNode = null;
     }
 
+    //Constructor
+    public GraphNode(long id){
+        this.id = id;
+        this.latitude  = 200;   // Set latitude and longitude as impossible numbers
+        this.longitude = 200;
+        this.elevation = 0;
+        this.neighbors = new ArrayList<GraphNode>();
+        this.prevNode = null;
+    }
+
     //public methods
 
     //Returns this Node's id
@@ -117,5 +127,17 @@ public class GraphNode implements Serializable {
 
     public boolean equals(PriorityQueueItem item){
         return item.getNode().equals(this);
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setElevation(double elevation) {
+        this.elevation = elevation;
     }
 }
