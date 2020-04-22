@@ -1,5 +1,6 @@
 package com.EleNa.graph;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,5 +66,25 @@ public class Graph implements Serializable {
             edgeCount += nodes.get(key).getNeighbors().size();
         }
         return edgeCount;
+    }
+
+    public void resetNodes(double val){
+        this.nodes.forEach((k,v) ->{
+            v.setFScore(val);
+            v.setGScore(val);
+            v.setDistanceFromSource(val);
+        });
+    }
+
+    public static void main(String[] args) {
+        Graph graph = new Graph();
+
+        GraphNode node = new GraphNode(0,0,0,0);
+
+        graph.addNode(node);
+
+        System.out.println(node.getFScore());
+        graph.resetNodes(666);
+        System.out.println(node.getFScore());
     }
 }

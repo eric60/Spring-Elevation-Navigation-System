@@ -48,7 +48,14 @@ public class AStarRouteFinderTests {
         minComp = new MinPriorityComparator();
         maxComp = new MaxPriorityComparator();
 
-        routeFinder = new AStarRouteFinder(minComp);
+        graph = new Graph();
+        graph.addNode(nodeA);
+        graph.addNode(nodeB);
+        graph.addNode(nodeC);
+        graph.addNode(nodeD);
+        graph.addNode(nodeE);
+
+        routeFinder = new AStarRouteFinder();
     }
 
     @AfterEach
@@ -69,16 +76,9 @@ public class AStarRouteFinderTests {
     }
 
     @Test
-    void testSetAndGetComparator(){
-        assertEquals(minComp,routeFinder.getComparator());
-
-        routeFinder.setComparator(maxComp);
-
-        assertEquals(maxComp,routeFinder.getComparator());
-    }
-
-    @Test
     void testShortestPath(){
+        graph.resetNodes(Double.POSITIVE_INFINITY);
+
         Route optimalRoute = routeFinder.shortestPath(nodeA,nodeD);
 
         assertEquals(3,optimalRoute.getRoute().size());
@@ -92,9 +92,10 @@ public class AStarRouteFinderTests {
 
     @Test
     void testMinElevationGainPath(){
-        Route optimalRoute = routeFinder.shortestPath(nodeA,nodeD);
 
-        Route minElevationRoute = routeFinder.minElevationGainPath(nodeA,nodeD,optimalRoute.getLength() * 1.5);
+        graph.resetNodes(Double.POSITIVE_INFINITY);
+
+        Route minElevationRoute = routeFinder.minElevationGainPath(nodeA,nodeD,Double.POSITIVE_INFINITY);
 
         assertEquals(3,minElevationRoute.getRoute().size());
         assertEquals(0.0,minElevationRoute.getElevationGain());
@@ -107,10 +108,10 @@ public class AStarRouteFinderTests {
 
     @Test
     void testMaxElevationGainPath(){
-        Route optimalRoute = routeFinder.shortestPath(nodeA,nodeD);
 
-        routeFinder.setComparator(maxComp);
-        Route maxElevationRoute = routeFinder.maxElevationGainPath(nodeA,nodeD,optimalRoute.getLength() * 10);
+        graph.resetNodes(Double.NEGATIVE_INFINITY);
+
+        Route maxElevationRoute = routeFinder.maxElevationGainPath(nodeA,nodeD,Double.POSITIVE_INFINITY);
 
         assertEquals(3,maxElevationRoute.getRoute().size());
         assertEquals(100.0,maxElevationRoute.getElevationGain());
@@ -122,15 +123,7 @@ public class AStarRouteFinderTests {
 
     @Test
     void testUMassToAmherstCollege() throws IOException, ClassNotFoundException {
-        String filePath = "./src/main/resources/graph.bin";
-
-        assertTrue(new File(filePath).exists());
-
-        FileInputStream fileInputStream = new FileInputStream(filePath);
-        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-
-        Graph graph = (Graph) objectInputStream.readObject();
-        objectInputStream.close();
+        Graph graph = DataImporter.fillGraph();
 
         //UMass
         GraphNode source = graph.getNodeById(DataImporter.getClosestNode(42.3857854,-72.5268343));
@@ -138,11 +131,19 @@ public class AStarRouteFinderTests {
         //Amherst College
         GraphNode sink = graph.getNodeById(DataImporter.getClosestNode(42.375818,-72.510099));
 
-        Route optimalRoute = routeFinder.shortestPath(source, sink);
-        Route minElevationRoute = routeFinder.minElevationGainPath(source, sink, 2 * optimalRoute.getLength());
-        routeFinder.setComparator(maxComp);
-        Route maxElevationRoute = routeFinder.maxElevationGainPath(source, sink, 2 * optimalRoute.getLength());
+        System.out.printf("Source Coordinates:(%f,%f)\nSink Coordinates:(%f,%f)\n",
+                source.getLatitude(),source.getLongitude(),sink.getLatitude(),sink.getLongitude());
 
+        Route optimalRoute = routeFinder.shortestPath(source, sink);
+        System.out.printf("Optimal Route has %d Nodes with a total length of %f meters and a total elevation gain of %f meters\n",
+                optimalRoute.size(), optimalRoute.getLength(), optimalRoute.getElevationGain());
+
+        Route minElevationRoute = routeFinder.minElevationGainPath(source, sink, 2 * optimalRoute.getLength());
+        System.out.printf("Minimum Elevation Route has %d Nodes with a total length of %f meters and a total elevation gain of %f meters\n",
+                minElevationRoute.size(), minElevationRoute.getLength(), minElevationRoute.getElevationGain());
+        Route maxElevationRoute = routeFinder.maxElevationGainPath(source, sink, 2 * optimalRoute.getLength());
+        System.out.printf("Maximum Elevation Route has %d Nodes with a total length of %f meters and a total elevation gain of %f meters\n",
+                maxElevationRoute.size(), maxElevationRoute.getLength(), maxElevationRoute.getElevationGain());
         //TODO
         //Make assertions of what the three Routes should look like
     }

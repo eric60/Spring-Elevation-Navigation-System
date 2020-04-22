@@ -21,6 +21,12 @@ public class GraphNode implements Serializable {
 
     protected GraphNode prevNode;
 
+    protected double gScore;
+
+    protected double fScore;
+
+    protected double distanceFromSource;
+
     //Constructor
     public GraphNode(long id, double latitude, double longitude, double elevation){
         this.id = id;
@@ -29,6 +35,9 @@ public class GraphNode implements Serializable {
         this.elevation = elevation;
         this.neighbors = new ArrayList<GraphNode>();
         this.prevNode = null;
+        this.fScore = Double.POSITIVE_INFINITY;
+        this.gScore = Double.POSITIVE_INFINITY;
+        this.distanceFromSource = Double.POSITIVE_INFINITY;
     }
 
     //Constructor
@@ -62,6 +71,24 @@ public class GraphNode implements Serializable {
     public double getElevation(){
         return this.elevation;
     }
+
+    //Returns this Nodes gScore
+    public double getGScore(){ return this.gScore; }
+
+    //Returns this Nodes fScore
+    public double getFScore(){ return this.fScore; }
+
+    //Sets this Nodes gScore
+    public void setGScore(double gScore){ this.gScore = gScore; }
+
+    //Sets this Nodes fScore
+    public void setFScore(double fScore){ this.fScore = fScore; }
+
+    //Returns this Nodes fScore
+    public double getDistanceFromSource(){ return this.distanceFromSource; }
+
+    //Sets this Nodes gScore
+    public void setDistanceFromSource(double distanceFromSource){ this.distanceFromSource = distanceFromSource; }
 
     //Adds a neighbor Node to this Node
     public void addNeighbor(GraphNode node) throws IllegalArgumentException{

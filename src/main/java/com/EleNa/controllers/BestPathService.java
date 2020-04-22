@@ -18,9 +18,11 @@ public class BestPathService {
 
     public BestPathService() throws ClassNotFoundException, IOException{
         //Import the graph from the database
-
+        System.out.println("Loading Graph...");
         this.myGraph = DataImporter.fillGraph();
-        this.routeFinder = new AStarRouteFinder(new MinPriorityComparator());
+        System.out.println("Graph Loaded");
+
+        this.routeFinder = new AStarRouteFinder();
         this.list = new ArrayList<>();
     }
 
@@ -42,20 +44,24 @@ public class BestPathService {
         System.out.println("Sink Coords: ("+sink.getLongitude()+","+sink.getLatitude()+")");
         System.out.println("sink neighbors: " + sink.getNeighbors().size());
 
+        System.out.println("Computing Shortest Route...");
         //Calculate the shortest route from source to sink
         Route optimalRoute = routeFinder.shortestPath(source,sink);
+        System.out.println("Shortest Route Found");
 
         System.out.println("Optimal Route Length: " + optimalRoute.size());
         Route output;
 
         if(elevationPref == "No elevation"){
+            this.myGraph.resetNodes(Double.POSITIVE_INFINITY);
             output = optimalRoute;
         }
         else if(elevationPref == "Min Elevation"){
+            this.myGraph.resetNodes(Double.POSITIVE_INFINITY);
             output = routeFinder.minElevationGainPath(source, sink,optimalRoute.getLength() * withinX / 100);
         }
         else{
-            routeFinder.setComparator(new MaxPriorityComparator());
+            this.myGraph.resetNodes(Double.NEGATIVE_INFINITY);
             output = routeFinder.maxElevationGainPath(source, sink,optimalRoute.getLength() * withinX / 100);
         }
 

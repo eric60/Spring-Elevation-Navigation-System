@@ -1,31 +1,14 @@
 package com.EleNa.routing;
 
 import com.EleNa.graph.*;
-
-import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class AStarRouteFinder implements RouteFinder{
 
     //Member fields
-    protected PriorityQueue pQueue;
+    protected PriorityQueue<GraphNode> pQueue;
 
-    protected Comparator<? super PriorityQueueItem> comparator;
-
-    //Constructor
-    public AStarRouteFinder(Comparator<? super PriorityQueueItem> comparator){
-        this.comparator = comparator;
-        this.pQueue = new PriorityQueue(this.comparator);
-    }
-
-    //public methods
-    public void setComparator(Comparator<? super PriorityQueueItem> comparator){
-        this.comparator = comparator;
-        this.pQueue = new PriorityQueue(this.comparator);
-    }
-
-    public Comparator<? super PriorityQueueItem> getComparator(){
-        return this.comparator;
-    }
+    protected Graph graph;
 
     /*
      *Computes the shortest path from source to sink using A* search
@@ -33,51 +16,45 @@ public class AStarRouteFinder implements RouteFinder{
     */
     public Route shortestPath(GraphNode source, GraphNode sink){
         //Initialization
-        PriorityQueueItem start = new PriorityQueueItem(source);
-        start.setDistanceFromSource(0.0);
-        start.setPriority(GraphNode.computeDistance(source,sink));
-        pQueue.add(start);
+        this.pQueue = new PriorityQueue<>(new MinComparator());
+
+        source.setGScore(0);
+        source.setFScore(GraphNode.computeDistance(source, sink));
+        pQueue.add(source);
 
         //Main loop
         while(!pQueue.isEmpty()){
             //Get the lowest priority node
-            PriorityQueueItem current = pQueue.poll();
+            GraphNode current = pQueue.poll();
 
             //If we've reached the goal, we're done
-            if(current.getNode() == sink){
-                pQueue.clear();
+            if(current == sink){
+                System.out.println("Route Found!");
                 return Route.reconstructRoute(source, sink);
             }
 
             //Look at each Node's neighbor
-            for(GraphNode neighbor : current.getNode().getNeighbors()){
-                double distanceFromSource = current.getDistanceFromSource() + GraphNode.computeDistance(current.getNode(), neighbor);
+            for(GraphNode neighbor : current.getNeighbors()){
+                double gScore = current.getGScore() + GraphNode.computeDistance(current, neighbor);
 
-                //If neighbor is not in the pQueue, it has never been seen before, so we know we can update safely
-                if(!pQueue.contains(neighbor)){
-                    PriorityQueueItem neighborItem = new PriorityQueueItem(neighbor);
+                if(gScore < neighbor.getGScore()){
 
-                    neighbor.setPrevNode(current.getNode());
-                    neighborItem.setDistanceFromSource(distanceFromSource);
-                    neighborItem.setPriority(distanceFromSource + GraphNode.computeDistance(neighbor, sink));
-
-                    pQueue.add(neighborItem);
-                }
-                else{
-                    PriorityQueueItem neighborItem = pQueue.remove(neighbor);
-
-                    if(distanceFromSource < neighborItem.getDistanceFromSource()){
-                        neighborItem.getNode().setPrevNode(current.getNode());
-                        neighborItem.setDistanceFromSource(distanceFromSource);
-                        neighborItem.setPriority(distanceFromSource + GraphNode.computeDistance(neighbor,sink));
-
-                        pQueue.add(neighborItem);
+                    if(pQueue.contains(neighbor)){
+                        pQueue.remove(neighbor);
                     }
+
+                    neighbor.setPrevNode(current);
+                    neighbor.setGScore(gScore);
+                    neighbor.setFScore(gScore + GraphNode.computeDistance(neighbor,sink));
+
+                    if(!pQueue.contains(neighbor))
+                    pQueue.add(neighbor);
                 }
             }
         }
 
         //If no route is found, return an empty Route
+        System.out.println("Route not Found.");
         return new Route();
     }
 
@@ -88,60 +65,54 @@ public class AStarRouteFinder implements RouteFinder{
      */
     public Route minElevationGainPath(GraphNode source, GraphNode sink, double maxDistance){
         //Initialization
-        PriorityQueueItem start = new PriorityQueueItem(source);
-        start.setDistanceFromSource(0.0);
-        start.setElevationGainFromSource(0.0);
-        start.setPriority(GraphNode.computeElevationGain(source,sink));
-        pQueue.add(start);
+        this.pQueue = new PriorityQueue<>(new MinComparator());
+
+        source.setGScore(0);
+        source.setFScore(GraphNode.computeElevationGain(source, sink));
+        source.setDistanceFromSource(GraphNode.computeDistance(source,sink));
+        pQueue.add(source);
 
         //Main loop
         while(!pQueue.isEmpty()){
             //Get the lowest priority node
-            PriorityQueueItem current = pQueue.poll();
+            GraphNode current = pQueue.poll();
 
             //If we've reached the goal, we're done
-            if(current.getNode() == sink){
-                pQueue.clear();
+            if(current == sink){
+                System.out.println("Route Found!");
                 return Route.reconstructRoute(source, sink);
             }
 
             //Look at each Node's neighbor
-            for(GraphNode neighbor : current.getNode().getNeighbors()){
-                double distanceFromSource = current.getDistanceFromSource() + GraphNode.computeDistance(current.getNode(), neighbor);
-                double elevationGainFromSource = current.getElevationGainFromSource() + GraphNode.computeElevationGain(current.getNode(),neighbor);
+            for(GraphNode neighbor : current.getNeighbors()){
+                double distanceFromSource = current.getDistanceFromSource() + GraphNode.computeDistance(current, neighbor);
 
                 if(distanceFromSource >= maxDistance){
+                    System.out.println("Skipping neighbor: Current Route too long.");
                     continue;
                 }
 
-                //If neighbor is not in the pQueue, it has never been seen before, so we know we can update safely
-                if(!pQueue.contains(neighbor)){
-                    PriorityQueueItem neighborItem = new PriorityQueueItem(neighbor);
+                double gScore = current.getGScore() + GraphNode.computeElevationGain(current, neighbor);
 
-                    neighbor.setPrevNode(current.getNode());
-                    neighborItem.setDistanceFromSource(distanceFromSource);
-                    neighborItem.setElevationGainFromSource(elevationGainFromSource);
-                    neighborItem.setPriority(elevationGainFromSource + GraphNode.computeElevationGain(neighbor, sink));
+                if(gScore < neighbor.getGScore()){
 
-                    pQueue.add(neighborItem);
-                }
-                else{
-                    PriorityQueueItem neighborItem = pQueue.remove(neighbor);
-
-                    if(elevationGainFromSource < neighborItem.getElevationGainFromSource()){
-                        neighborItem.getNode().setPrevNode(current.getNode());
-                        neighborItem.setDistanceFromSource(distanceFromSource);
-                        neighborItem.setElevationGainFromSource(elevationGainFromSource);
-                        neighborItem.setPriority(distanceFromSource + GraphNode.computeDistance(neighbor,sink));
-                        neighborItem.setPriority(elevationGainFromSource + GraphNode.computeElevationGain(neighbor, sink));
-
-                        pQueue.add(neighborItem);
+                    if(pQueue.contains(neighbor)){
+                        pQueue.remove(neighbor);
                     }
+
+                    neighbor.setPrevNode(current);
+                    neighbor.setGScore(gScore);
+                    neighbor.setFScore(gScore + GraphNode.computeElevationGain(neighbor,sink));
+                    neighbor.setDistanceFromSource(distanceFromSource);
+
+                    if(!pQueue.contains(neighbor))
+                        pQueue.add(neighbor);
                 }
             }
         }
 
         //If no route is found, return an empty Route
+        System.out.println("Route not Found.");
         return new Route();
     }
 
@@ -151,60 +122,54 @@ public class AStarRouteFinder implements RouteFinder{
      */
     public Route maxElevationGainPath(GraphNode source, GraphNode sink, double maxDistance){
         //Initialization
-        PriorityQueueItem start = new PriorityQueueItem(source);
-        start.setDistanceFromSource(0.0);
-        start.setElevationGainFromSource(0.0);
-        start.setPriority(GraphNode.computeElevationGain(source,sink));
-        pQueue.add(start);
+        this.pQueue = new PriorityQueue<>(new MaxComparator());
+
+        source.setGScore(0);
+        source.setFScore(GraphNode.computeElevationGain(source, sink));
+        source.setDistanceFromSource(GraphNode.computeDistance(source,sink));
+        pQueue.add(source);
 
         //Main loop
         while(!pQueue.isEmpty()){
             //Get the lowest priority node
-            PriorityQueueItem current = pQueue.poll();
+            GraphNode current = pQueue.poll();
 
             //If we've reached the goal, we're done
-            if(current.getNode() == sink){
-                pQueue.clear();
+            if(current == sink){
+                System.out.println("Route Found!");
                 return Route.reconstructRoute(source, sink);
             }
 
             //Look at each Node's neighbor
-            for(GraphNode neighbor : current.getNode().getNeighbors()){
-                double distanceFromSource = current.getDistanceFromSource() + GraphNode.computeDistance(current.getNode(), neighbor);
-                double elevationGainFromSource = current.getElevationGainFromSource() + GraphNode.computeElevationGain(current.getNode(),neighbor);
+            for(GraphNode neighbor : current.getNeighbors()){
 
+                double distanceFromSource = current.getDistanceFromSource() + GraphNode.computeDistance(current, neighbor);
                 if(distanceFromSource >= maxDistance){
+                    System.out.println("Skipping neighbor: Current Route too long.");
                     continue;
                 }
 
-                //If neighbor is not in the pQueue, it has never been seen before, so we know we can update safely
-                if(!pQueue.contains(neighbor)){
-                    PriorityQueueItem neighborItem = new PriorityQueueItem(neighbor);
+                double gScore = current.getGScore() + GraphNode.computeElevationGain(current, neighbor);
 
-                    neighbor.setPrevNode(current.getNode());
-                    neighborItem.setDistanceFromSource(distanceFromSource);
-                    neighborItem.setElevationGainFromSource(elevationGainFromSource);
-                    neighborItem.setPriority(elevationGainFromSource + GraphNode.computeElevationGain(neighbor, sink));
+                if(gScore > neighbor.getGScore()){
 
-                    pQueue.add(neighborItem);
-                }
-                else{
-                    PriorityQueueItem neighborItem = pQueue.remove(neighbor);
-
-                    if(elevationGainFromSource > neighborItem.getElevationGainFromSource()){
-                        neighborItem.getNode().setPrevNode(current.getNode());
-                        neighborItem.setDistanceFromSource(distanceFromSource);
-                        neighborItem.setElevationGainFromSource(elevationGainFromSource);
-                        neighborItem.setPriority(distanceFromSource + GraphNode.computeDistance(neighbor,sink));
-                        neighborItem.setPriority(elevationGainFromSource + GraphNode.computeElevationGain(neighbor, sink));
-
-                        pQueue.add(neighborItem);
+                    if(pQueue.contains(neighbor)){
+                        pQueue.remove(neighbor);
                     }
+
+                    neighbor.setPrevNode(current);
+                    neighbor.setGScore(gScore);
+                    neighbor.setFScore(gScore + GraphNode.computeElevationGain(neighbor,sink));
+                    neighbor.setDistanceFromSource(distanceFromSource);
+
+                    if(!pQueue.contains(neighbor))
+                        pQueue.add(neighbor);
                 }
             }
         }
 
         //If no route is found, return an empty Route
+        System.out.println("Route not Found.");
         return new Route();
     }
 
