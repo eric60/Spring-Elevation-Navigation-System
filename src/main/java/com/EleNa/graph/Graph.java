@@ -59,4 +59,11 @@ public class Graph implements Serializable {
         }
     }
 
+    public int numEdges() {
+        int edgeCount = 0;
+        for(Long key : nodes.keySet()) {
+            edgeCount += nodes.get(key).getNeighbors().size();
+        }
+        return edgeCount;
+    }
 }

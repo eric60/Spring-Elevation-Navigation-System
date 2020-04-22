@@ -26,6 +26,13 @@ public class Edge {
 
     public Edge(){}
 
+    public Edge(int id, long src, long dest, double distance) {
+        this.id = id;
+        this.src = src;
+        this.dest = dest;
+        this.distance = distance;
+    }
+
     public Edge(long src, long dest) {
         this.src = src;
         this.dest = dest;

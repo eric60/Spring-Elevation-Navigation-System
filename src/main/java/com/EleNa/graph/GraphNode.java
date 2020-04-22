@@ -68,7 +68,9 @@ public class GraphNode implements Serializable {
         if(node == null){
             throw new IllegalArgumentException("ERROR: node must be non-null");
         }
-        this.neighbors.add(node);
+        if(!this.neighbors.contains(node)) {
+            this.neighbors.add(node);
+        }
     }
 
     //Returns this Node's Edges

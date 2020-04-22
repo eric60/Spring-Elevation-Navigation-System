@@ -35,11 +35,12 @@ public class OsmParserTests {
 
     @Test
     public void test_given_osm_when_importData_then_Correct_number_of_nodes_and_ways() {
-        String file = "C:\\Users\\T450-180519\\Documents\\Coding_Projects\\520-Project\\src\\main\\resources\\map_small_test.osm";
+        String windowsFile = "C:\\Users\\T450-180519\\Documents\\Coding_Projects\\520-Project\\src\\main\\resources\\map_small_test.osm";
+        String macFile = "/Users/JohnBurns/Desktop/CS520/Elena/520-Project/src/main/resources/map_small_test.osm";
         Mockito.when(nodeRepo.saveAll(null)).thenReturn(null);
         Mockito.when(edgeRepo.saveAll(null)).thenReturn(null);
         importer = new OsmParser(nodeRepo, edgeRepo);
-        importer.importData(file);
+        importer.importData(windowsFile);
         assertEquals(50, importer.nodeCnt);
         assertEquals(3, importer.wayCnt);
         assertEquals(45, importer.edgeCnt);

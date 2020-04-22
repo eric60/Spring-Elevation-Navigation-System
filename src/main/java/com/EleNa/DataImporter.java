@@ -43,6 +43,7 @@ public class DataImporter {
             if(((graph.getNodeById(edges.get(i).getSrc())) != null) &&
                     (graph.getNodeById(edges.get(i).getDest()) != null)) {
                 graph.getNodeById(edges.get(i).getSrc()).addNeighbor(graph.getNodeById(edges.get(i).getDest()));
+                graph.getNodeById(edges.get(i).getDest()).addNeighbor(graph.getNodeById(edges.get(i).getSrc()));
             }
         }
 
