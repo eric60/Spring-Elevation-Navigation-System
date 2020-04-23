@@ -32,7 +32,7 @@ public class DijkstraRouteFinderTests {
     void startUp() {
         nodeA  = new GraphNode(0,0.0,0.0,0.0);
         nodeB = new GraphNode(1,1.0,1.0,10.0);
-        nodeC = new GraphNode(2,0.0,1.0,0.0);
+        nodeC = new GraphNode(2,0.0,1.0,0.1);
         nodeD = new GraphNode(3,1.0,0.0,0.0);
         nodeE = new GraphNode(4,0.0,1.01,1.0);
         nodeF = new GraphNode(5,0.0,1.02,2.0);
@@ -128,10 +128,10 @@ public class DijkstraRouteFinderTests {
         assertEquals(3, optimalRoute.getRoute().size());
 
         Route minElevationRoute = routeFinder.minElevationGainPath(nodeA, nodeD,
-                                                        optimalRoute.getLength() * 10);
+                                                        optimalRoute.getLength() * 1.5);
 
         assertEquals(3,minElevationRoute.getRoute().size());
-        assertEquals(0.0,minElevationRoute.getElevationGain());
+        assertEquals(0.1,minElevationRoute.getElevationGain());
 
         assertEquals(nodeA,minElevationRoute.getRoute().get(0));
         assertEquals(nodeC,minElevationRoute.getRoute().get(1));
@@ -143,7 +143,7 @@ public class DijkstraRouteFinderTests {
         Route optimalRoute = routeFinder.shortestPath(nodeA,nodeD);
 
         routeFinder.setComparator(maxComp);
-        Route maxElevationRoute = routeFinder.maxElevationGainPath(nodeA,nodeD,optimalRoute.getLength() * 10);
+        Route maxElevationRoute = routeFinder.maxElevationGainPath(nodeA,nodeD,optimalRoute.getLength() * 1.5);
 
         assertEquals(3,maxElevationRoute.getRoute().size());
         assertEquals(10.0,maxElevationRoute.getElevationGain());
