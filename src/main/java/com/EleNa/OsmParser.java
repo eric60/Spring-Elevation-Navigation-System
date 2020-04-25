@@ -54,13 +54,13 @@ public class OsmParser {
             List<org.dom4j.Node> wayNodes = document.selectNodes("/osm/way" );
 
             System.out.println("Number of Node elements: " + nodeNodes.size());
-            System.out.println("Number of Way elements: " + wayNodes.size());
+            System.out.println("Number of Way elements: " + wayNodes.size() + "\n");
 
-            parseWayNodes(wayNodes);
-            parseNodeNodes(nodeNodes);
+            parseWayNodes(wayNodes); // parse way nodes first without saving to exclude isolate nodes.
+            parseNodeNodes(nodeNodes); // exclude isolated nodes
             // save nodes first since edges have fk referencing nodes
-            saveNodes();
-            saveEdges();
+
+            saveBulkEdges();
 
             System.out.println("Excluded " + excludedWays + " ways");
         }
@@ -91,11 +91,13 @@ public class OsmParser {
                 }
                 if (i % SQL_BATCH_INSERT == 0) {
                     System.out.println("--- Reached " + i + " node elements and inserted into Nodes table");
+                    saveNodes();
                 }
             } else {
-                System.out.println("Not including node that's not in a way: " + nodeId);
+                System.out.println("Not including isolated node not in an edge: " + nodeId);
             }
         }
+        saveNodes();
         OsmParser.nodeCnt = i;
         System.out.println("--- Finished inserting " + i + " nodes");
     }
@@ -147,14 +149,30 @@ public class OsmParser {
         }
 
         int total_edges = ndCnt - wayCnt;
-        System.out.println("--- Finished inserting " + total_edges + " edges for " + wayCnt + " ways");
+        System.out.println("--- There are " + total_edges + " edges for " + wayCnt + " ways");
         OsmParser.wayCnt = wayCnt;
         OsmParser.edgeCnt = total_edges;
     }
 
-    public static void saveEdges() {
-        edgeRepo.saveAll(edges);
-        edges.clear();
+    public static void saveBulkEdges() {
+        System.out.println("Edges size: " + edges.size());
+        int edgeSize = edges.size();
+        List<Edge> insertEdges = new ArrayList<>();
+
+        for (int i = 0; i < edgeSize; i ++) {
+            insertEdges.add(edges.get(i));
+            if (i != 0 && i % SQL_BATCH_INSERT == 0) {
+                System.out.println("--- Reached " + i + " edges. Inserting 500 edges");
+                saveEdges(insertEdges);
+                insertEdges.clear();
+            }
+        }
+        System.out.println("Saving rest of edges " + insertEdges.size());
+        saveEdges(insertEdges);
+    }
+
+    public static void saveEdges(List<Edge> edgesBundle) {
+        edgeRepo.saveAll(edgesBundle);
     }
 
     public static boolean excludeWay(List<org.dom4j.Node> wayChildrenTagNodes) {
