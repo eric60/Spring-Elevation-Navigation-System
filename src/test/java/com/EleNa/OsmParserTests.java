@@ -42,9 +42,9 @@ public class OsmParserTests {
         Mockito.when(edgeRepo.saveAll(null)).thenReturn(null);
         importer = new OsmParser(nodeRepo, edgeRepo);
         importer.importData(windowsFile);
-        assertEquals(50, importer.nodeCnt);
+        assertEquals(46, importer.nodeCnt);
         assertEquals(3, importer.wayCnt);
-        assertEquals(54, importer.edgeCnt);
+        assertEquals(45, importer.edgeCnt);
     }
 
 

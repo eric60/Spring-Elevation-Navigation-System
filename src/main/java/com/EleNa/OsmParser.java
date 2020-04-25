@@ -192,7 +192,7 @@ public class OsmParser {
             }
             else if(excludedHighwayValues.contains(value)){
                 System.out.println("--> Not anymore. Excluding a highway value: " + value);
-                hasGoodWay = true; // could be service then trunk so exclude
+                return true; // could be service then trunk so exclude
             }
 
         }

@@ -52,6 +52,9 @@
  <node id="230035802" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:38Z" user="woodpeck_fixbot" uid="147510" lat="32.8456650" lon="-95.3091450"/>
  <node id="230035804" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:38Z" user="woodpeck_fixbot" uid="147510" lat="32.8456160" lon="-95.3092310"/>
  <node id="230036246" visible="true" version="2" changeset="3398222" timestamp="2009-12-18T04:54:43Z" user="woodpeck_fixbot" uid="147510" lat="32.8432690" lon="-95.3058210"/>
+ <way>
+   <tag k="something" v="trunk"/>
+ </way>
  <way id="21388725" visible="true" version="1" changeset="641448" timestamp="2008-01-15T21:26:49Z" user="DaveHansenTiger" uid="7168">
   <tag k="access" v="private"/>
   <tag k="highway" v="service"/>
