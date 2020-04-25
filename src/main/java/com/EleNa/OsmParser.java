@@ -58,6 +58,7 @@ public class OsmParser {
 
             parseWayNodes(wayNodes);
             parseNodeNodes(nodeNodes);
+            // save nodes first since edges have fk referencing nodes
             saveNodes();
             saveEdges();
 
@@ -76,6 +77,7 @@ public class OsmParser {
 
             String nodeId = node.valueOf("@id");
 
+            // Exclude nodes that are isolated and do not belong to a way.
             if(nodeIds.contains(Long.parseLong(nodeId))) {
                 String lon = node.valueOf("@lon");
                 String lat = node.valueOf("@lat");
@@ -90,6 +92,8 @@ public class OsmParser {
                 if (i % SQL_BATCH_INSERT == 0) {
                     System.out.println("--- Reached " + i + " node elements and inserted into Nodes table");
                 }
+            } else {
+                System.out.println("Not including node that's not in a way: " + nodeId);
             }
         }
         OsmParser.nodeCnt = i;
