@@ -55,7 +55,7 @@ public class BestPathService {
         System.out.println("Optimal Route Length: " + optimalRoute.size());
         Route output;
 
-        if(elevationPref == "No elevation"){
+        if(elevationPref == "No Preference"){
             this.myGraph.resetNodes(Double.POSITIVE_INFINITY);
             output = optimalRoute;
         }
