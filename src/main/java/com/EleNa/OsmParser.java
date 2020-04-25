@@ -11,6 +11,7 @@ import org.dom4j.io.SAXReader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import com.EleNa.model.DataStructures.Node;
@@ -116,7 +117,10 @@ public class OsmParser {
             List<org.dom4j.Node> wayChildrenTagNodes = wayNode.selectNodes(".//tag");
 
             boolean excludeCurrWay = excludeWay(wayChildrenTagNodes);
-            if (excludeCurrWay) { continue;}
+            if (excludeCurrWay) {
+                continue;
+            }
+            System.out.println("--------> Including way: " + wayCnt);
 
             int ndIdx = 0;
             for(Iterator<org.dom4j.Node> iter = wayChildrenNodes.iterator(); iter.hasNext();) {
@@ -176,17 +180,23 @@ public class OsmParser {
     }
 
     public static boolean excludeWay(List<org.dom4j.Node> wayChildrenTagNodes) {
+        List<String> excludedHighwayValues = Arrays.asList(new String[] {"motorway", "trunk"});
+        boolean hasGoodWay = true;
         for (org.dom4j.Node node: wayChildrenTagNodes) {
-            if (node.valueOf("@k").equals("highway")) {
-                String v = node.valueOf("@v");
-                if (v.equals("motorway") || v.equals("trunk")) {
-                    System.out.println("--- Not inserting highway:motorway/trunk way");
-                    excludedWays++;
-                    return true;
-                }
+            String key = node.valueOf("@k");
+            String value = node.valueOf("@v");
+
+            if (key.equals("highway") && !excludedHighwayValues.contains(value)) {
+                System.out.println("---> This way will be included: " + key + "," + value);
+                hasGoodWay = false;
             }
+            else if(excludedHighwayValues.contains(value)){
+                System.out.println("--> Not anymore. Excluding a highway value: " + value);
+                hasGoodWay = true; // could be service then trunk so exclude
+            }
+
         }
-        return false;
+        return hasGoodWay;
     }
 
     @GetMapping("/importData")
