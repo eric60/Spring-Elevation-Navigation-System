@@ -39,6 +39,10 @@ public class BestPathService {
         GraphNode source = myGraph.getNodeById(DataImporter.getClosestNode(start[1],start[0]));
         GraphNode sink = myGraph.getNodeById(DataImporter.getClosestNode(end[1],end[0]));
 
+        System.out.println("start Coords: ("+start[1]+","+start[0]+")");
+        System.out.println("end Coords: ("+end[1]+","+end[0]+")");
+        System.out.println("Source ID: " +source.getId());
+        System.out.println("Sink ID: " +sink.getId());
         System.out.println("Source Coords: ("+source.getLongitude()+","+source.getLatitude()+")");
         System.out.println("source neighbors: " + source.getNeighbors().size());
         System.out.println("Sink Coords: ("+sink.getLongitude()+","+sink.getLatitude()+")");
@@ -47,7 +51,6 @@ public class BestPathService {
         System.out.println("Computing Shortest Route...");
         //Calculate the shortest route from source to sink
         Route optimalRoute = routeFinder.shortestPath(source,sink);
-        System.out.println("Shortest Route Found");
 
         System.out.println("Optimal Route Length: " + optimalRoute.size());
         Route output;

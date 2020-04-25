@@ -34,10 +34,14 @@ public class OsmParser {
     private static int excludedWays = 0;
     public static int nodeCnt, wayCnt, edgeCnt;
 
+    private static ArrayList<Long> nodeIds;
+
     @Autowired
     public OsmParser(NodeRepository nodeRepo, EdgeRepository edgeRepo) {
         this.nodeRepo = nodeRepo;
         this.edgeRepo = edgeRepo;
+
+        this.nodeIds = new ArrayList<>();
     }
 
     public static String parseOSMFile(File osmFile){
@@ -52,8 +56,11 @@ public class OsmParser {
             System.out.println("Number of Node elements: " + nodeNodes.size());
             System.out.println("Number of Way elements: " + wayNodes.size());
 
-            parseNodeNodes(nodeNodes);
             parseWayNodes(wayNodes);
+            parseNodeNodes(nodeNodes);
+            saveNodes();
+            saveEdges();
+
             System.out.println("Excluded " + excludedWays + " ways");
         }
         catch(Exception e) {
@@ -66,24 +73,25 @@ public class OsmParser {
     public static void parseNodeNodes(List<org.dom4j.Node> nodeNodes) {
         int i = 0;
         for (org.dom4j.Node node : nodeNodes) {
+
             String nodeId = node.valueOf("@id");
-            String lon = node.valueOf("@lon");
-            String lat = node.valueOf("@lat");
 
-            Coordinate coordinate = new Coordinate(Double.parseDouble(lon), Double.parseDouble(lat));
-            Node osmNode = new Node(Long.parseLong(nodeId), coordinate);
-            nodes.add(osmNode);
-            i++;
-            if(i % REACH_NOTIFICATION == 0) {
-                System.out.println("Reached " + i + " node elements");
-            }
-            if(i % SQL_BATCH_INSERT == 0) {
-                saveNodes();
-                System.out.println("--- Reached " + i + " node elements and inserted into Nodes table");
+            if(nodeIds.contains(Long.parseLong(nodeId))) {
+                String lon = node.valueOf("@lon");
+                String lat = node.valueOf("@lat");
 
+                Coordinate coordinate = new Coordinate(Double.parseDouble(lon), Double.parseDouble(lat));
+                Node osmNode = new Node(Long.parseLong(nodeId), coordinate);
+                nodes.add(osmNode);
+                i++;
+                if (i % REACH_NOTIFICATION == 0) {
+                    System.out.println("Reached " + i + " node elements");
+                }
+                if (i % SQL_BATCH_INSERT == 0) {
+                    System.out.println("--- Reached " + i + " node elements and inserted into Nodes table");
+                }
             }
         }
-        saveNodes();
         OsmParser.nodeCnt = i;
         System.out.println("--- Finished inserting " + i + " nodes");
     }
@@ -108,6 +116,9 @@ public class OsmParser {
             for(Iterator<org.dom4j.Node> iter = wayChildrenNodes.iterator(); iter.hasNext();) {
                 org.dom4j.Node ndRefNode = iter.next();
                 Long ndRef = Long.parseLong(ndRefNode.valueOf("@ref"));
+
+                nodeIds.add(ndRef);
+
                 if(ndIdx != 0) {
                     prev.setDest(ndRef);
                 }
@@ -127,11 +138,10 @@ public class OsmParser {
                 System.out.println("Reached " + ndCnt + " nd elements");
             }
             if(ndCnt % SQL_BATCH_INSERT == 0) {
-                saveEdges();
                 System.out.println("--- Reached " + ndCnt + " way nd elements and inserted into Edges table");
             }
         }
-        saveEdges();
+
         int total_edges = ndCnt - wayCnt;
         System.out.println("--- Finished inserting " + total_edges + " edges for " + wayCnt + " ways");
         OsmParser.wayCnt = wayCnt;
