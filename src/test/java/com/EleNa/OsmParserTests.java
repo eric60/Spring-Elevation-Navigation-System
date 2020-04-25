@@ -43,7 +43,7 @@ public class OsmParserTests {
         importer = new OsmParser(nodeRepo, edgeRepo);
         importer.importData(windowsFile);
         assertEquals(50, importer.nodeCnt);
-        assertEquals(4, importer.wayCnt);
+        assertEquals(3, importer.wayCnt);
         assertEquals(54, importer.edgeCnt);
     }
 
