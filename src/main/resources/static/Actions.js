@@ -131,14 +131,51 @@ $(document).ready(function() {
     };
 
     let umassCoord = [-72.526798, 42.39205];
-    var map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/light-v10',
-        center: umassCoord,
-        zoom: 12
-    });
+    if (!map) {
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v10',
+            center: umassCoord,
+            zoom: 12
+        });
+    }
+
+    let lineStringId = 'LineString';
+    let lineStringSourceId = 'LineString'
+    let pointSourceId = 'points'
+    let startLayerId = 'start'
+    let endLayerId = 'end';
+
+    function removeOld() {
+        console.log("Trigger removing old")
+        if (map.getLayer(lineStringId)){
+            console.log("removing layer")
+            map.removeLayer(lineStringId);
+        }
+        if (map.getSource(lineStringSourceId)){
+            console.log("removing source")
+            map.removeSource(lineStringSourceId);
+        }
+        if (map.getSource(pointSourceId)){
+            console.log("removing points")
+            map.removeSource(pointSourceId);
+        }
+        if (map.getLayer(startLayerId)){
+            console.log("removing start layer point")
+            map.removeLayer(startLayerId);
+            map.removeSource(startLayerId);
+        }
+        if (map.getLayer(endLayerId)){
+            console.log("removing end layer point")
+            map.removeLayer(endLayerId);
+            map.removeSource(endLayerId);
+        }
+
+    }
 
     function initMapRoute(edges) {
+            removeOld();
+
             geojson.features[0].geometry.coordinates = edges;
 
             map.addSource('LineString', {
@@ -210,10 +247,10 @@ $(document).ready(function() {
                 ]
             }
         });
-        addPointColor("start", start)
-        addPointColor("end", end)
-        addPopup("start")
-        addPopup("end")
+        addPointColor(startLayerId, start)
+        addPointColor(endLayerId, end)
+        addPopup(startLayerId)
+        addPopup(endLayerId)
     }
 
     function addPointColor(type, coords) {

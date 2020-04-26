@@ -11,7 +11,7 @@
         <class>com.EleNa.repositories.NodeRepositoryFillImpl</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" /> <!-- DB Driver -->
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/elenaDb" /> <!-- BD Mane -->
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/elena2" /> <!-- BD Mane -->
             <property name="javax.persistence.jdbc.user" value="postgres" /> <!-- DB User -->
             <property name="javax.persistence.jdbc.password" value="password" /> <!-- DB Password -->
             <property name="hibernate.show_sql" value="true" />

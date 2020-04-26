@@ -55,20 +55,20 @@ public class BestPathService {
         System.out.println("Optimal Route Length: " + optimalRoute.size());
         Route output;
 
-        if(elevationPref == "No Preference"){
+        if (elevationPref.equals("No Preference")) {
             this.myGraph.resetNodes(Double.POSITIVE_INFINITY);
             output = optimalRoute;
         }
-        else if(elevationPref == "Min Elevation"){
+        else if (elevationPref.equals("Min Elevation")) {
             this.myGraph.resetNodes(Double.POSITIVE_INFINITY);
             output = routeFinder.minElevationGainPath(source, sink,optimalRoute.getLength() * withinX / 100);
         }
-        else{
+        else {
             this.myGraph.resetNodes(Double.NEGATIVE_INFINITY);
             output = routeFinder.maxElevationGainPath(source, sink,optimalRoute.getLength() * withinX / 100);
         }
 
-        System.out.println(output.size());
+        System.out.println("Number of coordinates: " + output.size());
         int nodesCnt = output.size();
         int nodePair = 2;
         double[][] nodes = new double[nodesCnt][nodePair];

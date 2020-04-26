@@ -4,6 +4,8 @@ import com.EleNa.model.FormData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+
 
 @RestController
 public class MainController {
@@ -22,6 +24,8 @@ public class MainController {
         System.out.println(formdata.getEnd());
 
         double[][] bestPath =  bestPathService.calculateRoute(formdata);
+        System.out.println("\nTrigger best path return");
+        System.out.println(Arrays.toString(bestPath));
         return bestPath;
     }
 
