@@ -22,7 +22,7 @@ public class BestPathService {
         this.myGraph = DataImporter.fillGraph();
         System.out.println("Graph Loaded");
 
-        this.routeFinder = new AStarRouteFinder();
+        this.routeFinder = new AStarRouteFinder(this.myGraph);
         this.list = new ArrayList<>();
     }
 
@@ -42,7 +42,7 @@ public class BestPathService {
         System.out.println("Computing Shortest Route...");
 
         //Calculate the shortest route from source to sink
-        this.myGraph.resetNodes(Double.POSITIVE_INFINITY);
+        this.myGraph.resetNodes();
         Route optimalRoute = routeFinder.shortestPath(source,sink);
 
         System.out.println("Optimal Route Length: " + optimalRoute.size());
@@ -52,11 +52,11 @@ public class BestPathService {
             output = optimalRoute;
         }
         else if (elevationPref.equals("Min Elevation")) {
-            this.myGraph.resetNodes(Double.POSITIVE_INFINITY);
+            this.myGraph.resetNodes();
             output = routeFinder.minElevationGainPath(source, sink,optimalRoute.getLength() * (100 + withinX) / 100);
         }
         else {
-            this.myGraph.resetNodes(Double.NEGATIVE_INFINITY);
+            this.myGraph.resetNodes();
             output = routeFinder.maxElevationGainPath(source, sink,optimalRoute.getLength() * (100 + withinX) / 100);
         }
 

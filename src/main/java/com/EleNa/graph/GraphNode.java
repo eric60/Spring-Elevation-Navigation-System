@@ -100,11 +100,27 @@ public class GraphNode implements Serializable {
         }
     }
 
+    public boolean hasNeighbor(Long id){
+        for(GraphNode neighbor : this.neighbors){
+            if(neighbor.getId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
+
     //Returns this Node's Edges
     public ArrayList<GraphNode> getNeighbors(){
         return this.neighbors;
     }
 
+    public void removeNeighbor(Long id){
+        for(int i = 0; i < this.neighbors.size(); i++){
+            if(this.neighbors.get(i).getId() == id){
+                this.neighbors.remove(i);
+            }
+        }
+    }
 
     //Uses the Haversine formula to compute the distance between two Nodes (in meters)
     //source: https://www.movable-type.co.uk/scripts/latlong.html

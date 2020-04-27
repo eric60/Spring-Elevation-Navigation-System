@@ -71,11 +71,11 @@ public class Graph implements Serializable {
         return edgeCount;
     }
 
-    public void resetNodes(double val){
+    public void resetNodes(){
         this.nodes.forEach((k,v) ->{
-            v.setFScore(val);
-            v.setGScore(val);
-            v.setDistanceFromSource(val);
+            v.setFScore(Double.POSITIVE_INFINITY);
+            v.setGScore(Double.POSITIVE_INFINITY);
+            v.setDistanceFromSource(Double.POSITIVE_INFINITY);
         });
     }
 
@@ -87,7 +87,7 @@ public class Graph implements Serializable {
         graph.addNode(node);
 
         System.out.println(node.getFScore());
-        graph.resetNodes(666);
+        graph.resetNodes();
         System.out.println(node.getFScore());
     }
 }

@@ -3,20 +3,25 @@ package com.EleNa.routing;
 import com.EleNa.graph.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 
-public class AStarRouteFinder implements RouteFinder{
+public class AStarRouteFinder implements RouteFinder {
 
     //Member fields
     protected PriorityQueue<GraphNode> pQueue;
 
     protected Graph graph;
 
+    public AStarRouteFinder(Graph graph){
+        this.graph = graph;
+    }
+
     /*
      *Computes the shortest path from source to sink using A* search
      * Expects this.comparator to be a MinPriorityComparator
-    */
-    public Route shortestPath(GraphNode source, GraphNode sink){
+     */
+    public Route shortestPath(GraphNode source, GraphNode sink) {
         //Initialization
         this.pQueue = new PriorityQueue<>(new MinComparator());
 
@@ -25,33 +30,33 @@ public class AStarRouteFinder implements RouteFinder{
         pQueue.add(source);
 
         //Main loop
-        while(!pQueue.isEmpty()){
+        while (!pQueue.isEmpty()) {
             //Get the lowest priority node
             GraphNode current = pQueue.poll();
 
             //If we've reached the goal, we're done
-            if(current.getId() == sink.getId()){
+            if (current.getId() == sink.getId()) {
                 System.out.println("Route Found!");
                 pQueue.clear();
                 return Route.reconstructRoute(source, sink);
             }
 
             //Look at each Node's neighbor
-            for(GraphNode neighbor : current.getNeighbors()){
+            for (GraphNode neighbor : current.getNeighbors()) {
                 double gScore = current.getGScore() + GraphNode.computeDistance(current, neighbor);
 
-                if(gScore < neighbor.getGScore()){
+                if (gScore < neighbor.getGScore()) {
 
-                    if(pQueue.contains(neighbor)){
+                    if (pQueue.contains(neighbor)) {
                         pQueue.remove(neighbor);
                     }
 
                     neighbor.setPrevNode(current);
                     neighbor.setGScore(gScore);
-                    neighbor.setFScore(gScore + GraphNode.computeDistance(neighbor,sink));
+                    neighbor.setFScore(gScore + GraphNode.computeDistance(neighbor, sink));
 
-                    if(!pQueue.contains(neighbor))
-                    pQueue.add(neighbor);
+                    if (!pQueue.contains(neighbor))
+                        pQueue.add(neighbor);
                 }
             }
         }
@@ -66,134 +71,150 @@ public class AStarRouteFinder implements RouteFinder{
      * That is within the specified maxDistance
      * Expects this.comparator to be a MinPriorityComparator
      */
-    public Route minElevationGainPath(GraphNode source, GraphNode sink, double maxDistance){
-        //Initialization
-        this.pQueue = new PriorityQueue<>(new MinComparator());
+    public Route minElevationGainPath(GraphNode source, GraphNode sink, double maxDistance) {
+        ArrayList<Route> routes = YensVariant(graph,source.getId(), sink.getId(), maxDistance);
 
-        ArrayList<Long> explored = new ArrayList<>();
+        Route optimal = routes.get(0);
 
-        source.setGScore(0);
-        source.setFScore(GraphNode.computeElevationGain(source, sink));
-        source.setDistanceFromSource(0);
-        pQueue.add(source);
-
-        //Main loop
-        while(!pQueue.isEmpty()){
-            //Get the lowest priority node
-            GraphNode current = pQueue.poll();
-
-            explored.add(current.getId());
-
-            //If we've reached the goal, we're done
-            if(current.getId() == sink.getId()){
-                System.out.println("Route Found!");
-                pQueue.clear();
-                return Route.reconstructRoute(source, sink);
+        for(Route route : routes){
+            if(route.getElevationGain() < optimal.getElevationGain()){
+                optimal = route;
             }
-
-            //Look at each Node's neighbor
-            for(GraphNode neighbor : current.getNeighbors()){
-                double distanceFromSource = current.getDistanceFromSource() + GraphNode.computeDistance(current, neighbor);
-
-                if(distanceFromSource > maxDistance){
-                    continue;
-                }
-
-                double gScore = current.getGScore() + GraphNode.computeElevationGain(current, neighbor);
-
-                if(gScore < neighbor.getGScore()){
-
-                    if(pQueue.contains(neighbor) || explored.contains(neighbor.getId())){
-                        GraphNode copy = new GraphNode(neighbor.getId(),neighbor.getLatitude(),neighbor.getLongitude(),neighbor.getElevation());
-                        copy.setPrevNode(current);
-                        copy.setGScore(gScore);
-                        copy.setFScore(gScore + GraphNode.computeElevationGain(neighbor,sink));
-                        copy.setDistanceFromSource(distanceFromSource);
-
-                        pQueue.add(copy);
-                    }
-                    else {
-                        neighbor.setPrevNode(current);
-                        neighbor.setGScore(gScore);
-                        neighbor.setFScore(gScore + GraphNode.computeElevationGain(neighbor, sink));
-                        neighbor.setDistanceFromSource(distanceFromSource);
-
-                        pQueue.add(neighbor);
-                    }
+            else if(route.getElevationGain() == optimal.getElevationGain()){
+                if(route.getLength() < optimal.getLength()){
+                    optimal = route;
                 }
             }
         }
 
-        //If no route is found, return an empty Route
-        System.out.println("Route not Found.");
-        return new Route();
+        return optimal;
     }
 
     /*
      *Computes the path with the max. elevation gain from source to sink
      * That is within the specified maxDistance
      */
-    public Route maxElevationGainPath(GraphNode source, GraphNode sink, double maxDistance){
-        //Initialization
-        this.pQueue = new PriorityQueue<>(new MaxComparator());
+    public Route maxElevationGainPath(GraphNode source, GraphNode sink, double maxDistance) {
+        ArrayList<Route> routes = YensVariant(graph, source.getId(), sink.getId(), maxDistance);
 
-        ArrayList<Long> explored = new ArrayList<>();
+        Route optimal = routes.get(0);
 
-        source.setGScore(0);
-        source.setFScore(GraphNode.computeElevationGain(source, sink));
-        source.setDistanceFromSource(0);
-        pQueue.add(source);
-
-        //Main loop
-        while(!pQueue.isEmpty()){
-            //Get the highest priority node
-            GraphNode current = pQueue.poll();
-
-            explored.add(current.getId());
-
-            //If we've reached the goal, we're done
-            if(current.getId() == sink.getId()){
-                System.out.println("Route Found!");
-                pQueue.clear();
-                return Route.reconstructRoute(source, sink);
+        for(Route route : routes){
+            if(route.getElevationGain() > optimal.getElevationGain()){
+                optimal = route;
             }
-
-            //Look at each Node's neighbor
-            for(GraphNode neighbor : current.getNeighbors()){
-
-                double distanceFromSource = current.getDistanceFromSource() + GraphNode.computeDistance(current, neighbor);
-
-                if(distanceFromSource > maxDistance){
-                    continue;
-                }
-
-                double gScore = current.getGScore() + GraphNode.computeElevationGain(current, neighbor);
-
-                if(gScore > neighbor.getGScore() ){
-
-                    if(pQueue.contains(neighbor)|| explored.contains(neighbor.getId())){
-                        GraphNode copy = new GraphNode(neighbor.getId(),neighbor.getLatitude(),neighbor.getLongitude(),neighbor.getElevation());
-                        copy.setPrevNode(current);
-                        copy.setGScore(gScore);
-                        copy.setFScore(gScore + GraphNode.computeElevationGain(neighbor,sink));
-                        copy.setDistanceFromSource(distanceFromSource);
-
-                        pQueue.add(copy);
-                    }
-                    else {
-                        neighbor.setPrevNode(current);
-                        neighbor.setGScore(gScore);
-                        neighbor.setFScore(gScore + GraphNode.computeElevationGain(neighbor, sink));
-                        neighbor.setDistanceFromSource(distanceFromSource);
-
-                        pQueue.add(neighbor);
-                    }
+            else if(route.getElevationGain() == optimal.getElevationGain()){
+                if(route.getLength() < optimal.getLength()){
+                    optimal = route;
                 }
             }
         }
 
-        //If no route is found, return an empty Route
-        System.out.println("Route not Found.");
-        return new Route();
+        return optimal;
+    }
+
+    //Returns an ArrayList of the shortest paths that are less than maxDistance in length
+    //Source: https://en.wikipedia.org/wiki/Yen%27s_algorithm
+    public ArrayList<Route> YensVariant(Graph graph, Long sourceId, Long sinkId, double maxDistance) {
+        //Initialization
+        ArrayList<Route> A = new ArrayList<>();
+
+        HashMap<Long, ArrayList<Long>> removedEdges = new HashMap<>();
+
+        // Determine the shortest path from the source to the sink.
+        A.add(this.shortestPath(graph.getNodeById(sourceId), graph.getNodeById(sinkId)));
+        graph.resetNodes();
+
+        // Initialize the set to store the potential kth shortest path.
+        PriorityQueue<Route> B = new PriorityQueue<>(new MinRouteComparator());
+
+        for (int k = 1; k < (int) Double.POSITIVE_INFINITY; k++) {
+
+            // The spur node ranges from the first node to the next to last node in the previous k-shortest path.
+            for (int i = 0; i < A.get(k - 1).getRoute().size() - 2; i++) {
+
+                // Spur node is retrieved from the previous k-shortest path, k − 1.
+                GraphNode spurNode = A.get(k - 1).getNode(i);
+
+                // The sequence of nodes from the source to the spur node of the previous k-shortest path.
+                ArrayList<GraphNode> rootPath = A.get(k - 1).getNodes(0, i);
+
+                for (Route route : A) {
+                    if (Route.equals(rootPath, route.getNodes(0, i))) {
+                        // Remove the links that are part of the previous shortest paths which share the same root path.
+                        Long id1 = route.getRoute().get(i).getId();
+                        Long id2 = route.getRoute().get(i + 1).getId();
+
+                        if (removedEdges.get(id1) == null) {
+                            removedEdges.put(id1, new ArrayList<>());
+                        }
+
+                        removedEdges.get(id1).add(id2);
+
+                        graph.getNodeById(id1).removeNeighbor(id2);
+                    }
+                }
+
+                for (GraphNode rootPathNode : rootPath) {
+                    if (rootPathNode.getId() != spurNode.getId()) {
+                        for (Long id : graph.getAllNodeIds()) {
+                            GraphNode node = graph.getNodeById(id);
+
+                            if (node.hasNeighbor(rootPathNode.getId())) {
+                                if (removedEdges.get(id) == null) {
+                                    removedEdges.put(id, new ArrayList<>());
+                                }
+                                removedEdges.get(id).add(rootPathNode.getId());
+
+                                node.removeNeighbor(rootPathNode.getId());
+                            }
+                        }
+                    }
+                }
+
+                // Calculate the spur path from the spur node to the sink.
+                Route spurPath = this.shortestPath(graph.getNodeById(spurNode.getId()), graph.getNodeById(sinkId));
+
+                graph.resetNodes();
+
+                // Entire path is made up of the root path and spur path.
+                Route totalPath = Route.concat(rootPath, spurPath.getRoute());
+
+                // Add the potential k-shortest path to the heap.
+                if(!B.contains(totalPath) && spurPath.size() > 0){
+                    B.add(totalPath);
+                }
+                // Add back the edges and nodes that were removed from the graph.
+                removedEdges.forEach((key,value)->{
+                    GraphNode node = graph.getNodeById(key);
+
+                    for(Long id : value){
+                        node.addNeighbor(graph.getNodeById(id));
+
+                    }
+
+                    removedEdges.get(key).clear();
+                });
+            }
+
+            if(B.isEmpty()) {
+                // This handles the case of there being no spur paths, or no spur paths left.
+                // This could happen if the spur paths have already been exhausted (added to A),
+                // or there are no spur paths at all - such as when both the source and sink vertices
+                // lie along a "dead end".
+                break;
+            }
+
+            // Add the lowest cost path becomes the k-shortest path.
+            Route shortest = B.poll();
+
+            if(shortest.getLength() <= maxDistance){
+                A.add(shortest);
+            }
+            else{
+                return A;
+            }
+        }
+        return A;
     }
 }

@@ -55,7 +55,7 @@ public class AStarRouteFinderTests {
         graph.addNode(nodeD);
         graph.addNode(nodeE);
 
-        routeFinder = new AStarRouteFinder();
+        routeFinder = new AStarRouteFinder(graph);
     }
 
     @AfterEach
@@ -77,7 +77,7 @@ public class AStarRouteFinderTests {
 
     @Test
     void testShortestPath(){
-        graph.resetNodes(Double.POSITIVE_INFINITY);
+        graph.resetNodes();
 
         Route optimalRoute = routeFinder.shortestPath(nodeA,nodeD);
 
@@ -93,7 +93,7 @@ public class AStarRouteFinderTests {
     @Test
     void testMinElevationGainPath(){
 
-        graph.resetNodes(Double.POSITIVE_INFINITY);
+        graph.resetNodes();
 
         Route minElevationRoute = routeFinder.minElevationGainPath(nodeA,nodeD,Double.POSITIVE_INFINITY);
 
@@ -109,7 +109,7 @@ public class AStarRouteFinderTests {
     @Test
     void testMaxElevationGainPath(){
 
-        graph.resetNodes(Double.NEGATIVE_INFINITY);
+        graph.resetNodes();
 
         Route maxElevationRoute = routeFinder.maxElevationGainPath(nodeA,nodeD,Double.POSITIVE_INFINITY);
 

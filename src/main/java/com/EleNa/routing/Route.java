@@ -47,6 +47,16 @@ public class Route {
         return this.route.get(i);
     }
 
+    //Returns the Nodes in the route from start to end
+    public ArrayList<GraphNode> getNodes(int start, int end){
+        ArrayList<GraphNode> nodes = new ArrayList<>();
+
+        for(int i = start; i <= end; i++){
+            nodes.add(this.route.get(i));
+        }
+
+        return nodes;
+    }
     //Returns the elevation gain along this route
     public double getElevationGain(){
         double elevationGain = 0.0;
@@ -97,6 +107,30 @@ public class Route {
         }
 
         route.prependNode(source);
+        return route;
+    }
+
+    public static boolean equals(ArrayList<GraphNode> first,ArrayList<GraphNode> second){
+        for(int i = 0; i < first.size(); i++){
+            if(first.get(i).getId() != second.get(i).getId()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static Route concat(ArrayList<GraphNode> first, ArrayList<GraphNode> second){
+        Route route = new Route();
+
+        for(GraphNode node : first){
+            route.appendNode(node);
+        }
+
+        for(GraphNode node : second){
+            if(node.getId() != route.getNode(route.getRoute().size() - 1).getId())
+            route.appendNode(node);
+        }
+
         return route;
     }
 }
