@@ -13,8 +13,8 @@
 2. Launch stackbuilder and download PostGIS under Spatial Extensions 
 3. Launch pgadmin4
 4. Create database elenaDb with password 'password'
-5. Go to http://localhost:8080/importData?path=yourFilePath inputting your OSM file path to parse the file and input 
-the node and edge values into the elenaDb. Make sure you have forward slashes path1/path2
+5. Go to localhost:8080/importData?path=**yourOsmFilePath**<br>
+inputting your OSM file path to parse the osm file and input the node and edge values into the elenaDb. Make sure you have forward slashes path1/path2
 
 ## Adding dependencies
 1. Go to maven repository online and copy and paste the dependency into pom.xml and import them as libraries in intellij
