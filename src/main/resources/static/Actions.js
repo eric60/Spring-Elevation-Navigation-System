@@ -104,9 +104,15 @@ $(document).ready(function() {
         .done(function( edges ) {
              console.log('------- Received edges --------')
              console.log(edges)
-
+             if (edges.length == 0) {
+                 handleEmptyRoute();
+             }
              initMapRoute(edges)
         });
+    }
+    
+    function handleEmptyRoute() {
+        alert("Sorry, no route was found. Try increasing the within x% setting")
     }
 
 
