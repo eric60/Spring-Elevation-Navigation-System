@@ -16,13 +16,18 @@ public class BestPathService {
     private RouteFinder routeFinder ;
     private Graph myGraph;
 
-    public BestPathService() throws ClassNotFoundException, IOException{
+    public BestPathService() throws ClassNotFoundException, IOException {
         //Import the graph from the database
         System.out.println("Loading Graph...");
+        //
         this.myGraph = DataImporter.fillGraph();
         System.out.println("Graph Loaded");
 
         this.routeFinder = new AStarRouteFinder();
+
+        // All three of the route finders use Min comparator
+        //this.routeFinder = new DijkstraRouteFinder(myGraph, new MinPriorityComparator());
+
         this.list = new ArrayList<>();
     }
 
@@ -61,11 +66,11 @@ public class BestPathService {
         }
         else if (elevationPref.equals("Min Elevation")) {
             this.myGraph.resetNodes(Double.POSITIVE_INFINITY);
-            output = routeFinder.minElevationGainPath(source, sink,optimalRoute.getLength() * withinX / 100);
+            output = routeFinder.minElevationGainPath(source, sink,optimalRoute.getLength() * (100.0 + (double) withinX) / 100.0);
         }
         else {
             this.myGraph.resetNodes(Double.NEGATIVE_INFINITY);
-            output = routeFinder.maxElevationGainPath(source, sink,optimalRoute.getLength() * withinX / 100);
+            output = routeFinder.maxElevationGainPath(source, sink,optimalRoute.getLength() * (100.0 + (double) withinX) / 100.0);
         }
 
         System.out.println("Number of coordinates: " + output.size());

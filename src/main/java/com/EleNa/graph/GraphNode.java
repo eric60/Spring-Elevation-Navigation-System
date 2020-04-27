@@ -105,6 +105,7 @@ public class GraphNode implements Serializable {
         return this.neighbors;
     }
 
+
     //Uses the Haversine formula to compute the distance between two Nodes (in meters)
     //source: https://www.movable-type.co.uk/scripts/latlong.html
     public static double computeDistance(GraphNode source, GraphNode sink){
@@ -124,6 +125,7 @@ public class GraphNode implements Serializable {
 
         return radius * c;
     }
+
 
     public static double computeElevationGain(GraphNode source, GraphNode sink){
         if(sink.getElevation() > source.getElevation()){

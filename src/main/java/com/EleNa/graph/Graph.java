@@ -3,6 +3,7 @@ package com.EleNa.graph;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.HashMap;
 
 public class Graph implements Serializable {
@@ -41,6 +42,8 @@ public class Graph implements Serializable {
 
         //Otherwise, don't do anything
     }
+
+    public ArrayList<Long> getAllNodeIds() { return new ArrayList<Long>(this.nodes.keySet()); }
 
     public GraphNode getNodeById(long id){
         return this.nodes.get(new Long(id));

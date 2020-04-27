@@ -139,7 +139,7 @@ public class DijkstraRouteFinderTests {
     }
 
     @Test
-    void testMaxElevationGainPath(){
+    void testMaxElevationGainPath() {
         Route optimalRoute = routeFinder.shortestPath(nodeA,nodeD);
 
         routeFinder.setComparator(maxComp);
@@ -151,5 +151,22 @@ public class DijkstraRouteFinderTests {
         assertEquals(nodeA,maxElevationRoute.getRoute().get(0));
         assertEquals(nodeB,maxElevationRoute.getRoute().get(1));
         assertEquals(nodeD,maxElevationRoute.getRoute().get(2));
+    }
+
+    /**
+     * Longer weighted path, but has greater elevation gain should be picked.
+     */
+    @Test
+    void testLongerMaxElevationGainPath() {
+        Route optimalRoute = routeFinder.shortestPath(nodeA,nodeG);
+
+        routeFinder.setComparator(maxComp);
+        Route maxElevationRoute = routeFinder.maxElevationGainPath(nodeA,nodeG,optimalRoute.getLength() * 1.5);
+
+        assertEquals(3,maxElevationRoute.getRoute().size());
+        assertEquals(10.0,maxElevationRoute.getElevationGain());
+        assertEquals(nodeA,maxElevationRoute.getRoute().get(0));
+        assertEquals(nodeB,maxElevationRoute.getRoute().get(1));
+        assertEquals(nodeG,maxElevationRoute.getRoute().get(2));
     }
 }

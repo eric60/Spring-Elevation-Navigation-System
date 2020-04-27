@@ -43,9 +43,8 @@ public class DijkstraRouteFinder implements RouteFinder {
      * @return A reference to the priority queue.
      */
     private PriorityQueue initializeDistancesToInfinity(GraphNode source) {
-        int numNodes = this.graph.getNumNodes();
-        for(int id = 0; id < numNodes; ++id) {
-            if (id != source.getId()) {
+        for(long id : this.graph.getAllNodeIds()) {
+            if (id != source.getId() && this.graph.getNodeById(id) != null) {
                 PriorityQueueItem item = new PriorityQueueItem(this.graph.getNodeById(id));
                 this.pQueue.add(item);
             }
@@ -56,21 +55,21 @@ public class DijkstraRouteFinder implements RouteFinder {
     }
 
     /**
-     * Initializes the priorities to zero. As we want to maximize distance, we want the priorities to initially be
+     * Initializes the priorities and elevation to the specified value. Source has its priority set to zero.
      * small.
      * @param source
      * @return
      */
-    private PriorityQueue initializeDistancesToZero(GraphNode source) {
-        int numNodes = this.graph.getNumNodes();
-        for(int id = 0; id < numNodes; ++id) {
-            if (id != source.getId()) {
-                PriorityQueueItem item = new PriorityQueueItem(this.graph.getNodeById(id), Double.NEGATIVE_INFINITY,
-                                                               0.0);
+    private PriorityQueue initializeElevationToVal(GraphNode source, Double val) {
+        for(long id : this.graph.getAllNodeIds()) {
+            if (id != source.getId() && this.graph.getNodeById(id) != null) {
+                PriorityQueueItem item = new PriorityQueueItem(this.graph.getNodeById(id), val, val);
+                item.setElevationGainFromSource(val);
                 this.pQueue.add(item);
             }
         }
-        PriorityQueueItem sourceItem = new PriorityQueueItem(source, Double.POSITIVE_INFINITY, 0.0);
+        PriorityQueueItem sourceItem = new PriorityQueueItem(source, 0.0, 0.0);
+        sourceItem.setElevationGainFromSource(0.0);
         this.pQueue.add(sourceItem);
         return this.pQueue;
     }
@@ -114,7 +113,7 @@ public class DijkstraRouteFinder implements RouteFinder {
 
             // when the sink is polled from the queue, it is at its minimum. The shortest path to it will not
             // change. So, we can stop early.
-            if (current.getNode() == sink) {
+            if (current.getNode() == sink && prevNode.get(sink) != null) {
                 this.pQueue.clear();
                 prevNode.put(source, source); // stopping condition.
                 return routeFromIds(source, sink, prevNode);
@@ -135,6 +134,7 @@ public class DijkstraRouteFinder implements RouteFinder {
 
             }
         }
+        System.out.println("No route found.");
         return new Route();
     }
 
@@ -145,89 +145,91 @@ public class DijkstraRouteFinder implements RouteFinder {
     public Route minElevationGainPath(GraphNode source, GraphNode sink, double maxDistance){
         HashMap<GraphNode, GraphNode> prevNode = new HashMap<GraphNode, GraphNode>();
 
-        initializeDistancesToInfinity(source);
+        initializeElevationToVal(source, Double.POSITIVE_INFINITY);
 
         while(!pQueue.isEmpty()) {
             PriorityQueueItem current = pQueue.poll();
             // when the sink is polled from the queue, it is at its minimum. The shortest path to it will not
             // change. So, we can stop early.
-            if (current.getNode() == sink) {
+            if (current.getNode() == sink && prevNode.get(sink) != null) {
+                System.out.println("Dijkstra's found a route");
                 this.pQueue.clear();
                 // make the previous node of source be itself. This is the stopping condition for the route construction
                 // function.
                 prevNode.put(source, source);
                 return routeFromIds(source, sink, prevNode);
             }
-            if (current.getDistanceFromSource() < maxDistance) {
+            if (current.getDistanceFromSource() <= maxDistance) {
                 for (GraphNode neighbor : current.getNode().getNeighbors()) {
                     if (this.pQueue.contains(neighbor)) {
                         PriorityQueueItem neighborPQueueItem = this.pQueue.remove(neighbor);
                         Double currentToNeighbor = GraphNode.computeElevationGain(current.getNode(), neighbor);
                         Double altElevation = current.getElevationGainFromSource() + currentToNeighbor;
-                        if (altElevation <= neighborPQueueItem.getElevationGainFromSource()) {
-                            // update the previous node in shortest path to node neighbor.
+
+                        Double distToNeighbor = GraphNode.computeDistance(current.getNode(), neighbor);
+                        Double altDist = current.getDistanceFromSource() + distToNeighbor;
+
+                        if (altElevation < neighborPQueueItem.getElevationGainFromSource()) {
+                            System.out.println(altElevation);
                             prevNode.put(neighbor, current.getNode());
+                            PriorityQueueItem maybeUpdatedNeighbor = new PriorityQueueItem(neighbor, altElevation, altDist);
+                            maybeUpdatedNeighbor.setElevationGainFromSource(altElevation);
+                            this.pQueue.offer(maybeUpdatedNeighbor);
                         }
-                        // neighbor needs to be replaced in the pqueue whether or not the priority was changed because we
-                        // removed it.
-                        Double newElev = Math.min(altElevation, neighborPQueueItem.getElevationGainFromSource());
-
-                        Double currentToNeighborDist = GraphNode.computeDistance(current.getNode(), neighbor);
-                        Double newDist = Math.min(neighborPQueueItem.getDistanceFromSource(),
-                                current.getDistanceFromSource() + currentToNeighborDist);
-
-                        PriorityQueueItem maybeUpdatedNeighbor = new PriorityQueueItem(neighbor, newElev, newDist);
-                        maybeUpdatedNeighbor.setElevationGainFromSource(newElev);
-                        this.pQueue.offer(maybeUpdatedNeighbor);
+                        else {
+                            this.pQueue.offer(neighborPQueueItem); // it wasn't updated.
+                        }
                     }
                 }
             }
         }
+        System.out.println("Dijkstra did not find a route.");
         return new Route();
     }
 
     /**
      * Computes the path with the max. elevation gain from source to sink
-     * That is within the specified maxDistance
+     * That is within the specified maxDistance.
+     * The algorithm is the same as the minElevationGain path, but makes all elevations negative.
      */
-    public Route maxElevationGainPath(GraphNode source, GraphNode sink, double maxDistance){
+    public Route maxElevationGainPath(GraphNode source, GraphNode sink, double maxDistance) {
         HashMap<GraphNode, GraphNode> prevNode = new HashMap<GraphNode, GraphNode>();
 
-        initializeDistancesToZero(source);
+        initializeElevationToVal(source, Double.POSITIVE_INFINITY);
 
-        while(!pQueue.isEmpty()) {
+        while (!pQueue.isEmpty()) {
             PriorityQueueItem current = pQueue.poll();
-            if (current.getNode() == sink) {
+            if (current.getNode() == sink && prevNode.get(sink) != null) {
                 this.pQueue.clear();
                 prevNode.put(source, source); // set the stopping condition.
                 return routeFromIds(source, sink, prevNode);
             }
             // don't consider nodes that are too long.
-            if (current.getDistanceFromSource() < maxDistance) {
+            if (current.getDistanceFromSource() <= maxDistance) {
                 for (GraphNode neighbor : current.getNode().getNeighbors()) {
                     if (this.pQueue.contains(neighbor)) {
                         PriorityQueueItem neighborPQueueItem = this.pQueue.remove(neighbor);
+                        Double currentToNeighbor = -GraphNode.computeElevationGain(current.getNode(), neighbor);
+                        Double altElevation = -current.getElevationGainFromSource() + currentToNeighbor;
 
-                        Double currentToNeighbor = GraphNode.computeElevationGain(current.getNode(), neighbor);
-                        Double altElevation = current.getElevationGainFromSource() + currentToNeighbor;
+                        Double distToNeighbor = GraphNode.computeDistance(current.getNode(), neighbor);
+                        Double altDist = current.getDistanceFromSource() + distToNeighbor;
 
-                        if (altElevation >= neighborPQueueItem.getElevationGainFromSource()) {
-                            // prev of neighbor is not current.
+                        if (altElevation < neighborPQueueItem.getElevationGainFromSource()) {
+                            System.out.println(altElevation);
                             prevNode.put(neighbor, current.getNode());
+                            PriorityQueueItem maybeUpdatedNeighbor = new PriorityQueueItem(neighbor, altElevation, altDist);
+                            maybeUpdatedNeighbor.setElevationGainFromSource(altElevation);
+                            this.pQueue.offer(maybeUpdatedNeighbor);
                         }
-
-                        Double newElev = Math.max(altElevation, neighborPQueueItem.getElevationGainFromSource());
-                        Double currentToNeighborDist = GraphNode.computeDistance(current.getNode(), neighbor);
-                        Double newDist = Math.min(neighborPQueueItem.getDistanceFromSource(),
-                                                  current.getDistanceFromSource() + currentToNeighborDist);
-                        PriorityQueueItem maybeUpdatedNeighbor = new PriorityQueueItem(neighbor, newElev, newDist);
-                        maybeUpdatedNeighbor.setElevationGainFromSource(newElev);
-                        this.pQueue.offer(maybeUpdatedNeighbor);
+                        else {
+                            this.pQueue.offer(neighborPQueueItem); // it wasn't updated.
+                        }
                     }
                 }
             }
         }
+        System.out.println("No route found.");
         return new Route();
     }
-
 }
