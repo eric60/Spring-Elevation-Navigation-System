@@ -3,9 +3,6 @@ package com.EleNa;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-/**
- * @author imssbora
- */
 public class JPAUtil {
     private static final String PERSISTENCE_UNIT_NAME = "PERSISTENCE";
     private static EntityManagerFactory factory;

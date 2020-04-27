@@ -20,7 +20,6 @@ public class NodeRepositoryFillImpl implements NodeRepositoryFill{
     @Override
     public long getClosestID(double lon, double lat) {
         entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
-        entityManager.getTransaction().begin();
 
         long closestID;
 
@@ -35,13 +34,14 @@ public class NodeRepositoryFillImpl implements NodeRepositoryFill{
 
         closestID = (new BigInteger(query.getSingleResult().toString())).longValue();
 
+        entityManager.close();
+
         return closestID;
     }
 
     @Override
     public ArrayList<BufferNode> getBufferNodes() {
         entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
-        entityManager.getTransaction().begin();
 
         ArrayList<BufferNode> nodes;
 
