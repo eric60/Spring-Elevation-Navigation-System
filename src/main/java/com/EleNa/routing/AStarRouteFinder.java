@@ -36,8 +36,6 @@ public class AStarRouteFinder implements RouteFinder {
 
             //If we've reached the goal, we're done
             if (current.getId() == sink.getId()) {
-                System.out.println("Route Found!");
-                pQueue.clear();
                 return Route.reconstructRoute(source, sink);
             }
 
@@ -62,7 +60,6 @@ public class AStarRouteFinder implements RouteFinder {
         }
 
         //If no route is found, return an empty Route
-        System.out.println("Route not Found.");
         return new Route();
     }
 
@@ -75,7 +72,7 @@ public class AStarRouteFinder implements RouteFinder {
         ArrayList<Route> routes = YensVariant(graph,source.getId(), sink.getId(), maxDistance);
 
         Route optimal = routes.get(0);
-
+        int i = 0;
         for(Route route : routes){
             if(route.getElevationGain() < optimal.getElevationGain()){
                 optimal = route;
@@ -98,7 +95,7 @@ public class AStarRouteFinder implements RouteFinder {
         ArrayList<Route> routes = YensVariant(graph, source.getId(), sink.getId(), maxDistance);
 
         Route optimal = routes.get(0);
-
+        int i = 0;
         for(Route route : routes){
             if(route.getElevationGain() > optimal.getElevationGain()){
                 optimal = route;
@@ -131,7 +128,7 @@ public class AStarRouteFinder implements RouteFinder {
         for (int k = 1; k < (int) Double.POSITIVE_INFINITY; k++) {
 
             // The spur node ranges from the first node to the next to last node in the previous k-shortest path.
-            for (int i = 0; i < A.get(k - 1).getRoute().size() - 2; i++) {
+            for (int i = 0; i <= A.get(k - 1).getRoute().size() - 2; i++) {
 
                 // Spur node is retrieved from the previous k-shortest path, k − 1.
                 GraphNode spurNode = A.get(k - 1).getNode(i);
@@ -140,7 +137,7 @@ public class AStarRouteFinder implements RouteFinder {
                 ArrayList<GraphNode> rootPath = A.get(k - 1).getNodes(0, i);
 
                 for (Route route : A) {
-                    if (Route.equals(rootPath, route.getNodes(0, i))) {
+                    if (i < route.size() && Route.equals(rootPath, route.getNodes(0, i))) {
                         // Remove the links that are part of the previous shortest paths which share the same root path.
                         Long id1 = route.getRoute().get(i).getId();
                         Long id2 = route.getRoute().get(i + 1).getId();

@@ -51,7 +51,7 @@ public class Route {
     public ArrayList<GraphNode> getNodes(int start, int end){
         ArrayList<GraphNode> nodes = new ArrayList<>();
 
-        for(int i = start; i <= end; i++){
+        for(int i = start; i < end; i++){
             nodes.add(this.route.get(i));
         }
 
@@ -111,6 +111,9 @@ public class Route {
     }
 
     public static boolean equals(ArrayList<GraphNode> first,ArrayList<GraphNode> second){
+        if(first.size() != second.size()){
+            return false;
+        }
         for(int i = 0; i < first.size(); i++){
             if(first.get(i).getId() != second.get(i).getId()){
                 return false;
@@ -127,7 +130,6 @@ public class Route {
         }
 
         for(GraphNode node : second){
-            if(node.getId() != route.getNode(route.getRoute().size() - 1).getId())
             route.appendNode(node);
         }
 
