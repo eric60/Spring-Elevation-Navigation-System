@@ -7,6 +7,8 @@
     2. Or from root directory type `./mvnw spring-boot:run`
 3. Set up database
 3. Go to localhost:8080
+    * The application will load an in memory Graph object to route from.
+    * You must delete the nodes.bin and edges.bin files each time you input new osm data.
 
 ## Database setup
 1. Download [postgres with stackbuilder](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads#windows) all default settings port 5432
