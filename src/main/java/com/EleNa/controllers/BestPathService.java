@@ -36,36 +36,28 @@ public class BestPathService {
         int withinX = form.getWithinX();
 
         //Find the source and sink Nodes
-        GraphNode source = myGraph.getNodeById(DataImporter.getClosestNode(start[1],start[0]));
-        GraphNode sink = myGraph.getNodeById(DataImporter.getClosestNode(end[1],end[0]));
-
-        System.out.println("start Coords: ("+start[1]+","+start[0]+")");
-        System.out.println("end Coords: ("+end[1]+","+end[0]+")");
-        System.out.println("Source ID: " +source.getId());
-        System.out.println("Sink ID: " +sink.getId());
-        System.out.println("Source Coords: ("+source.getLongitude()+","+source.getLatitude()+")");
-        System.out.println("source neighbors: " + source.getNeighbors().size());
-        System.out.println("Sink Coords: ("+sink.getLongitude()+","+sink.getLatitude()+")");
-        System.out.println("sink neighbors: " + sink.getNeighbors().size());
+        GraphNode source = this.myGraph.getNodeById(DataImporter.getClosestNode(start[1],start[0]));
+        GraphNode sink = this.myGraph.getNodeById(DataImporter.getClosestNode(end[1],end[0]));
 
         System.out.println("Computing Shortest Route...");
+
         //Calculate the shortest route from source to sink
+        this.myGraph.resetNodes(Double.POSITIVE_INFINITY);
         Route optimalRoute = routeFinder.shortestPath(source,sink);
 
         System.out.println("Optimal Route Length: " + optimalRoute.size());
         Route output;
 
         if (elevationPref.equals("No Preference")) {
-            this.myGraph.resetNodes(Double.POSITIVE_INFINITY);
             output = optimalRoute;
         }
         else if (elevationPref.equals("Min Elevation")) {
             this.myGraph.resetNodes(Double.POSITIVE_INFINITY);
-            output = routeFinder.minElevationGainPath(source, sink,optimalRoute.getLength() * withinX / 100);
+            output = routeFinder.minElevationGainPath(source, sink,optimalRoute.getLength() * (100 + withinX) / 100);
         }
         else {
             this.myGraph.resetNodes(Double.NEGATIVE_INFINITY);
-            output = routeFinder.maxElevationGainPath(source, sink,optimalRoute.getLength() * withinX / 100);
+            output = routeFinder.maxElevationGainPath(source, sink,optimalRoute.getLength() * (100 + withinX) / 100);
         }
 
         System.out.println("Number of coordinates: " + output.size());

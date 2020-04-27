@@ -91,14 +91,12 @@ public class Route {
 
         GraphNode temp = sink;
 
-        while(temp != source){
+        while(temp.getId() != source.getId()){
             route.prependNode(temp);
-
             temp = temp.getPrevNode();
         }
 
         route.prependNode(source);
-
         return route;
     }
 }

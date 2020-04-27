@@ -158,6 +158,10 @@ public class GraphNode implements Serializable {
         return item.getNode().equals(this);
     }
 
+    public boolean equals(GraphNode node){
+        return this.id == node.id;
+    }
+
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
