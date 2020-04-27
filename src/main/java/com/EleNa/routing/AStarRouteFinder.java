@@ -1,6 +1,8 @@
 package com.EleNa.routing;
 
 import com.EleNa.graph.*;
+
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class AStarRouteFinder implements RouteFinder{
@@ -28,8 +30,9 @@ public class AStarRouteFinder implements RouteFinder{
             GraphNode current = pQueue.poll();
 
             //If we've reached the goal, we're done
-            if(current == sink){
+            if(current.getId() == sink.getId()){
                 System.out.println("Route Found!");
+                pQueue.clear();
                 return Route.reconstructRoute(source, sink);
             }
 
@@ -67,9 +70,11 @@ public class AStarRouteFinder implements RouteFinder{
         //Initialization
         this.pQueue = new PriorityQueue<>(new MinComparator());
 
+        ArrayList<Long> explored = new ArrayList<>();
+
         source.setGScore(0);
         source.setFScore(GraphNode.computeElevationGain(source, sink));
-        source.setDistanceFromSource(GraphNode.computeDistance(source,sink));
+        source.setDistanceFromSource(0);
         pQueue.add(source);
 
         //Main loop
@@ -77,9 +82,12 @@ public class AStarRouteFinder implements RouteFinder{
             //Get the lowest priority node
             GraphNode current = pQueue.poll();
 
+            explored.add(current.getId());
+
             //If we've reached the goal, we're done
-            if(current == sink){
+            if(current.getId() == sink.getId()){
                 System.out.println("Route Found!");
+                pQueue.clear();
                 return Route.reconstructRoute(source, sink);
             }
 
@@ -87,8 +95,7 @@ public class AStarRouteFinder implements RouteFinder{
             for(GraphNode neighbor : current.getNeighbors()){
                 double distanceFromSource = current.getDistanceFromSource() + GraphNode.computeDistance(current, neighbor);
 
-                if(distanceFromSource >= maxDistance){
-                    System.out.println("Skipping neighbor: Current Route too long.");
+                if(distanceFromSource > maxDistance){
                     continue;
                 }
 
@@ -96,17 +103,23 @@ public class AStarRouteFinder implements RouteFinder{
 
                 if(gScore < neighbor.getGScore()){
 
-                    if(pQueue.contains(neighbor)){
-                        pQueue.remove(neighbor);
+                    if(pQueue.contains(neighbor) || explored.contains(neighbor.getId())){
+                        GraphNode copy = new GraphNode(neighbor.getId(),neighbor.getLatitude(),neighbor.getLongitude(),neighbor.getElevation());
+                        copy.setPrevNode(current);
+                        copy.setGScore(gScore);
+                        copy.setFScore(gScore + GraphNode.computeElevationGain(neighbor,sink));
+                        copy.setDistanceFromSource(distanceFromSource);
+
+                        pQueue.add(copy);
                     }
+                    else {
+                        neighbor.setPrevNode(current);
+                        neighbor.setGScore(gScore);
+                        neighbor.setFScore(gScore + GraphNode.computeElevationGain(neighbor, sink));
+                        neighbor.setDistanceFromSource(distanceFromSource);
 
-                    neighbor.setPrevNode(current);
-                    neighbor.setGScore(gScore);
-                    neighbor.setFScore(gScore + GraphNode.computeElevationGain(neighbor,sink));
-                    neighbor.setDistanceFromSource(distanceFromSource);
-
-                    if(!pQueue.contains(neighbor))
                         pQueue.add(neighbor);
+                    }
                 }
             }
         }
@@ -124,19 +137,24 @@ public class AStarRouteFinder implements RouteFinder{
         //Initialization
         this.pQueue = new PriorityQueue<>(new MaxComparator());
 
+        ArrayList<Long> explored = new ArrayList<>();
+
         source.setGScore(0);
         source.setFScore(GraphNode.computeElevationGain(source, sink));
-        source.setDistanceFromSource(GraphNode.computeDistance(source,sink));
+        source.setDistanceFromSource(0);
         pQueue.add(source);
 
         //Main loop
         while(!pQueue.isEmpty()){
-            //Get the lowest priority node
+            //Get the highest priority node
             GraphNode current = pQueue.poll();
 
+            explored.add(current.getId());
+
             //If we've reached the goal, we're done
-            if(current == sink){
+            if(current.getId() == sink.getId()){
                 System.out.println("Route Found!");
+                pQueue.clear();
                 return Route.reconstructRoute(source, sink);
             }
 
@@ -144,26 +162,32 @@ public class AStarRouteFinder implements RouteFinder{
             for(GraphNode neighbor : current.getNeighbors()){
 
                 double distanceFromSource = current.getDistanceFromSource() + GraphNode.computeDistance(current, neighbor);
-                if(distanceFromSource >= maxDistance){
-                    System.out.println("Skipping neighbor: Current Route too long.");
+
+                if(distanceFromSource > maxDistance){
                     continue;
                 }
 
                 double gScore = current.getGScore() + GraphNode.computeElevationGain(current, neighbor);
 
-                if(gScore > neighbor.getGScore()){
+                if(gScore > neighbor.getGScore() ){
 
-                    if(pQueue.contains(neighbor)){
-                        pQueue.remove(neighbor);
+                    if(pQueue.contains(neighbor)|| explored.contains(neighbor.getId())){
+                        GraphNode copy = new GraphNode(neighbor.getId(),neighbor.getLatitude(),neighbor.getLongitude(),neighbor.getElevation());
+                        copy.setPrevNode(current);
+                        copy.setGScore(gScore);
+                        copy.setFScore(gScore + GraphNode.computeElevationGain(neighbor,sink));
+                        copy.setDistanceFromSource(distanceFromSource);
+
+                        pQueue.add(copy);
                     }
+                    else {
+                        neighbor.setPrevNode(current);
+                        neighbor.setGScore(gScore);
+                        neighbor.setFScore(gScore + GraphNode.computeElevationGain(neighbor, sink));
+                        neighbor.setDistanceFromSource(distanceFromSource);
 
-                    neighbor.setPrevNode(current);
-                    neighbor.setGScore(gScore);
-                    neighbor.setFScore(gScore + GraphNode.computeElevationGain(neighbor,sink));
-                    neighbor.setDistanceFromSource(distanceFromSource);
-
-                    if(!pQueue.contains(neighbor))
                         pQueue.add(neighbor);
+                    }
                 }
             }
         }
@@ -172,5 +196,4 @@ public class AStarRouteFinder implements RouteFinder{
         System.out.println("Route not Found.");
         return new Route();
     }
-
 }
