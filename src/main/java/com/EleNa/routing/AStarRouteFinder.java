@@ -203,9 +203,9 @@ public class AStarRouteFinder implements RouteFinder {
             // Add the lowest cost path becomes the k-shortest path.
             Route shortest = B.poll();
 
-            if(shortest.getLength() <= maxDistance){
+            if(shortest.getLength() + GraphNode.computeDistance(shortest.getNode(shortest.size() - 1),graph.getNodeById(sinkId)) <= maxDistance){
+                System.out.printf("Potential Route #%d added.\n",A.size());
                 A.add(shortest);
-                System.out.println("Potential Route added.");
             }
             else{
                 return A;
