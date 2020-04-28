@@ -154,16 +154,15 @@ public class AStarRouteFinder implements RouteFinder {
 
                 for (GraphNode rootPathNode : rootPath) {
                     if (rootPathNode.getId() != spurNode.getId()) {
-                        for (Long id : graph.getAllNodeIds()) {
-                            GraphNode node = graph.getNodeById(id);
+                        for (GraphNode neighbor : graph.getNodeById(rootPathNode.getId()).getNeighbors()) {
 
-                            if (node.hasNeighbor(rootPathNode.getId())) {
-                                if (removedEdges.get(id) == null) {
-                                    removedEdges.put(id, new ArrayList<>());
+                            if (neighbor.hasNeighbor(rootPathNode.getId())) {
+                                if (removedEdges.get(neighbor.getId()) == null) {
+                                    removedEdges.put(neighbor.getId(), new ArrayList<>());
                                 }
-                                removedEdges.get(id).add(rootPathNode.getId());
+                                removedEdges.get(neighbor.getId()).add(rootPathNode.getId());
 
-                                node.removeNeighbor(rootPathNode.getId());
+                                neighbor.removeNeighbor(rootPathNode.getId());
                             }
                         }
                     }
@@ -181,15 +180,14 @@ public class AStarRouteFinder implements RouteFinder {
                 if(!B.contains(totalPath) && spurPath.size() > 0){
                     B.add(totalPath);
                 }
+
                 // Add back the edges and nodes that were removed from the graph.
                 removedEdges.forEach((key,value)->{
                     GraphNode node = graph.getNodeById(key);
-
                     for(Long id : value){
                         node.addNeighbor(graph.getNodeById(id));
 
                     }
-
                     removedEdges.get(key).clear();
                 });
             }
@@ -207,6 +205,7 @@ public class AStarRouteFinder implements RouteFinder {
 
             if(shortest.getLength() <= maxDistance){
                 A.add(shortest);
+                System.out.println("Potential Route added.");
             }
             else{
                 return A;
