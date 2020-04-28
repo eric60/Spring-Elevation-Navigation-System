@@ -8,6 +8,7 @@ import com.EleNa.repositories.EdgeRepositoryFillImpl;
 import com.EleNa.repositories.NodeRepository;
 
 import com.EleNa.repositories.NodeRepositoryFillImpl;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,11 +20,11 @@ import org.mockito.MockitoAnnotations;
 
 import org.springframework.test.context.ActiveProfiles;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.Buffer;
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 
 @ActiveProfiles("test")
@@ -37,13 +38,26 @@ public class DataImporterTests {
     @InjectMocks
     private DataImporter dataImporter;
 
-    private Graph myGraph;
     private ArrayList<BufferNode> bufferNodes = new ArrayList<BufferNode>();
     private ArrayList<Edge> edges = new ArrayList<Edge>();
+
+    String nodePath = "./src/main/resources/nodes.bin";
+    String edgePath = "./src/main/resources/edges.bin";
+
+    File nodeBin = new File(nodePath);
+    File edgeBin = new File(edgePath);
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+
+        if(nodeBin.exists()){
+            nodeBin.delete();
+        }
+
+        if(edgeBin.exists()){
+            edgeBin.delete();
+        }
 
         bufferNodes.add(new BufferNode(0, "POINT(0 0)", 0));
         bufferNodes.add(new BufferNode(1, "POINT(0 1)", 0));
@@ -69,17 +83,46 @@ public class DataImporterTests {
         System.out.println("trigger setup");
     }
 
+    @AfterAll
+    public static void cleanUp(){
+        String nodePath = "./src/main/resources/nodes.bin";
+        String edgePath = "./src/main/resources/edges.bin";
+
+        File nodeBin = new File(nodePath);
+        File edgeBin = new File(edgePath);
+
+        if(nodeBin.exists()){
+            nodeBin.delete();
+        }
+
+        if(edgeBin.exists()){
+            edgeBin.delete();
+        }
+    }
+
     @Test
     public void test_given_query_response_when_getNodesEdges_then_correct_number_of_nodes_and_edges() throws ClassNotFoundException, IOException {
 
         Mockito.when(nodeRepo.getBufferNodes()).thenReturn(bufferNodes);
         Mockito.when(edgeRepo.getEdges()).thenReturn(edges);
 
+        assertTrue(!nodeBin.exists());
+        assertTrue(!edgeBin.exists());
+
         dataImporter = new DataImporter(nodeRepo, edgeRepo);
-        myGraph = dataImporter.fillGraph();
+        Graph freshGraph = dataImporter.fillGraph();
 
-        assertEquals(bufferNodes.size(), myGraph.getNumNodes());
-        assertEquals(2 * edges.size(), myGraph.numEdges());
+        assertTrue(nodeBin.exists());
+        assertTrue(edgeBin.exists());
 
+        Graph binGraph = dataImporter.fillGraph();
+
+        // Check initial creation of graph from DB is correct
+        assertEquals(bufferNodes.size(), freshGraph.getNumNodes());
+        assertEquals(2 * edges.size(), freshGraph.numEdges());
+
+        // Check recreated graph from bin files is correct
+        assertEquals(bufferNodes.size(), binGraph.getNumNodes());
+        assertEquals(2 * edges.size(), binGraph.numEdges());
     }
 }
