@@ -3,10 +3,10 @@
 ## How to Run
 1. Install [Maven](https://maven.apache.org/download.cgi) build tool
 2. Import all Maven repositories
+3. Set up database
 2. To Run
     1. Either run EleNaApplication with Intellij
     2. Or from root directory type `./mvnw spring-boot:run`
-3. Set up database
 3. Go to localhost:8080
     * The application will load an in memory Graph object to route from.
     * You must delete the nodes.bin and edges.bin files each time you input new osm data.
