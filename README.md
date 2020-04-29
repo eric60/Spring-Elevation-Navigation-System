@@ -2,6 +2,7 @@
 
 ## How to Run
 1. Install [Maven](https://maven.apache.org/download.cgi) build tool
+2. Import all Maven repositories
 2. To Run
     1. Either run EleNaApplication with Intellij
     2. Or from root directory type `./mvnw spring-boot:run`
