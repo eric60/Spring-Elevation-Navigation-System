@@ -1,7 +1,7 @@
 # EleNa: Elevation Navigation System
 
 ## Description
-Navigation system considering shortest distance as well as minimum and maximum elevation gain.
+Navigation system for shortest distance path considering minimum and maximum elevation gain.
 
 ## Resources Used
 * Spring Boot
