@@ -38,7 +38,6 @@ inputting your OSM file path to parse the osm file and input the node and edge v
 ## How to Test 
 Running all unit tests
 1. In root directory type `mvn test`
-
 ***
 # Documentation
 ## PostGIS (Geographic Information System) Docs
