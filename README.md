@@ -1,4 +1,17 @@
-# 520-Project
+# EleNa: Elevation Navigation System
+
+## Description
+Navigation system considering shortest distance as well as minimum and maximum elevation gain.
+
+## Resources Used
+* Spring Boot
+* Hibernate
+* PostgreSQL with PostGIS
+* Mapbox GL JS
+* Graph Algorithms
+    * A* Search algorithm with elevation gain weighted paths
+    * Dijkstra's algorithm
+    * Yen's algorithm
 
 ## How to Run
 1. Install [Maven](https://maven.apache.org/download.cgi) build tool
@@ -26,7 +39,9 @@ inputting your OSM file path to parse the osm file and input the node and edge v
 Running all unit tests
 1. In root directory type `mvn test`
 
-## PostGIS Geographic Information System Docs
+***
+# Documentation
+## PostGIS (Geographic Information System) Docs
 PostGIS enables geometry and geography data types such as Point which has coordinates and spatial indexing to 
 enable useful queries such as 
 * [ST_Distance(geography, geography) returns double](https://postgis.net/docs/ST_Distance.html)
@@ -37,7 +52,7 @@ enable useful queries such as
 2. [Hibernate object relational mapping(ORM) to PostGis DB](https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#spatial-overview)
 3. [Point Java class](https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/Point.html) with coordinate error checking and the same useful methods in PostGIS
 
-## Map Docs
+## Mapbox GL JS Docs
 Using MapBox GL JS API to draw customized routes
 * (Lat, Long) pairs
 * Flow
